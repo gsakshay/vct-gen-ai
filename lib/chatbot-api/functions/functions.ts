@@ -91,6 +91,7 @@ export class LambdaFunctionStack extends cdk.Stack {
           actions: [
             "s3:PutObject",
             "s3:GetObject",
+            "s3:ListBucket",
             "athena:StartQueryExecution",
             "athena:GetQueryExecution",
             "athena:GetQueryResults",
