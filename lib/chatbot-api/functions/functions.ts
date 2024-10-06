@@ -89,6 +89,31 @@ export class LambdaFunctionStack extends cdk.Stack {
         websocketAPIFunction.addToRolePolicy(new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,
           actions: [
+            "s3:PutObject",
+            "s3:GetObject",
+            "athena:StartQueryExecution",
+            "athena:GetQueryExecution",
+            "athena:GetQueryResults",
+            "s3:GetBucketLocation",
+            "glue:GetDatabase",
+            "glue:GetDatabases",
+            "glue:GetTable",
+            "glue:GetTables",
+            "glue:GetPartition",
+            "glue:GetPartitions"
+          ],
+          resources: [`arn:aws:athena:us-east-1:${cdk.Stack.of(this).account}:workgroup/*`,
+                "arn:aws:s3:::riot-unzipped/*",
+                "arn:aws:s3:::riot-unzipped",                
+                `arn:aws:glue:us-east-1:${cdk.Stack.of(this).account}:catalog`,
+                `arn:aws:glue:us-east-1:${cdk.Stack.of(this).account}:catalog/*`,
+                `arn:aws:glue:us-east-1:${cdk.Stack.of(this).account}:database/*`,
+                `arn:*:glue:us-east-1:${cdk.Stack.of(this).account}:table/*`]
+        }));  
+
+        websocketAPIFunction.addToRolePolicy(new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          actions: [
             'lambda:InvokeFunction'
           ],
           resources: [this.sessionFunction.functionArn]
