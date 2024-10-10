@@ -63,8 +63,8 @@ export class LambdaFunctionStack extends cdk.Stack {
           handler: 'index.handler', // Points to the 'hello' file in the lambda directory
           environment : {
             "WEBSOCKET_API_ENDPOINT" : props.wsApiEndpoint.replace("wss","https"),            
-            "PROMPT" : `You are a helpful AI chatbot that will answer questions based on your knowledge. 
-            You have access to a search tool that you will use to look up answers to questions.`,
+            "PROMPT" : `You are a team manager for Valorant. Help users assemble teams for Valorant using relevant tools.Before calling a tool, do some analysis. First, think about which of the provided tools is the relevant tool to answer the user's request. Second, go through each of the required parameters of the relevant tool and determine if the user has directly provided or given enough information to infer a value. When deciding if the parameter can be inferred, carefully consider all the context to see if it supports a specific value. If all of the required parameters are present or can be reasonably inferred, proceed with the tool call. BUT, if one of the values for a required parameter is missing, DO NOT invoke the function (not even with fillers for the missing params) and instead, ask the user to provide the missing parameters.
+            `,
             'KB_ID' : props.knowledgeBase.attrKnowledgeBaseId
           },
           timeout: cdk.Duration.seconds(300)
@@ -85,6 +85,32 @@ export class LambdaFunctionStack extends cdk.Stack {
           ],
           resources: [props.knowledgeBase.attrKnowledgeBaseArn]
         }));
+
+        websocketAPIFunction.addToRolePolicy(new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          actions: [
+            "s3:PutObject",
+            "s3:GetObject",
+            "s3:ListBucket",
+            "athena:StartQueryExecution",
+            "athena:GetQueryExecution",
+            "athena:GetQueryResults",
+            "s3:GetBucketLocation",
+            "glue:GetDatabase",
+            "glue:GetDatabases",
+            "glue:GetTable",
+            "glue:GetTables",
+            "glue:GetPartition",
+            "glue:GetPartitions"
+          ],
+          resources: [`arn:aws:athena:us-east-1:${cdk.Stack.of(this).account}:workgroup/*`,
+                "arn:aws:s3:::riot-unzipped/*",
+                "arn:aws:s3:::riot-unzipped",                
+                `arn:aws:glue:us-east-1:${cdk.Stack.of(this).account}:catalog`,
+                `arn:aws:glue:us-east-1:${cdk.Stack.of(this).account}:catalog/*`,
+                `arn:aws:glue:us-east-1:${cdk.Stack.of(this).account}:database/*`,
+                `arn:*:glue:us-east-1:${cdk.Stack.of(this).account}:table/*`]
+        }));  
 
         websocketAPIFunction.addToRolePolicy(new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,

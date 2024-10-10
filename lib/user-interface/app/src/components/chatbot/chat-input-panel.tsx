@@ -247,7 +247,9 @@ export default function ChatInputPanel(props: ChatInputPanelProps) {
           return;          
         }
         if (!incomingMetadata) {
-          receivedData += data.data;
+          const timeoutPattern = /\{"message":\s*"[^"]*",\s*"connectionId":\s*"[^"]*",\s*"requestId":\s*"[^"]*"\}/g;
+          const cleanedString = data.data.replace(timeoutPattern, '');
+          receivedData += cleanedString;        
         } else {
           let sourceData = JSON.parse(data.data);
           sourceData = sourceData.map((item) => {
