@@ -8,11 +8,12 @@ import NotificationBar from "./notif-flashbar"
 
 export default function BaseAppLayout(
   props: AppLayoutProps & { info?: ReactElement }
-) {
+)
+{
   const [navigationPanelState, setNavigationPanelState] =
     useNavigationPanelState();
-  const [toolsOpen, setToolsOpen] = useState(false);  
-  const [needsRefresh, setNeedsRefresh] = useState(true);
+  const [toolsOpen, setToolsOpen] = useState( false );
+  const [needsRefresh, setNeedsRefresh] = useState( true );
 
 
   return (
@@ -20,17 +21,17 @@ export default function BaseAppLayout(
       <NotificationProvider>
         <AppLayout
           headerSelector="#awsui-top-navigation"
-          navigation={<NavigationPanel />}
-          navigationOpen={!navigationPanelState.collapsed}
-          onNavigationChange={({ detail }) =>
-            setNavigationPanelState({ collapsed: !detail.open })
-          }
+          // navigation={<NavigationPanel />}
+          // navigationOpen={!navigationPanelState.collapsed}
+          // onNavigationChange={({ detail }) =>
+          //   setNavigationPanelState({ collapsed: !detail.open })
+          // }
           toolsHide={props.info === undefined ? true : false}
           tools={props.info}
           toolsOpen={toolsOpen}
           stickyNotifications={true}
           notifications={<NotificationBar />}
-          onToolsChange={({ detail }) => setToolsOpen(detail.open)}
+          onToolsChange={( { detail } ) => setToolsOpen( detail.open )}
           {...props}
         />
       </NotificationProvider>

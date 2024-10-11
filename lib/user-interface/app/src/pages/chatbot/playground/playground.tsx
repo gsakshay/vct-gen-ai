@@ -4,10 +4,11 @@ import Chat from "../../../components/chatbot/chat";
 import { Link, useParams } from "react-router-dom";
 import { Header, HelpPanel } from "@cloudscape-design/components";
 
-export default function Playground() {
+export default function Playground()
+{
   const { sessionId } = useParams();
 
-  return (    
+  return (
     <BaseAppLayout
       info={
         <HelpPanel header={<Header variant="h3">Using the chat</Header>}>
@@ -25,7 +26,7 @@ export default function Playground() {
           <p>
             If the chatbot references any files (uploaded by admin users), they will show up
             underneath the relevant message. Admin users have access to a portal to add or delete
-            files. 
+            files.
           </p>
           <h3>Session history</h3>
           <p>
@@ -34,14 +35,14 @@ export default function Playground() {
           </p>
         </HelpPanel>
       }
-      toolsWidth={300}       
+      toolsWidth={300}
       content={
-       <div>
-      {/* <Chat sessionId={sessionId} /> */}
-      
-      <Chat sessionId={sessionId} />
-      </div>
-     }
-    />    
+        <div>
+          {/* <Chat sessionId={sessionId} /> */}
+
+          <Chat sessionId={sessionId} />
+        </div>
+      }
+    />
   );
 }
