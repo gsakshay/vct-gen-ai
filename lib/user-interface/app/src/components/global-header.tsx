@@ -1,4 +1,5 @@
-import {
+import
+{
   ButtonDropdownProps,
   TopNavigation,
 } from "@cloudscape-design/components";
@@ -9,17 +10,21 @@ import { Auth } from "aws-amplify";
 import useOnFollow from "../common/hooks/use-on-follow";
 import { CHATBOT_NAME } from "../common/constants";
 
-export default function GlobalHeader() {
+export default function GlobalHeader()
+{
   const onFollow = useOnFollow();
-  const [userName, setUserName] = useState<string | null>(null);
-  const [theme, setTheme] = useState<Mode>(StorageHelper.getTheme());
+  const [userName, setUserName] = useState<string | null>( null );
+  const [theme, setTheme] = useState<Mode>( StorageHelper.getTheme() );
 
-  useEffect(() => {
-    (async () => {
-      const result = await Auth.currentAuthenticatedUser();    
+  useEffect( () =>
+  {
+    ( async () =>
+    {
+      const result = await Auth.currentAuthenticatedUser();
       // console.log(result);  
-      if (!result || Object.keys(result).length === 0) {
-        console.log("Signed out!")
+      if ( !result || Object.keys( result ).length === 0 )
+      {
+        console.log( "Signed out!" )
         Auth.signOut();
         return;
       }
@@ -27,24 +32,29 @@ export default function GlobalHeader() {
       // const userName = result?.attributes?.email;
       const name = result?.signInUserSession?.idToken?.payload?.name;
       const email = result?.signInUserSession?.idToken?.payload?.email
-      const userName = name? name : email;
-      setUserName(userName);
-    })();
-  }, []);
+      const userName = name ? name : email;
+      setUserName( userName );
+    } )();
+  }, [] );
 
-  const onChangeThemeClick = () => {
-    if (theme === Mode.Dark) {
-      setTheme(StorageHelper.applyTheme(Mode.Light));
-    } else {
-      setTheme(StorageHelper.applyTheme(Mode.Dark));
+  const onChangeThemeClick = () =>
+  {
+    if ( theme === Mode.Dark )
+    {
+      setTheme( StorageHelper.applyTheme( Mode.Light ) );
+    } else
+    {
+      setTheme( StorageHelper.applyTheme( Mode.Dark ) );
     }
   };
-  const onUserProfileClick = ({
+  const onUserProfileClick = ( {
     detail,
   }: {
     detail: ButtonDropdownProps.ItemClickDetails;
-  }) => {
-    if (detail.id === "signout") {
+  } ) =>
+  {
+    if ( detail.id === "signout" )
+    {
       Auth.signOut();
     }
   };
@@ -57,15 +67,15 @@ export default function GlobalHeader() {
       <TopNavigation
         identity={{
           href: "/",
-          logo: { src: "/images/stateseal-color.png", alt:  CHATBOT_NAME  + " Logo" },
+          logo: { src: "/images/stateseal-color.png", alt: CHATBOT_NAME + " Logo" },
         }}
-        utilities={[          
+        utilities={[
           {
             type: "button",
             text: theme === Mode.Dark ? "Light Mode" : "Dark Mode",
             onClick: onChangeThemeClick,
           },
-  
+
           {
             type: "menu-dropdown",
             description: userName ?? "",

@@ -10,7 +10,7 @@ export interface AppConfig {
           domain: string,
           scope: string[],
           redirectSignIn: string,
-          redirectSignOut: "https://myapplications.microsoft.com/",
+          redirectSignOut: string,
           responseType: string,
         }
       },

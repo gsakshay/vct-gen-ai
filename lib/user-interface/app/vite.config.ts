@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import react from "@vitejs/plugin-react";
 
-const isDev = process.env.NODE_ENV === "development";
+const isDev = true;
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,8 +14,7 @@ export default defineConfig({
     isDev && {
       name: "aws-exports",
       writeBundle() {
-        const outputPath = path.resolve("public/aws-exports.json");
-
+        const outputPath = path.resolve( "public/aws-exports.json" );
         // Write the modified JSON data to the public folder
         fs.writeFileSync(
           outputPath,

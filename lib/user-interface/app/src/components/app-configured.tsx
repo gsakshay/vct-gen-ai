@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import {
+import
+{
   ThemeProvider,
   defaultDarkModeOverride,
 } from "@aws-amplify/ui-react";
@@ -12,92 +13,114 @@ import { StorageHelper } from "../common/helpers/storage-helper";
 import { Mode } from "@cloudscape-design/global-styles";
 import "@aws-amplify/ui-react/styles.css";
 
-export default function AppConfigured() {
-  const [config, setConfig] = useState<AppConfig | null>(null);
-  const [error, setError] = useState<boolean | null>(null);
-  const [authenticated, setAuthenticated] = useState<boolean>(null);
-  const [theme, setTheme] = useState(StorageHelper.getTheme());
-  const [configured, setConfigured] = useState<boolean>(false);
+export default function AppConfigured()
+{
+  const [config, setConfig] = useState<AppConfig | null>( null );
+  const [error, setError] = useState<boolean | null>( null );
+  const [authenticated, setAuthenticated] = useState<boolean>( null );
+  const [theme, setTheme] = useState( StorageHelper.getTheme() );
+  const [configured, setConfigured] = useState<boolean>( false );
 
   // trigger authentication state when needed
-  useEffect(() => {
-    (async () => {
+  useEffect( () =>
+  {
+    ( async () =>
+    {
       let currentConfig: AppConfig;
-      try {
-        const result = await fetch("/aws-exports.json");
+      try
+      {
+        const result = await fetch( "/aws-exports.json" );
         const awsExports = await result.json();
-        currentConfig = Amplify.configure(awsExports) as AppConfig | null;
+        currentConfig = Amplify.configure( awsExports ) as AppConfig | null;
         const user = await Auth.currentAuthenticatedUser();
-        if (user) {
-          setAuthenticated(true);
+        if ( user )
+        {
+          setAuthenticated( true );
         }
-        setConfig(awsExports);
-        setConfigured(true);
-      } catch (e) {
+        setConfig( awsExports );
+        setConfigured( true );
+      } catch ( e )
+      {
         // If you get to this state, then this means the user check failed
         // technically it is possible that loading aws-exports.json failed too or some other step
         // but that is very unlikely
-        console.error("Authentication check error:", e);
-        try {
-          if (currentConfig.federatedSignInProvider != "") {
-            Auth.federatedSignIn({ customProvider: currentConfig.federatedSignInProvider });
-          } else {
+        console.error( "Authentication check error:", e );
+        try
+        {
+          if ( currentConfig.federatedSignInProvider != "" )
+          {
+            Auth.federatedSignIn( { customProvider: currentConfig.federatedSignInProvider } );
+          } else
+          {
             Auth.federatedSignIn();
           }
-        } catch (error) {
+        } catch ( error )
+        {
           // however, just in case, we'll add another try catch
-          setError(true);
+          setError( true );
         }
       }
-    })();
-  }, []);
+    } )();
+  }, [] );
 
   // whenever the authentication state changes, if it's changed to un-authenticated, re-verify
-  useEffect(() => {
-    if (!authenticated && configured) {
-      console.log("No authenticated user, initiating sign-in.");
-      if (config.federatedSignInProvider != "") {
-        Auth.federatedSignIn({ customProvider: config.federatedSignInProvider });
-      } else {
+  useEffect( () =>
+  {
+    if ( !authenticated && configured )
+    {
+      console.log( "No authenticated user, initiating sign-in." );
+      if ( config.federatedSignInProvider != "" )
+      {
+        Auth.federatedSignIn( { customProvider: config.federatedSignInProvider } );
+      } else
+      {
         Auth.federatedSignIn();
       }
     }
-  }, [authenticated, configured]);
+  }, [authenticated, configured] );
 
   // dark/light theme
-  useEffect(() => {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
+  useEffect( () =>
+  {
+    const observer = new MutationObserver( ( mutations ) =>
+    {
+      mutations.forEach( ( mutation ) =>
+      {
         if (
           mutation.type === "attributes" &&
           mutation.attributeName === "style"
-        ) {
+        )
+        {
           const newValue =
             document.documentElement.style.getPropertyValue(
               "--app-color-scheme"
             );
 
           const mode = newValue === "dark" ? Mode.Dark : Mode.Light;
-          if (mode !== theme) {
-            setTheme(mode);
+          if ( mode !== theme )
+          {
+            setTheme( mode );
           }
         }
-      });
-    });
+      } );
+    } );
 
-    observer.observe(document.documentElement, {
+    observer.observe( document.documentElement, {
       attributes: true,
       attributeFilter: ["style"],
-    });
+    } );
 
-    return () => {
+    return () =>
+    {
       observer.disconnect();
     };
-  }, [theme]);
+  }, [theme] );
 
   // display a loading screen while waiting for the config file to load
-  if (!config) {
-    if (error) {
+  if ( !config )
+  {
+    if ( error )
+    {
       return (
         <div
           style={{
