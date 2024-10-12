@@ -6,8 +6,8 @@
         "oauth":{
             "domain":"db-vct-auth.auth.us-east-1.amazoncognito.com",
             "scope":["aws.cognito.signin.user.admin","email","openid","profile"],
-            "redirectSignIn":"https://d24j8dq99znyi7.cloudfront.net",
-            "redirectSignOut":"https://d24j8dq99znyi7.cloudfront.net",
+            "redirectSignIn":"http://localhost:3000/",
+            "redirectSignOut":"http://localhost:3000/",
             "responseType":"code"
             }
         },
