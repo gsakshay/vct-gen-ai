@@ -70,11 +70,11 @@ export default function GlobalHeader()
           logo: { src: "/images/stateseal-color.png", alt: CHATBOT_NAME + " Logo" },
         }}
         utilities={[
-          {
-            type: "button",
-            text: theme === Mode.Dark ? "Light Mode" : "Dark Mode",
-            onClick: onChangeThemeClick,
-          },
+          // {
+          //   type: "button",
+          //   text: theme === Mode.Dark ? "Light Mode" : "Dark Mode",
+          //   onClick: onChangeThemeClick,
+          // },
 
           {
             type: "menu-dropdown",

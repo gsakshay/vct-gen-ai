@@ -45,7 +45,14 @@ export default defineConfig({
     },
     react(),
   ],
+  resolve: {
+    alias: {
+      '@cloudscape-design/components': path.resolve(__dirname, './themed/components'),
+      '@cloudscape-design/design-tokens': path.resolve(__dirname, './themed/design-tokens'),
+    },
+  },
   server: {
     port: 3000,
+    hmr: false,
   },
 });
