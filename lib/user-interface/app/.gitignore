@@ -431,6 +431,7 @@ bin/*.js
 lib/**/*.js
 !lib/chatbot-api/functions/resolvers/**/*.js
 !jest.config.js
+!lib/user-interface/app/src/generate-valorant-theme.js
 
 node_modules
 
