@@ -47,8 +47,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@cloudscape-design/components': path.resolve(__dirname, './themed/components'),
-      '@cloudscape-design/design-tokens': path.resolve(__dirname, './themed/design-tokens'),
+      '@cloudscape-design/components': path.resolve(__dirname, 'themed/components'),
+      '@cloudscape-design/design-tokens': path.resolve(__dirname, 'themed/design-tokens'),
     },
   },
   server: {
