@@ -107,10 +107,11 @@ Utilize provided data sources to gather information on players, including:
 Performance Statistics: Recent performances, agent proficiency, win rates.
 Player Backgrounds: Regions, teams, participation in VCT events.
 Agent Synergies: How well players perform with certain agents.
+
 Team Composition Creation:
 
 Select Players:
-Choose players that meet the criteria of the user's request and complement each other's playstyles.
+Choose players that meet the criteria of the user's request and complement each other's playstyles. Make sure to look up EACH SELECTED PLAYER with player_info.
 Assign Roles:
 Assign each player a role (offensive, defensive) and an agent category.
 Designate a team IGL (in-game leader) responsible for strategy and shot-calling.
