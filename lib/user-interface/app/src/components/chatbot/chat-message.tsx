@@ -12,7 +12,8 @@ import
   Modal,
   FormField,
   Input,
-  Select
+  Select,
+  Grid
 } from "@cloudscape-design/components";
 import * as React from "react";
 import { useState } from 'react';
@@ -31,7 +32,7 @@ import "react-json-view-lite/dist/index.css";
 import "../../styles/app.scss";
 import { useNotifications } from "../notif-manager";
 import { Utils } from "../../common/utils";
-import { feedbackCategories, feedbackTypes } from '../../common/constants'
+import { CHATBOT_NAME, feedbackCategories, feedbackTypes } from '../../common/constants'
 
 export interface ChatMessageProps
 {
@@ -125,129 +126,116 @@ export default function ChatMessage( props: ChatMessageProps )
           </FormField>
         </SpaceBetween>
       </Modal>
-      {props.message?.type === ChatBotMessageType.AI && (
-        <Container
-          footer={
-            showSources && (
-              <SpaceBetween direction="horizontal" size="s">
-                <ButtonDropdown
-                  items={( props.message.metadata.Sources as any[] ).map( ( item ) => { return { id: "id", disabled: false, text: item.title, href: item.uri, external: true, externalIconAriaLabel: "(opens in new tab)" } } )}
+      <Grid gridDefinition={[{ colspan: 8 }, { colspan: 4 }]}>
+        <div className="AIInteractionDiv">
+          {props.message?.type === ChatBotMessageType.AI && (
+            <Grid gridDefinition={[{ colspan: 1 }, { colspan: 11 }]}>
+              <div>
+                <img src="/svg/valorant-icon.svg" alt={CHATBOT_NAME} />
+              </div>
+              <div>
+                <Container
+                  footer={
+                    showSources && (
+                      <SpaceBetween direction="horizontal" size="s">
+                        <ButtonDropdown
+                          items={( props.message.metadata.Sources as any[] ).map( ( item ) => { return { id: "id", disabled: false, text: item.title, href: item.uri, external: true, externalIconAriaLabel: "(opens in new tab)" } } )}
 
-                >Sources</ButtonDropdown>
-              </SpaceBetween>
-            )
-          }
-        >
-          {content?.length === 0 ? (
-            <Box>
-              <Spinner />
-            </Box>
-          ) : null}
-          {props.message.content.length > 0 ? (
-            <div className={styles.btn_chabot_message_copy}>
-              <Popover
-                size="medium"
-                position="top"
-                triggerType="custom"
-                dismissButton={false}
-                content={
-                  <StatusIndicator type="success">
-                    Copied to clipboard
-                  </StatusIndicator>
-                }
-              >
-                <Button
-                  variant="inline-icon"
-                  iconName="copy"
-                  onClick={() =>
-                  {
-                    navigator.clipboard.writeText( props.message.content );
-                  }}
-                />
-              </Popover>
-            </div>
-          ) : null}
-          <ReactMarkdown
-            children={content}
-            remarkPlugins={[remarkGfm]}
-            components={{
-              pre( props )
-              {
-                const { children, ...rest } = props;
-                return (
-                  <pre {...rest} className={styles.codeMarkdown}>
-                    {children}
-                  </pre>
-                );
-              },
-              table( props )
-              {
-                const { children, ...rest } = props;
-                return (
-                  <table {...rest} className={styles.markdownTable}>
-                    {children}
-                  </table>
-                );
-              },
-              th( props )
-              {
-                const { children, ...rest } = props;
-                return (
-                  <th {...rest} className={styles.markdownTableCell}>
-                    {children}
-                  </th>
-                );
-              },
-              td( props )
-              {
-                const { children, ...rest } = props;
-                return (
-                  <td {...rest} className={styles.markdownTableCell}>
-                    {children}
-                  </td>
-                );
-              },
-            }}
-          />
-          {/* <div className={styles.thumbsContainer}>
-            {(selectedIcon === 1 || selectedIcon === null) && (
-              <Button
-                variant="icon"
-                iconName={selectedIcon === 1 ? "thumbs-up-filled" : "thumbs-up"}
-                onClick={() => {
-                  props.onThumbsUp();
-                  const id = addNotification("success","Thank you for your valuable feedback!")
-                  Utils.delay(3000).then(() => removeNotification(id));
-                  setSelectedIcon(1);
-                }}
-              />
-            )}
-            {(selectedIcon === 0 || selectedIcon === null) && (
-              <Button
-                iconName={
-                  selectedIcon === 0 ? "thumbs-down-filled" : "thumbs-down"
-                }
-                variant="icon"
-                onClick={() => {
-                  // props.onThumbsDown();
-                  // setSelectedIcon(0);
-                  setModalVisible(true);
-                }}
-              />
-            )}
-          </div> */}
-        </Container>
-      )}
+                        >Sources</ButtonDropdown>
+                      </SpaceBetween>
+                    )
+                  }
+                >
+                  {content?.length === 0 ? (
+                    <Box>
+                      <Spinner />
+                    </Box>
+                  ) : null}
+                  {props.message.content.length > 0 ? (
+                    <div className={styles.btn_chabot_message_copy}>
+                      <Popover
+                        size="medium"
+                        position="top"
+                        triggerType="custom"
+                        dismissButton={false}
+                        content={
+                          <StatusIndicator type="success">
+                            Copied to clipboard
+                          </StatusIndicator>
+                        }
+                      >
+                        <Button
+                          variant="inline-icon"
+                          iconName="copy"
+                          onClick={() =>
+                          {
+                            navigator.clipboard.writeText( props.message.content );
+                          }}
+                        />
+                      </Popover>
+                    </div>
+                  ) : null}
+                  <ReactMarkdown
+                    children={content}
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      pre( props )
+                      {
+                        const { children, ...rest } = props;
+                        return (
+                          <pre {...rest} className={styles.codeMarkdown}>
+                            {children}
+                          </pre>
+                        );
+                      },
+                      table( props )
+                      {
+                        const { children, ...rest } = props;
+                        return (
+                          <table {...rest} className={styles.markdownTable}>
+                            {children}
+                          </table>
+                        );
+                      },
+                      th( props )
+                      {
+                        const { children, ...rest } = props;
+                        return (
+                          <th {...rest} className={styles.markdownTableCell}>
+                            {children}
+                          </th>
+                        );
+                      },
+                      td( props )
+                      {
+                        const { children, ...rest } = props;
+                        return (
+                          <td {...rest} className={styles.markdownTableCell}>
+                            {children}
+                          </td>
+                        );
+                      },
+                    }}
+                  />
+                </Container>
+              </div>
+            </Grid>
+          )}
+        </div>
+        <div className="UserInteractionDiv">
+          {props.message?.type === ChatBotMessageType.Human && (
+            <TextContent>
+              <strong>{props.message.content}</strong>
+            </TextContent>
+          )}
+        </div>
+      </Grid>
       {loading && (
         <Box float="left">
           <Spinner />
         </Box>
       )}
-      {props.message?.type === ChatBotMessageType.Human && (
-        <TextContent>
-          <strong>{props.message.content}</strong>
-        </TextContent>
-      )}
+
     </div>
   );
 }

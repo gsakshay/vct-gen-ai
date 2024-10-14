@@ -41,4 +41,4 @@ export const feedbackTypes = [
   {label: "Other", value:"other", disabled: false}
 ]
 
-export const CHATBOT_NAME = "Valorant Team Manager";
+export const CHATBOT_NAME = "VALORANT TEAM MANAGER";

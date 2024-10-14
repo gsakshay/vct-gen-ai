@@ -67,15 +67,9 @@ export default function GlobalHeader()
       <TopNavigation
         identity={{
           href: "/",
-          logo: { src: "/images/stateseal-color.png", alt: CHATBOT_NAME + " Logo" },
+          logo: { src: "/svg/valorant-icon.svg", alt: CHATBOT_NAME + " Logo" },
         }}
         utilities={[
-          // {
-          //   type: "button",
-          //   text: theme === Mode.Dark ? "Light Mode" : "Dark Mode",
-          //   onClick: onChangeThemeClick,
-          // },
-
           {
             type: "menu-dropdown",
             description: userName ?? "",

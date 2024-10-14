@@ -241,13 +241,13 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
             userMessage: messageToSend,
             chatHistory: assembleHistory( messageHistoryRef.current.slice( 0, -2 ) ),
             systemPrompt: `You are an AI chatbot for the RIDE, an MBTA paratransit service. You will help customer service representatives respond to user complaints and queries.
-          Answer questions based on your Context and nothing more. If you are unable to decisively answer a question, direct them to customer service. Do not provide information outside of your given Context.
-          Customer service is needed if it is something you cannot answer. Requests for fare history require customer service, as do service complaints like a rude driver or late pickup.
-          Highly-specific situations will also require customer service to step in. Remember that RIDE Flex and RIDE are not the same service. 
-          Phone numbers:
-          TRAC (handles scheduling/booking, trip changes/cancellations, anything time-sensitive): 844-427-7433 (voice/relay) 857-206-6569 (TTY)
-          Mobility Center (handles eligibility questions, renewals, and changes to mobility status): 617-337-2727 (voice/relay)
-          MBTA Customer support (handles all other queries): 617-222-3200 (voice/relay)`,
+              Answer questions based on your Context and nothing more. If you are unable to decisively answer a question, direct them to customer service. Do not provide information outside of your given Context.
+              Customer service is needed if it is something you cannot answer. Requests for fare history require customer service, as do service complaints like a rude driver or late pickup.
+              Highly-specific situations will also require customer service to step in. Remember that RIDE Flex and RIDE are not the same service. 
+              Phone numbers:
+              TRAC (handles scheduling/booking, trip changes/cancellations, anything time-sensitive): 844-427-7433 (voice/relay) 857-206-6569 (TTY)
+              Mobility Center (handles eligibility questions, renewals, and changes to mobility status): 617-337-2727 (voice/relay)
+              MBTA Customer support (handles all other queries): 617-222-3200 (voice/relay)`,
             projectId: 'rsrs111111',
             user_id: username,
             session_id: props.session.id,
@@ -353,12 +353,13 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
   }[readyState];
 
   return (
-    <SpaceBetween direction="vertical" size="l">
-      <Container>
+    <div>
+      <Container className="ChatInputContainer">
         <div className={styles.input_textarea_container}>
           <SpaceBetween size="xxs" direction="horizontal" alignItems="center">
             {browserSupportsSpeechRecognition ? (
               <Button
+                className="MicButton"
                 iconName={listening ? "microphone-off" : "microphone"}
                 variant="icon"
                 ariaLabel="microphone-access"
@@ -394,6 +395,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
           />
           <div style={{ marginLeft: "8px" }}>
             <Button
+              className="InputChatSendButton"
               disabled={
                 readyState !== ReadyState.OPEN ||
                 props.running ||
@@ -411,7 +413,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
                   <Spinner />
                 </>
               ) : (
-                "Send"
+                "SEND"
               )}
             </Button>
           </div>
@@ -427,7 +429,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
           </SpaceBetween>
         </div>
       </div>
-    </SpaceBetween>
+    </div>
   );
 }
 

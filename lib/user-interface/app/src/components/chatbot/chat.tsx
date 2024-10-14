@@ -129,14 +129,15 @@ export default function Chat( props: { sessionId?: string } )
     <div className={styles.chat_container}>
       <SpaceBetween direction="vertical" size="m">
 
-        {messageHistory.map( ( message, idx ) => (
-          <ChatMessage
+        {messageHistory.map( ( message, idx ) =>
+        {
+          return <ChatMessage
             key={idx}
             message={message}
             onThumbsUp={() => handleFeedback( 1, idx, message )}
             onThumbsDown={( feedbackTopic: string, feedbackType: string, feedbackMessage: string ) => handleFeedback( 0, idx, message, feedbackTopic, feedbackType, feedbackMessage )}
           />
-        ) )}
+        } )}
       </SpaceBetween>
       <div className={styles.welcome_text}>
         {messageHistory.length == 0 && !session?.loading && (

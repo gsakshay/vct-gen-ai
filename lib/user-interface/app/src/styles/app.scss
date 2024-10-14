@@ -27,3 +27,268 @@ div[data-amplify-theme] {
 body {
   overflow-y: scroll;
 }
+
+
+// VALORANT INSPIRED THEME
+
+// Background Colors
+$valorant-bg-primary: #0F1923;
+$valorant-bg-secondary: #1F2326;
+
+// Button Colors
+$valorant-button-primary: #FF4654; // Valorant red for primary buttons
+
+// Text Colors
+$valorant-text-primary: #EAEAEA; // Light gray for primary text
+$valorant-text-secondary: #B0B0B0; // Lighter gray for secondary text
+
+$valorant-red: #FF4654;
+
+// Border Colors
+$valorant-white: #FFFFFF;
+$valorant-black: #000000;
+
+// Font Family
+$valorant-font-family-base: "'Rajdhani', sans-serif"; // Futuristic and bold font
+
+// Border Radius
+$valorant-border-radius-small: 4px; // Small border radius
+$valorant-border-radius-medium: 8px; // Medium border radius
+
+// Shadow Colors
+$valorant-shadow-small: rgba(0, 0, 0, 0.25); // Slightly pronounced shadow for contrast
+
+// Context-Specific Colors
+// Top Navigation
+$valorant-text-accent-nav: #FF4654; // Accent color for navigation items
+
+// Header Colors
+$valorant-header-bg: #1A1A1A; // Dark gray for header background
+$valorant-header-text-primary: #EAEAEA; // Light gray for header text
+
+// Flashbar Colors
+$valorant-flashbar-bg: #1F2C38; // Flashbar background with a blueish tone
+$valorant-flashbar-text-accent: #FF4654; // Accent color for flash messages
+
+// Alert Colors
+$valorant-alert-bg: #FFDDDD; // Light red background for alerts
+$valorant-alert-text-accent: #FF4654; // Valorant red for alert text
+
+// USAGE 
+
+.awsui-context-top-navigation {
+  header {
+    background: $valorant-bg-secondary !important;
+
+    ul,
+    div {
+      border-radius: 0 !important;
+    }
+  }
+}
+
+main {
+  background: $valorant-bg-secondary !important;
+}
+
+nav {
+  background: $valorant-bg-secondary !important;
+  border-inline-end: none !important;
+}
+
+.ChatInputContainer {
+  background: $valorant-bg-primary !important;
+}
+
+.UserInteractionDiv {
+  padding: 1rem;
+  background: $valorant-bg-secondary !important;
+
+  strong {
+    color: $valorant-red !important;
+  }
+}
+
+.AIInteractionDiv {
+  padding: 0.5rem !important;
+  background: $valorant-bg-secondary !important;
+  margin-bottom: 1rem !important;
+
+  div {
+    &:first-child {
+      padding: 0 !important;
+      background: $valorant-bg-secondary !important;
+    }
+
+    &:last-child {
+      padding: 0 !important;
+      background: $valorant-bg-secondary !important;
+      color: $valorant-text-primary !important
+    }
+  }
+
+  div {
+    border: 0 !important;
+    // border-radius: 2rem;
+    background: $valorant-text-primary !important;
+  }
+
+  strong {
+    color: $valorant-red !important;
+  }
+
+  button {
+    background: $valorant-white !important;
+    border: none !important;
+    outline: 0 !important;
+    outline-offset: 0 !important;
+    font-family: 'Rajdhani' !important;
+    border-radius: 0 !important;
+    padding: 0.5rem !important;
+
+    span {
+      color: $valorant-black !important;
+    }
+  }
+
+  button:hover {
+    background: $valorant-black !important;
+
+    span {
+      color: $valorant-white !important;
+    }
+  }
+}
+
+textarea,
+.MicButton {
+  color: $valorant-red !important;
+}
+
+nav {
+  div {
+    button {
+      background: $valorant-red !important;
+      border: none !important;
+      outline: $valorant-white solid 1px !important;
+      outline-offset: 3px !important;
+      color: $valorant-white !important;
+      font-family: 'Rajdhani' !important;
+      border-radius: 0 !important;
+      text-transform: uppercase !important;
+    }
+
+    button:hover {
+      background: $valorant-white !important;
+      color: $valorant-black !important;
+    }
+  }
+}
+
+nav {
+  &:first-child {
+    div {
+      &:first-child {
+        padding-left: 1rem;
+      }
+    }
+  }
+}
+
+header {
+  button {
+    background: $valorant-red !important;
+  }
+}
+
+.InputChatSendButton,
+.NewSessionButton .ChatInputContainer {
+  background: $valorant-red !important;
+  border: none !important;
+  outline: $valorant-white solid 1px !important;
+  outline-offset: 3px !important;
+  color: $valorant-white !important;
+  font-family: 'Rajdhani' !important;
+  border-radius: 0 !important;
+  padding: 0.5rem 1.5rem !important;
+  text-transform: uppercase !important;
+}
+
+.InputChatSendButton:hover,
+.MicButton:hover,
+.NewSessionButton:hover {
+  background: $valorant-white !important;
+  color: $valorant-black !important;
+}
+
+.NewSessionButton {
+  outline: 0 !important;
+  outline-offset: 0 !important;
+}
+
+center {
+  color: $valorant-white !important;
+}
+
+.SideNavigations {
+  span {
+    color: $valorant-text-primary !important;
+  }
+
+  a {
+    span {
+      color: $valorant-text-secondary !important;
+    }
+
+    span:hover {
+      color: $valorant-text-primary !important;
+    }
+  }
+
+  button {
+    background: $valorant-black !important;
+    border: none !important;
+    outline: 0 !important;
+    outline-offset: 0 !important;
+    font-family: 'Rajdhani' !important;
+    border-radius: 0 !important;
+    padding: 0.5rem 1.5rem !important;
+    text-transform: uppercase !important;
+
+    span {
+      color: $valorant-white !important;
+    }
+  }
+
+  button:hover {
+    background: $valorant-white !important;
+
+    span {
+      color: $valorant-black !important;
+    }
+  }
+}
+
+.awsui_hide-navigation_hyvsj_t18rz_817 {
+  button {
+    background: $valorant-white !important;
+    border: none !important;
+    outline: 0 !important;
+    outline-offset: 0 !important;
+    font-family: 'Rajdhani' !important;
+    border-radius: 0 !important;
+    padding: 0.5rem !important;
+
+    span {
+      color: $valorant-black !important;
+    }
+  }
+
+  button:hover {
+    background: $valorant-black !important;
+
+    span {
+      color: $valorant-white !important;
+    }
+  }
+}
