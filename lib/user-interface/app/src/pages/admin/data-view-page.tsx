@@ -1,4 +1,5 @@
-import {
+import
+{
   BreadcrumbGroup,
   ContentLayout,
   Header,
@@ -17,54 +18,66 @@ import DataFileUpload from "./file-upload-tab";
 import { ApiClient } from "../../common/api-client/api-client";
 import { AppContext } from "../../common/app-context";
 
-export default function DataPage() {
+export default function DataPage()
+{
   const onFollow = useOnFollow();
-  const [admin, setAdmin] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState("file");
-  const appContext = useContext(AppContext);
-  const apiClient = new ApiClient(appContext);
-  const [lastSyncTime, setLastSyncTime] = useState("")
-  const [showUnsyncedAlert, setShowUnsyncedAlert] = useState(false);
+  const [admin, setAdmin] = useState<boolean>( false );
+  const [activeTab, setActiveTab] = useState( "file" );
+  const appContext = useContext( AppContext );
+  const apiClient = new ApiClient( appContext );
+  const [lastSyncTime, setLastSyncTime] = useState( "" )
+  const [showUnsyncedAlert, setShowUnsyncedAlert] = useState( false );
 
   /** Function to get the last synced time */
-  const refreshSyncTime = async () => {
-    try {
-      const lastSync = await apiClient.knowledgeManagement.lastKendraSync();    
-      setLastSyncTime(lastSync);
-    } catch (e) {
-      console.log(e);
+  const refreshSyncTime = async () =>
+  {
+    try
+    {
+      const lastSync = await apiClient.knowledgeManagement.lastKendraSync();
+      setLastSyncTime( lastSync );
+    } catch ( e )
+    {
+      console.log( e );
     }
   }
 
   /** Checks for admin status */
-  useEffect(() => {
-    (async () => {
-      try {
+  useEffect( () =>
+  {
+    ( async () =>
+    {
+      try
+      {
         const result = await Auth.currentAuthenticatedUser();
-        if (!result || Object.keys(result).length === 0) {
-          console.log("Signed out!")
+        if ( !result || Object.keys( result ).length === 0 )
+        {
+          console.log( "Signed out!" )
           Auth.signOut();
           return;
         }
         const admin = result?.signInUserSession?.idToken?.payload["custom:role"]
-        if (admin) {
-          const data = JSON.parse(admin);
-          if (data.includes("Admin")) {
-            setAdmin(true);
+        if ( admin )
+        {
+          const data = JSON.parse( admin );
+          if ( data.includes( "Admin" ) )
+          {
+            setAdmin( true );
           }
         }
       }
       /** If there is some issue checking for admin status, just do nothing and the
        * error page will show up
         */
-      catch (e) {
-        console.log(e);
+      catch ( e )
+      {
+        console.log( e );
       }
-    })();
-  }, []);
+    } )();
+  }, [] );
 
   /** If the admin status check fails, just show an access denied page*/
-  if (!admin) {
+  if ( !admin )
+  {
     return (
       <div
         style={{
@@ -102,6 +115,7 @@ export default function DataPage() {
       }
       content={
         <ContentLayout
+          className="DataDashboardHeader"
           header={
             <Header
               variant="h1"
@@ -112,42 +126,44 @@ export default function DataPage() {
         >
           <SpaceBetween size="l">
             <Container
+              className="DataDashboardSync"
               header={
                 <Header
                   variant="h3"
-                  // description="Container description"
+                // description="Container description"
                 >
                   Last successful sync: {lastSyncTime}
-                </Header>                
+                </Header>
               }
             >
               <SpaceBetween size="xxs">
-              Manage the chatbot's data here. You can view, add, or remove data for the chatbot to reference.
+                Manage the chatbot's data here. You can view, add, or remove data for the chatbot to reference.
 
-              Please make sure to sync data with the chatbot when you are done adding or removing new files.
-              <br></br>
-              {showUnsyncedAlert && (
-                <Alert
-                  type="warning"
-                  dismissAriaLabel="Close alert"
-                  // dismissible
-                  onDismiss={() => setShowUnsyncedAlert(false)}
-                >
-                  Some files have been added or modified since the last sync.
-                  Please sync the data to ensure the chatbot has the latest
-                  information.
-                </Alert>
-              )}
+                Please make sure to sync data with the chatbot when you are done adding or removing new files.
+                <br></br>
+                {showUnsyncedAlert && (
+                  <Alert
+                    type="warning"
+                    dismissAriaLabel="Close alert"
+                    // dismissible
+                    onDismiss={() => setShowUnsyncedAlert( false )}
+                  >
+                    Some files have been added or modified since the last sync.
+                    Please sync the data to ensure the chatbot has the latest
+                    information.
+                  </Alert>
+                )}
               </SpaceBetween>
             </Container>
             <Tabs
+              className="DataDashboardTabs"
               tabs={[
                 {
                   label: "Current Files",
                   id: "file",
                   content: (
                     <DocumentsTab
-                      tabChangeFunction={() => setActiveTab("add-data")}
+                      tabChangeFunction={() => setActiveTab( "add-data" )}
                       documentType="file"
                       statusRefreshFunction={refreshSyncTime}
                       lastSyncTime={lastSyncTime}
@@ -159,15 +175,16 @@ export default function DataPage() {
                   label: "Add Files",
                   id: "add-data",
                   content: (
-                    <DataFileUpload 
-                      tabChangeFunction={() => setActiveTab("file")}
+                    <DataFileUpload
+                      tabChangeFunction={() => setActiveTab( "file" )}
                     />
                   ),
                 },
               ]}
               activeTabId={activeTab}
-              onChange={({ detail: { activeTabId } }) => {
-                setActiveTab(activeTabId);
+              onChange={( { detail: { activeTabId } } ) =>
+              {
+                setActiveTab( activeTabId );
               }}
             />
 

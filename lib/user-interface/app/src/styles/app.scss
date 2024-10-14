@@ -89,11 +89,35 @@ $valorant-alert-text-accent: #FF4654; // Valorant red for alert text
 
 main {
   background: $valorant-bg-secondary !important;
+
+  div {
+    div {
+      background: $valorant-bg-secondary !important;
+    }
+  }
 }
 
 nav {
   background: $valorant-bg-secondary !important;
   border-inline-end: none !important;
+
+  ol {
+    li {
+      // background: $valorant-text-primary !important;
+
+      a {
+        color: $valorant-red !important;
+      }
+
+      div {
+        padding-left: 0 !important;
+
+        span {
+          color: $valorant-text-primary !important;
+        }
+      }
+    }
+  }
 }
 
 .ChatInputContainer {
@@ -289,6 +313,113 @@ center {
 
     span {
       color: $valorant-white !important;
+    }
+  }
+}
+
+.DataDashboardHeader {
+  div {
+    background: $valorant-bg-secondary !important;
+    color: $valorant-text-primary !important;
+  }
+}
+
+.DataDashboardSync {
+  background: $valorant-bg-secondary !important;
+  color: $valorant-text-primary !important;
+  border: 0 !important;
+  outline: 0 !important;
+
+  div {
+    background: $valorant-bg-secondary !important;
+    color: $valorant-text-primary !important;
+  }
+}
+
+.DataDashboardTabs {
+
+  div,
+  p {
+    color: $valorant-text-primary !important;
+  }
+
+  button {
+    color: $valorant-red !important;
+  }
+
+  div::after {
+    background: $valorant-red !important;
+  }
+
+  div {
+    border: 0 !important;
+  }
+
+  div {
+    button {
+      background: $valorant-white !important;
+      border: none !important;
+      outline: 0 !important;
+      outline-offset: 0 !important;
+      font-family: 'Rajdhani' !important;
+      border-radius: 0 !important;
+      padding: 0.5rem !important;
+
+      span {
+        color: $valorant-black !important;
+      }
+    }
+
+    button:hover {
+      background: $valorant-black !important;
+
+      span {
+        color: $valorant-white !important;
+      }
+    }
+
+    ul {
+      li {
+        button {
+          background: transparent !important;
+
+          span {
+            color: $valorant-red !important;
+          }
+        }
+
+        button:hover {
+          background: transparent !important;
+
+          span {
+            color: $valorant-red !important;
+          }
+        }
+      }
+    }
+
+  }
+
+  input:checked {
+    background: $valorant-red !important;
+  }
+
+
+  table {
+    thead {
+      th {
+        background: $valorant-bg-secondary !important;
+      }
+    }
+
+    tbody {
+      tr {
+
+        td,
+        th {
+          border: 0 !important;
+        }
+      }
     }
   }
 }
