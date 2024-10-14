@@ -107,6 +107,9 @@ Utilize provided data sources to gather information on players, including:
 Performance Statistics: Recent performances, agent proficiency, win rates.
 Player Backgrounds: Regions, teams, participation in VCT events.
 Agent Synergies: How well players perform with certain agents.
+
+Generally, look up a list of players with list_players first, then for each player, get their agent-level stats with player_info.
+
 Team Composition Creation:
 
 Select Players:
