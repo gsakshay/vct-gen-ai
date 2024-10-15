@@ -1,16 +1,16 @@
 import
-  {
-    Box,
-    SpaceBetween,
-    Table,
-    Pagination,
-    Button,
-    TableProps,
-    Header,
-    CollectionPreferences,
-    Modal,
-    ContentLayout,
-  } from "@cloudscape-design/components";
+{
+  Box,
+  SpaceBetween,
+  Table,
+  Pagination,
+  Button,
+  TableProps,
+  Header,
+  CollectionPreferences,
+  Modal,
+  ContentLayout,
+} from "@cloudscape-design/components";
 import { useState, useEffect, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
@@ -20,6 +20,7 @@ import { ApiClient } from "../../common/api-client/api-client";
 import { AppContext } from "../../common/app-context";
 import RouterButton from "../wrappers/router-button";
 import { DateTime } from "luxon";
+import RouterLink from "../wrappers/router-link";
 // import { Session } from "../../API";
 
 export interface SessionsProps
@@ -120,7 +121,7 @@ export default function Sessions( props: SessionsProps )
   };
 
   return (
-    <>
+    <div className="SessionHistoryDiv">
       <Modal
         onDismiss={() => setShowModalDelete( false )}
         visible={showModalDelete}
@@ -173,7 +174,7 @@ export default function Sessions( props: SessionsProps )
       >
         {`Do you want to delete ${sessions.length} sessions?`}
       </Modal> */}
-      <ContentLayout header={<Header variant="h1">Session History</Header>}>
+      <ContentLayout className="SessionHistoryTabDiv" header={<Header variant="h1">Session History</Header>}>
         <Table
           {...collectionProps}
           // variant="full-page"
@@ -230,14 +231,16 @@ export default function Sessions( props: SessionsProps )
               // variant="awsui-h1-sticky"
               actions={
                 <SpaceBetween direction="horizontal" size="m">
-                  <RouterButton
-                    iconName="add-plus"
-                    href={`/chatbot/playground/${uuidv4()}`}
-                  // variant="inline-link"
-                  // onClick={() => getSessions()}
-                  >
-                    New session
-                  </RouterButton>
+                  <RouterLink
+                    href={`/chatbot/playground/${uuidv4()}`}>
+                    <Button
+                      iconName="add-plus"
+                      iconAlt="New session"
+                    >
+                      New session
+
+                    </Button>
+                  </RouterLink>
                   <Button
                     iconAlt="Refresh list"
                     iconName="refresh"
@@ -306,6 +309,6 @@ export default function Sessions( props: SessionsProps )
           }
         />
       </ContentLayout>
-    </>
+    </div>
   );
 }

@@ -122,6 +122,8 @@ nav {
 
 .ChatInputContainer {
   background: $valorant-bg-primary !important;
+  border-color: $valorant-white !important;
+  border-radius: 0 !important;
 }
 
 .UserInteractionDiv {
@@ -336,7 +338,8 @@ center {
   }
 }
 
-.DataDashboardTabs {
+.DataDashboardTabs,
+.SessionHistoryDiv {
 
   div,
   p {
@@ -419,6 +422,87 @@ center {
         th {
           border: 0 !important;
         }
+      }
+    }
+  }
+}
+
+.SessionHistoryTabDiv {
+  a {
+    color: $valorant-red !important;
+  }
+
+  button {
+    background: $valorant-white !important;
+    border: none !important;
+    outline: 0 !important;
+    outline-offset: 0 !important;
+    font-family: 'Rajdhani' !important;
+    border-radius: 0 !important;
+    padding: 0.5rem !important;
+
+    span {
+      color: $valorant-black !important;
+    }
+  }
+
+  button:hover {
+    background: $valorant-black !important;
+
+    span {
+      color: $valorant-white !important;
+    }
+  }
+
+  a {
+    button {
+      background: $valorant-red !important;
+      border: none !important;
+      color: $valorant-white !important;
+      font-family: 'Rajdhani' !important;
+      border-radius: 0 !important;
+      text-transform: uppercase !important;
+    }
+
+    button:hover {
+      background: $valorant-white !important;
+
+      span {
+        color: $valorant-black !important;
+      }
+    }
+  }
+}
+
+.awsui_dialog_1d2i7_11r6m_165 {
+  div {
+    border-radius: 0 !important;
+    background: $valorant-bg-primary !important;
+    color: $valorant-text-primary !important;
+
+    span {
+      color: $valorant-text-primary !important;
+    }
+
+    button {
+      background: $valorant-white !important;
+      border: none !important;
+      outline: 0 !important;
+      outline-offset: 0 !important;
+      font-family: 'Rajdhani' !important;
+      border-radius: 0 !important;
+      padding: 0.5rem !important;
+
+      span {
+        color: $valorant-black !important;
+      }
+    }
+
+    button:hover {
+      background: $valorant-red !important;
+
+      span {
+        color: $valorant-white !important;
       }
     }
   }

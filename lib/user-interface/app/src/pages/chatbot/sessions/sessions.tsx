@@ -5,15 +5,16 @@ import { BreadcrumbGroup } from "@cloudscape-design/components";
 import { CHATBOT_NAME } from "../../../common/constants";
 import useOnFollow from "../../../common/hooks/use-on-follow";
 
-export default function SessionPage() {
-  const [toolsOpen, setToolsOpen] = useState(false);
+export default function SessionPage()
+{
+  const [toolsOpen, setToolsOpen] = useState( false );
   const onFollow = useOnFollow();
 
   return (
     <BaseAppLayout
       contentType="table"
       toolsOpen={toolsOpen}
-      onToolsChange={(e) => setToolsOpen(e.detail.open)}
+      onToolsChange={( e ) => setToolsOpen( e.detail.open )}
       breadcrumbs={
         <BreadcrumbGroup
           onFollow={onFollow}

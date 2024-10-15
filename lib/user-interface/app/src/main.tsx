@@ -6,11 +6,11 @@ import { StorageHelper } from "./common/helpers/storage-helper";
 import "@cloudscape-design/global-styles/index.css";
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById( "root" ) as HTMLElement
 );
 
 const theme = StorageHelper.getTheme();
-StorageHelper.applyTheme(theme);
+StorageHelper.applyTheme( theme );
 
 root.render(
   <React.StrictMode>
