@@ -128,16 +128,17 @@ export default function Chat( props: { sessionId?: string } )
   return (
     <div className={styles.chat_container}>
       <SpaceBetween direction="vertical" size="m">
-
-        {messageHistory.map( ( message, idx ) =>
-        {
-          return <ChatMessage
-            key={idx}
-            message={message}
-            onThumbsUp={() => handleFeedback( 1, idx, message )}
-            onThumbsDown={( feedbackTopic: string, feedbackType: string, feedbackMessage: string ) => handleFeedback( 0, idx, message, feedbackTopic, feedbackType, feedbackMessage )}
-          />
-        } )}
+        <div className="ChatHistoryDiv">
+          {messageHistory.map( ( message, idx ) =>
+          {
+            return <ChatMessage
+              key={idx}
+              message={message}
+              onThumbsUp={() => handleFeedback( 1, idx, message )}
+              onThumbsDown={( feedbackTopic: string, feedbackType: string, feedbackMessage: string ) => handleFeedback( 0, idx, message, feedbackTopic, feedbackType, feedbackMessage )}
+            />
+          } )}
+        </div>
       </SpaceBetween>
       <div className={styles.welcome_text}>
         {messageHistory.length == 0 && !session?.loading && (
@@ -149,15 +150,13 @@ export default function Chat( props: { sessionId?: string } )
           </center>
         )}
       </div>
-      <div>
-        <ChatInputPanel
-          session={session}
-          running={running}
-          setRunning={setRunning}
-          messageHistory={messageHistory}
-          setMessageHistory={( history ) => setMessageHistory( history )}
-        />
-      </div>
+      <ChatInputPanel
+        session={session}
+        running={running}
+        setRunning={setRunning}
+        messageHistory={messageHistory}
+        setMessageHistory={( history ) => setMessageHistory( history )}
+      />
     </div>
   );
 }

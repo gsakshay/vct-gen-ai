@@ -353,7 +353,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
   }[readyState];
 
   return (
-    <div>
+    <>
       <Container className="ChatInputContainer">
         <div className={styles.input_textarea_container}>
           <SpaceBetween size="xxs" direction="horizontal" alignItems="center">
@@ -429,7 +429,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
           </SpaceBetween>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
