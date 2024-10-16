@@ -126,7 +126,7 @@ export default function ChatMessage( props: ChatMessageProps )
           </FormField>
         </SpaceBetween>
       </Modal>
-      <Grid gridDefinition={[{ colspan: 8 }, { colspan: 4 }]}>
+      <Grid gridDefinition={[{ colspan: 9 }, { colspan: 3 }]}>
         <div className="AIInteractionDiv">
           {props.message?.type === ChatBotMessageType.AI && (
             <Grid gridDefinition={[{ colspan: 1 }, { colspan: 11 }]}>
