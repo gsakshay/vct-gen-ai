@@ -127,8 +127,9 @@ export default function Chat( props: { sessionId?: string } )
 
   return (
     <div className={styles.chat_container}>
-      <SpaceBetween direction="vertical" size="m">
-        <div className="ChatHistoryDiv">
+      <div className="ChatHistoryDiv">
+
+        <SpaceBetween direction="vertical" size="m">
           {messageHistory.map( ( message, idx ) =>
           {
             return <ChatMessage
@@ -138,17 +139,17 @@ export default function Chat( props: { sessionId?: string } )
               onThumbsDown={( feedbackTopic: string, feedbackType: string, feedbackMessage: string ) => handleFeedback( 0, idx, message, feedbackTopic, feedbackType, feedbackMessage )}
             />
           } )}
+        </SpaceBetween>
+        <div className={styles.welcome_text}>
+          {messageHistory.length == 0 && !session?.loading && (
+            <center>{CHATBOT_NAME}</center>
+          )}
+          {session?.loading && (
+            <center>
+              <StatusIndicator type="loading">Loading session</StatusIndicator>
+            </center>
+          )}
         </div>
-      </SpaceBetween>
-      <div className={styles.welcome_text}>
-        {messageHistory.length == 0 && !session?.loading && (
-          <center>{CHATBOT_NAME}</center>
-        )}
-        {session?.loading && (
-          <center>
-            <StatusIndicator type="loading">Loading session</StatusIndicator>
-          </center>
-        )}
       </div>
       <ChatInputPanel
         session={session}
