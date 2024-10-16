@@ -1,8 +1,6 @@
-# Welcome to your CDK TypeScript project
+# VCT Scout
 
-This is a blank project for CDK development with TypeScript.
-
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+VCT Scout is an AI assistant, powered by Amazon Bedrock. It streamlines team-building and player analysis, offering managers data-driven insights to optimize recruitment and strategy.
 
 ## Useful commands
 
