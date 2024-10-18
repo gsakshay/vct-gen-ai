@@ -135,7 +135,7 @@ nav {
 }
 
 .UserInteractionDiv {
-  padding: 1rem;
+  // padding: 1rem;
   background: $valorant-bg-secondary !important;
 
   .ChatTextContainer {
@@ -153,7 +153,7 @@ nav {
   display: flex !important;
   flex-direction: row !important;
   justify-content: flex-end !important;
-  text-align: right !important;
+  width: 100% !important;
 }
 
 .AIInteractionDiv {
