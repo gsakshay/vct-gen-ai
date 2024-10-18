@@ -172,7 +172,7 @@ export default function ChatMessage(props: ChatMessageProps) {
                       <Spinner />
                     </Box>
                   ) : null}
-                  {props.message.content.length > 0 ? (
+                  {/* {props.message.content.length > 0 ? (
                     <div className={styles.btn_chabot_message_copy}>
                       <Popover
                         size="medium"
@@ -194,7 +194,7 @@ export default function ChatMessage(props: ChatMessageProps) {
                         />
                       </Popover>
                     </div>
-                  ) : null}
+                  ) : null} */}
                   {/* Render the segments */}
                   {segments.map((segment, index) => {
                     if (segment.type === 'text') {
@@ -241,7 +241,7 @@ export default function ChatMessage(props: ChatMessageProps) {
                       );
                     } else if (segment.type === 'thinking') {
                       return (
-                        <ExpandableSection key={index} header="Thinking...">
+                        <ExpandableSection key={index} headerText={"Thinking..."}>
                           <ReactMarkdown
                             children={segment.content}
                             remarkPlugins={[remarkGfm]}
