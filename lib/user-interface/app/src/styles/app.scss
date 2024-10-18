@@ -25,7 +25,7 @@ div[data-amplify-theme] {
 }
 
 body {
-  // overflow-y: scroll;
+  overflow-y: scroll;
 }
 
 
@@ -138,15 +138,32 @@ nav {
   padding: 1rem;
   background: $valorant-bg-secondary !important;
 
+  .ChatTextContainer {
+    div {
+      background: $valorant-white !important;
+      padding: 1rem 2rem !important;
+      border-radius: 1rem !important;
+    }
+  }
+
   strong {
     color: $valorant-red !important;
   }
+
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: flex-end !important;
+  text-align: right !important;
 }
 
 .AIInteractionDiv {
   padding: 0.5rem !important;
   background: $valorant-bg-secondary !important;
   margin-bottom: 1rem !important;
+
+  .UserInteractionGrid {
+    flex-direction: row !important;
+  }
 
   p {
     margin: 0 !important;
@@ -194,6 +211,12 @@ nav {
 
     span {
       color: $valorant-white !important;
+    }
+  }
+
+  .ChatTextContainer {
+    div {
+      // background: $valorant-bg-primary !important;
     }
   }
 }
@@ -539,7 +562,7 @@ center {
 }
 
 .ChatHistoryDiv {
-  overflow-y: scroll !important;
+  overflow-y: hidden !important;
   overflow-x: hidden !important;
-  height: 80vh !important;
+  min-height: 80vh !important;
 }
