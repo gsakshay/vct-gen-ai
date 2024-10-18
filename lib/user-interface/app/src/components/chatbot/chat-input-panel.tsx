@@ -216,9 +216,6 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
       let incomingMetadata: boolean = false;
       let sources = {};
 
-      let thinking = false;
-      let currentThought = ''
-
       /**If there is no response after a minute, time out the response to try again. */
       setTimeout( () =>
       {
@@ -281,29 +278,14 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
           incomingMetadata = true;
           return;
         }
-
-        
-
-        if (data.data.includes("</thinking>")) {
-          thinking = false;
-          currentThought = '';
-          return;
-        }
-
-        if (receivedData.includes("<thinking>")) {          
-          thinking = true;
-          receivedData = receivedData.replace("<thinking>","")          
-        }
+      
 
         if ( !incomingMetadata )
         {
           const timeoutPattern = /\{"message":\s*"[^"]*",\s*"connectionId":\s*"[^"]*",\s*"requestId":\s*"[^"]*"\}/g;
-          const cleanedString = data.data.replace( timeoutPattern, '' );
-          if (thinking) {
-            currentThought += cleanedString;            
-          } else {
-            receivedData += cleanedString;            
-          }
+          const cleanedString = data.data.replace( timeoutPattern, '' );          
+          receivedData += cleanedString;            
+          
         } else
         {
           let sourceData = JSON.parse( data.data );
@@ -336,7 +318,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
           },
           {
             type: ChatBotMessageType.AI,
-            content: receivedData + currentThought,
+            content: receivedData,
             metadata: sources,
           },
         ];

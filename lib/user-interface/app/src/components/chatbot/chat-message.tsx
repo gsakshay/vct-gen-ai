@@ -201,7 +201,7 @@ export default function ChatMessage(props: ChatMessageProps) {
                       return (
                         <ReactMarkdown
                           key={index}
-                          children={segment.content}
+                          children={segment.content.replace("<thinking>","")}
                           remarkPlugins={[remarkGfm]}
                           components={{
                             pre(props) {
