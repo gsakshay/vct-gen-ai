@@ -313,16 +313,11 @@ export default function ChatMessage( props: ChatMessageProps )
       </div>
       <div className="UserInteractionDiv">
         {props.message?.type === ChatBotMessageType.Human && (
-          <Grid className="UserInteractionGrid" gridDefinition={[{ colspan: 10 }]}>
-            <div className="ChatTextContainer">
-              <TextContent>
-                <strong>{props.message.content}</strong>
-              </TextContent>
-            </div>
-            {/* <div style={{ display: "flex", justifyContent: "right", width: "100%" }}>
-              <img src="/svg/valorant-icon.svg" alt={CHATBOT_NAME} />
-            </div> */}
-          </Grid>
+          <div className="ChatTextContainer">
+            <TextContent>
+              <strong>{props.message.content}</strong>
+            </TextContent>
+          </div>
         )}
       </div>
       {loading && (

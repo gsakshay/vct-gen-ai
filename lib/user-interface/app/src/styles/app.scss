@@ -143,27 +143,24 @@ nav {
       background: $valorant-white !important;
       padding: 1rem 2rem !important;
       border-radius: 1rem !important;
+      white-space: nowrap !important;
     }
-  }
 
-  strong {
-    color: $valorant-red !important;
-  }
+    strong {
+      color: $valorant-red !important;
+    }
 
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: flex-end !important;
-  width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+    width: 100% !important;
+  }
 }
 
 .AIInteractionDiv {
   padding: 0.5rem !important;
   background: $valorant-bg-secondary !important;
   margin-bottom: 1rem !important;
-
-  .UserInteractionGrid {
-    flex-direction: row !important;
-  }
 
   p {
     margin: 0 !important;
