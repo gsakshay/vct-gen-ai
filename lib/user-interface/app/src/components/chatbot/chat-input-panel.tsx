@@ -261,6 +261,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
       // Event listener for incoming messages
       ws.addEventListener( 'message', async function incoming( data )
       {
+        console.log(data.data)
         /**This is a custom tag from the API that denotes that an error occured
          * and the next chunk will be an error message. */
         if ( data.data.includes( "<!ERROR!>:" ) )
@@ -277,11 +278,14 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
           incomingMetadata = true;
           return;
         }
+      
+
         if ( !incomingMetadata )
         {
           const timeoutPattern = /\{"message":\s*"[^"]*",\s*"connectionId":\s*"[^"]*",\s*"requestId":\s*"[^"]*"\}/g;
-          const cleanedString = data.data.replace( timeoutPattern, '' );
-          receivedData += cleanedString;
+          const cleanedString = data.data.replace( timeoutPattern, '' );          
+          receivedData += cleanedString;            
+          
         } else
         {
           let sourceData = JSON.parse( data.data );
@@ -298,6 +302,8 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
           sources = { "Sources": sourceData }
           console.log( sources );
         }
+
+        
 
         // Update the chat history state with the new message        
         messageHistoryRef.current = [
