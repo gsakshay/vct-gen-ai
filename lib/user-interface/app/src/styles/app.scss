@@ -536,5 +536,6 @@ center {
 
 .ChatHistoryDiv {
   overflow-y: scroll !important;
+  overflow-x: hidden !important;
   height: 80vh !important;
 }

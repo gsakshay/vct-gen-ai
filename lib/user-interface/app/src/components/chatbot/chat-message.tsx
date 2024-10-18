@@ -126,10 +126,10 @@ export default function ChatMessage( props: ChatMessageProps )
           </FormField>
         </SpaceBetween>
       </Modal>
-      <Grid gridDefinition={[{ colspan: 9 }, { colspan: 3 }]}>
+      <Grid gridDefinition={[{ colspan: 9 }, { colspan: 2.5 }]}>
         <div className="AIInteractionDiv">
           {props.message?.type === ChatBotMessageType.AI && (
-            <Grid gridDefinition={[{ colspan: 1 }, { colspan: 11 }]}>
+            <Grid gridDefinition={[{ colspan: 1 }, { colspan: 10 }]}>
               <div>
                 <img src="/svg/valorant-icon.svg" alt={CHATBOT_NAME} />
               </div>
