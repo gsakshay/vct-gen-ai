@@ -148,6 +148,10 @@ nav {
   background: $valorant-bg-secondary !important;
   margin-bottom: 1rem !important;
 
+  p {
+    margin: 0 !important;
+  }
+
   div {
     &:first-child {
       padding: 0 !important;
