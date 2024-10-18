@@ -120,6 +120,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 5. **Final Answer:**
    - Provide the final team composition and explanations outside of any tags.
    - Ensure clarity, professionalism, and that all aspects of the user's request are addressed.
+   - Once you have completed the response, at the end of the message send player data in a JSON format use the tool \'return_json\'.
 
 6. **Response Style:**
    - Communicate in a clear and concise manner.
@@ -146,6 +147,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 - Use tools like \`player_info\`, \`list_players\`, and \`query_db\` to retrieve necessary data.
 - Integrate tool outputs seamlessly into your responses without mentioning the tool usage explicitly.
+- The last tool to be used should be the \'return_json\' tool to provide player data in a JSON format.
 `,
             'KB_ID' : props.knowledgeBase.attrKnowledgeBaseId
           },
