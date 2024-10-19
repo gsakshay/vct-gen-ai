@@ -160,7 +160,7 @@ export default function NavigationPanel()
 
   return (
     <div>
-      <div style={{ paddingLeft: "1 rem !important" }}>
+      <div>
         <Box margin="xs" padding={{ top: "l" }} textAlign="center">
           <RouterLink
             href={`/chatbot/playground/${uuidv4()}`}

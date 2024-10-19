@@ -6,7 +6,7 @@ import
   FeedbackData
 } from "./types";
 import { Auth } from "aws-amplify";
-import { SpaceBetween, StatusIndicator, Alert, Flashbar } from "@cloudscape-design/components";
+import { SpaceBetween, StatusIndicator, Alert, Flashbar, Grid } from "@cloudscape-design/components";
 import { v4 as uuidv4 } from "uuid";
 import { AppContext } from "../../common/app-context";
 import { ApiClient } from "../../common/api-client/api-client";
@@ -151,13 +151,18 @@ export default function Chat( props: { sessionId?: string } )
           )}
         </div>
       </div>
-      <ChatInputPanel
-        session={session}
-        running={running}
-        setRunning={setRunning}
-        messageHistory={messageHistory}
-        setMessageHistory={( history ) => setMessageHistory( history )}
-      />
+      <Grid gridDefinition={[{ colspan: 1 }, { colspan: 10 }, { colspan: 1 }]}>
+        <div></div>
+        <ChatInputPanel
+          session={session}
+          running={running}
+          setRunning={setRunning}
+          messageHistory={messageHistory}
+          setMessageHistory={( history ) => setMessageHistory( history )}
+        />
+        <div></div>
+
+      </Grid>
     </div>
   );
 }

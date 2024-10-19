@@ -61,13 +61,14 @@ export default function GlobalHeader()
 
   return (
     <div
-      style={{ zIndex: 1002, top: 0, left: 0, right: 0, position: "fixed" }}
+      style={{ zIndex: 1002, top: 0, left: 0, right: 0, position: "fixed", boxShadow: '0px 8px 10px -4px rgba( 255, 255, 255, 0.5 )' }}
       id="awsui-top-navigation"
     >
       <TopNavigation
         identity={{
           href: "/",
           logo: { src: "/svg/valorant-icon.svg", alt: CHATBOT_NAME + " Logo" },
+          title: "VCT Scout"
         }}
         utilities={[
           {
