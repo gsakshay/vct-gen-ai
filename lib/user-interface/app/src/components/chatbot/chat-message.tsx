@@ -313,11 +313,15 @@ export default function ChatMessage( props: ChatMessageProps )
       </div>
       <div className="UserInteractionDiv">
         {props.message?.type === ChatBotMessageType.Human && (
-          <div className="ChatTextContainer">
-            <TextContent>
-              <strong>{props.message.content}</strong>
-            </TextContent>
-          </div>
+          <Grid gridDefinition={[{ colspan: 1 }, { colspan: 10 }, { colspan: 2 }]}>
+            <div></div>
+            <div className="ChatTextContainer">
+              <TextContent>
+                <strong>{props.message.content}</strong>
+              </TextContent>
+            </div>
+            <div></div>
+          </Grid>
         )}
       </div>
       {loading && (
