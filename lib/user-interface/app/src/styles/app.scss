@@ -145,7 +145,7 @@ nav {
 
   .ChatTextContainer {
     div {
-      background: $valorant-white !important;
+      background: $valorant-red !important;
       padding: 1rem 2rem !important;
       border-radius: 1rem !important;
       // white-space: nowrap !important;
@@ -153,6 +153,7 @@ nav {
 
     strong {
       color: $valorant-red !important;
+      color: $valorant-white !important;
     }
 
     display: flex !important;

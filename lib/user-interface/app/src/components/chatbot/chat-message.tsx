@@ -313,7 +313,7 @@ export default function ChatMessage( props: ChatMessageProps )
       </div>
       <div className="UserInteractionDiv">
         {props.message?.type === ChatBotMessageType.Human && (
-          <Grid gridDefinition={[{ colspan: 1 }, { colspan: 10 }, { colspan: 2 }]}>
+          <Grid gridDefinition={[{ colspan: 3 }, { colspan: 8 }, { colspan: 2 }]}>
             <div></div>
             <div className="ChatTextContainer">
               <TextContent>
