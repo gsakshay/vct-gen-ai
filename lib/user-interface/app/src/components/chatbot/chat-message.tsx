@@ -33,6 +33,7 @@ import "../../styles/app.scss";
 import { useNotifications } from "../notif-manager";
 import { Utils } from "../../common/utils";
 import { CHATBOT_NAME, feedbackCategories, feedbackTypes } from '../../common/constants'
+import { formatThinkingString } from "./utils";
 
 export interface ChatMessageProps
 {
@@ -62,27 +63,34 @@ export default function ChatMessage( props: ChatMessageProps )
   function parseContent( content: string )
   {
     const segments = [];
-    let thinkingRegex = /<thinking>([\s\S]*?)<\/thinking>/g;
+    let customTagRegex = /<(\w+)>([\s\S]*?)<\/\1>/g;
     let lastIndex = 0;
     let match;
 
-    while ( ( match = thinkingRegex.exec( content ) ) !== null )
+    while ( ( match = customTagRegex.exec( content ) ) !== null )
     {
+      let [tagContent, tagName, tagInnerContent] = match;
+
       if ( match.index > lastIndex )
       {
-        // Add text before <thinking> as normal text
+        // Add text before the custom tag as normal text
         segments.push( {
           type: 'text',
           content: content.substring( lastIndex, match.index ),
         } );
       }
-      // Add thinking content
+
+      // Add custom tag content
       segments.push( {
-        type: 'thinking',
-        content: match[1],
+        type: "thinking",
+        tagName: tagName,
+        tagContent: tagContent,
+        tagInnerContent: tagInnerContent,
       } );
-      lastIndex = thinkingRegex.lastIndex;
+
+      lastIndex = customTagRegex.lastIndex;
     }
+
     if ( lastIndex < content.length )
     {
       // Add remaining text
@@ -91,10 +99,13 @@ export default function ChatMessage( props: ChatMessageProps )
         content: content.substring( lastIndex ),
       } );
     }
+
     return segments;
   }
 
   const segments = parseContent( content );
+
+  console.log( "Segments", segments )
 
   return (
     <div>
@@ -214,7 +225,7 @@ export default function ChatMessage( props: ChatMessageProps )
                     return (
                       <ReactMarkdown
                         key={index}
-                        children={segment.content.replace( "<thinking>", "" )}
+                        children={segment.content.replace( segment?.tagName, "" )}
                         remarkPlugins={[remarkGfm]}
                         components={{
                           pre( props )
@@ -259,9 +270,9 @@ export default function ChatMessage( props: ChatMessageProps )
                   } else if ( segment.type === 'thinking' )
                   {
                     return (
-                      <ExpandableSection key={index} headerText={"Thinking..."}>
+                      <ExpandableSection key={index} headerText={formatThinkingString( segment?.tagName )}>
                         <ReactMarkdown
-                          children={segment.content}
+                          children={segment?.tagInnerContent}
                           remarkPlugins={[remarkGfm]}
                           components={{
                             pre( props )

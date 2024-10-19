@@ -275,6 +275,12 @@ header {
   button {
     background: $valorant-red !important;
   }
+
+  a {
+    span:hover {
+      color: $valorant-red !important;
+    }
+  }
 }
 
 .InputChatSendButton,
