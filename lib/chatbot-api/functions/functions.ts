@@ -134,7 +134,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 
    - Enclose internal reasoning within descriptive tags (e.g., start with \`'<retrieving_players>'\`, end with \`'</retrieving_players>'\`).
    - Exclude the user's original message from these tags.
-   - Always close the tag before opening another.
+   - Always "close the tag" before opening another.
 
 5. **Final Answer:**
 
