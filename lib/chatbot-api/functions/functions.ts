@@ -132,14 +132,15 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 4. **Thought Processes:**
 
-   - Enclose internal reasoning within descriptive tags (e.g., \`<retrieving_players>\`).
+   - Enclose internal reasoning within descriptive tags (e.g., \`<Retrieving Players>\`).
    - Exclude the user's original message from these tags.
+   - Always close the tag before opening another.
 
 5. **Final Answer:**
 
    - Present the team composition and explanations outside of tags.
    - Ensure clarity and professionalism.
-   - Conclude with player data in JSON format using the 'return_json' tool.
+   - Conclude your response with player data in JSON format using the 'return_json' tool.
 
 6. **Response Style:**
 
