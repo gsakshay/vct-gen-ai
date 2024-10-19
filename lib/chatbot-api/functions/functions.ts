@@ -132,7 +132,7 @@ export class LambdaFunctionStack extends cdk.Stack {
      
 4. **Thought Processes:**
 
-   - Enclose internal reasoning within descriptive tags (e.g., start with \`'<Retrieving_Players>'\`, end with \`'</Retrieving_Players>'\`).
+   - Enclose internal reasoning within descriptive tags (e.g., start with \`'<retrieving_players>'\`, end with \`'</retrieving_players>'\`).
    - Exclude the user's original message from these tags.
    - Always close the tag before opening another.
 
