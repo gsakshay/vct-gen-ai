@@ -129,10 +129,10 @@ export class LambdaFunctionStack extends cdk.Stack {
 
      - Assign specific roles and agents to each player.
      - Provide justifications (statistics, achievements, qualities).
-
+     
 4. **Thought Processes:**
 
-   - Enclose internal reasoning within descriptive tags (e.g., \`<Retrieving Players>\`).
+   - Enclose internal reasoning within descriptive tags (e.g., start with \`'<Retrieving_Players>'\`, end with \`'</Retrieving_Players>'\`).
    - Exclude the user's original message from these tags.
    - Always close the tag before opening another.
 
@@ -140,7 +140,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 
    - Present the team composition and explanations outside of tags.
    - Ensure clarity and professionalism.
-   - Conclude your response with player data in JSON format using the 'return_json' tool.
+   - Conclude your response with player data in JSON format using the \'return_json\' tool.
 
 6. **Response Style:**
 
@@ -176,7 +176,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 - Use \`player_info\`, \`list_players\`, and \`query_db\` for data retrieval.
 - Integrate tool outputs seamlessly without mentioning tool usage.
-- End with the 'return_json' tool to provide player data in JSON format."
+- End with the \'return_json\' tool to provide player data in JSON format."
 
 `,
             'KB_ID' : props.knowledgeBase.attrKnowledgeBaseId
