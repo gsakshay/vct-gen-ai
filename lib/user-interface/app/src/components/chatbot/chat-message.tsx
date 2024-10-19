@@ -33,7 +33,7 @@ import "../../styles/app.scss";
 import { useNotifications } from "../notif-manager";
 import { Utils } from "../../common/utils";
 import { CHATBOT_NAME, feedbackCategories, feedbackTypes } from '../../common/constants'
-import { formatThinkingString } from "./utils";
+import { formatThinkingString, removeAngleBracketContent } from "./utils";
 
 export interface ChatMessageProps
 {
@@ -51,6 +51,9 @@ export default function ChatMessage( props: ChatMessageProps )
   const [selectedTopic, setSelectedTopic] = React.useState( { label: "Select a Topic", value: "1" } );
   const [selectedFeedbackType, setSelectedFeedbackType] = React.useState( { label: "Select a Problem", value: "1" } );
   const [value, setValue] = useState( "" );
+
+  // const [selectedValorantPlayers, setSelectedValorantPlayers] = useState( [] )
+  // console.log( selectedValorantPlayers )
 
   const content =
     props.message.content && props.message.content.length > 0
@@ -80,6 +83,12 @@ export default function ChatMessage( props: ChatMessageProps )
         } );
       }
 
+      // if ( tagName === "json_data" )
+      // {
+      //   const parsedPlayers = JSON.parse( JSON.stringify( tagInnerContent ) );
+      //   setSelectedValorantPlayers( parsedPlayers?.players )
+      // }
+
       // Add custom tag content
       segments.push( {
         type: "thinking",
@@ -105,7 +114,6 @@ export default function ChatMessage( props: ChatMessageProps )
 
   const segments = parseContent( content );
 
-  console.log( "Segments", segments )
 
   return (
     <div>
@@ -270,50 +278,52 @@ export default function ChatMessage( props: ChatMessageProps )
                   } else if ( segment.type === 'thinking' )
                   {
                     return (
-                      <ExpandableSection key={index} headerText={formatThinkingString( segment?.tagName )}>
-                        <ReactMarkdown
-                          children={segment?.tagInnerContent}
-                          remarkPlugins={[remarkGfm]}
-                          components={{
-                            pre( props )
-                            {
-                              const { children, ...rest } = props;
-                              return (
-                                <pre {...rest} className={styles.codeMarkdown}>
-                                  {children}
-                                </pre>
-                              );
-                            },
-                            table( props )
-                            {
-                              const { children, ...rest } = props;
-                              return (
-                                <table {...rest} className={styles.markdownTable}>
-                                  {children}
-                                </table>
-                              );
-                            },
-                            th( props )
-                            {
-                              const { children, ...rest } = props;
-                              return (
-                                <th {...rest} className={styles.markdownTableCell}>
-                                  {children}
-                                </th>
-                              );
-                            },
-                            td( props )
-                            {
-                              const { children, ...rest } = props;
-                              return (
-                                <td {...rest} className={styles.markdownTableCell}>
-                                  {children}
-                                </td>
-                              );
-                            },
-                          }}
-                        />
-                      </ExpandableSection>
+                      <div className="ThinkingContent">
+                        <ExpandableSection key={index} headerText={formatThinkingString( segment?.tagName )}>
+                          <ReactMarkdown
+                            children={removeAngleBracketContent( segment?.tagInnerContent )}
+                            remarkPlugins={[remarkGfm]}
+                            components={{
+                              pre( props )
+                              {
+                                const { children, ...rest } = props;
+                                return (
+                                  <pre {...rest} className={styles.codeMarkdown}>
+                                    {children}
+                                  </pre>
+                                );
+                              },
+                              table( props )
+                              {
+                                const { children, ...rest } = props;
+                                return (
+                                  <table {...rest} className={styles.markdownTable}>
+                                    {children}
+                                  </table>
+                                );
+                              },
+                              th( props )
+                              {
+                                const { children, ...rest } = props;
+                                return (
+                                  <th {...rest} className={styles.markdownTableCell}>
+                                    {children}
+                                  </th>
+                                );
+                              },
+                              td( props )
+                              {
+                                const { children, ...rest } = props;
+                                return (
+                                  <td {...rest} className={styles.markdownTableCell}>
+                                    {children}
+                                  </td>
+                                );
+                              },
+                            }}
+                          />
+                        </ExpandableSection>
+                      </div>
                     );
                   }
                 } )}

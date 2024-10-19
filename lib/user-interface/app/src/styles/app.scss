@@ -168,8 +168,61 @@ nav {
   background: $valorant-bg-secondary !important;
   margin-bottom: 1rem !important;
 
-  p {
-    margin: 0 !important;
+  .ThinkingContent {
+    margin: 0 2rem !important;
+
+    div {
+      span {
+        background-image: linear-gradient(135deg, #ea9069, #e1818a);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+        font-weight: normal !important
+      }
+
+      div {
+
+        p {
+          padding-left: 1rem !important;
+          border-left: 2px solid rgb(164, 161, 161) !important;
+        }
+
+        ol,
+        ul {
+          padding-left: 2rem !important;
+          border-left: 2px solid rgb(164, 161, 161) !important;
+
+          p {
+            border: 0 !important;
+            padding: 0 !important;
+          }
+        }
+      }
+    }
+
+    .awsui_icon-container_gwq0h_10iv9_263 {
+      display: none !important;
+    }
+  }
+
+  .ChatTextContainer {
+    div {
+      div {
+        div {
+          div {
+
+            p,
+            ol,
+            li {
+              margin: 0 !important;
+            }
+          }
+        }
+      }
+    }
+
   }
 
   div {
@@ -310,6 +363,10 @@ header {
 
 center {
   color: $valorant-white !important;
+}
+
+div:has(> .SideNavigations) {
+  // Apply box shadow
 }
 
 .SideNavigations {

@@ -33,3 +33,11 @@ export function formatThinkingString(input: string): string {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 }
+
+export function removeAngleBracketContent(input: string): string {
+  if (typeof input !== 'string') {
+    throw new Error('Input must be a string');
+  }
+  
+  return input.replace(/<[^>]*>/g, '');
+}
