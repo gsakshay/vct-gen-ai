@@ -115,7 +115,7 @@ def get_team_composition(session_id, user_id):
             return {
                 'statusCode': 200,
                 'headers': {'Access-Control-Allow-Origin': '*'},
-                'body': json.dumps(response['Item']['team_composition'])
+                'body': json.dumps(response['Item']['team_composition'], cls=DecimalEncoder)
             }
         else:
             return {
