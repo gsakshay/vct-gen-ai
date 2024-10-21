@@ -24,15 +24,24 @@ class DecimalEncoder(json.JSONEncoder):
 def add_session(session_id, user_id, chat_history, title, new_chat_entry):
     try:
         # Attempt to add an item to the DynamoDB table with provided details
-        response = table.put_item(
-            Item={
-                'user_id': user_id,  # Identifier for the user
-                'session_id': session_id,  # Unique identifier for the session
-                'chat_history': [new_chat_entry],  # List of chat history, initiating with the new entry
-                "title": title.strip(),  # Title of the session
-                "time_stamp": str(datetime.now()), # Current timestamp as a string
-                "team_composition": {}  # Initialize an empty json for team composition
-            }
+        # response = table.put_item(
+        #     Item={
+        #         'user_id': user_id,  # Identifier for the user
+        #         'session_id': session_id,  # Unique identifier for the session
+        #         'chat_history': [new_chat_entry],  # List of chat history, initiating with the new entry
+        #         "title": title.strip(),  # Title of the session
+        #         "time_stamp": str(datetime.now()), # Current timestamp as a string
+        #         "team_composition": {}  # Initialize an empty json for team composition
+        #     }
+        # )
+
+        response = table.update_item(
+            Key={"session_id": session_id, "user_id": user_id},
+            UpdateExpression="set chat_history = :chat_history, title = :title, time_stamp = :time_stamp",
+            ExpressionAttributeValues={":chat_history": [new_chat_entry],
+                                       ":title" : title.strip(),
+                                       ":time_stamp" : str(datetime.now())},
+            ReturnValues="UPDATED_NEW"
         )
         # Return any attributes returned by the DynamoDB operation, default to an empty dictionary if none
         return response.get("Attributes", {})
