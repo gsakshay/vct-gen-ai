@@ -24,7 +24,8 @@ def add_session(session_id, user_id, chat_history, title, new_chat_entry):
                 'session_id': session_id,  # Unique identifier for the session
                 'chat_history': [new_chat_entry],  # List of chat history, initiating with the new entry
                 "title": title.strip(),  # Title of the session
-                "time_stamp": str(datetime.now())  # Current timestamp as a string
+                "time_stamp": str(datetime.now()), # Current timestamp as a string
+                "team_composition": {}  # Initialize an empty json for team composition
             }
         )
         # Return any attributes returned by the DynamoDB operation, default to an empty dictionary if none
@@ -45,8 +46,12 @@ def add_session(session_id, user_id, chat_history, title, new_chat_entry):
 
 
 def save_team_composition(session_id, user_id, team_composition):
+    session_response = get_session(session_id, user_id)
+    if 'statusCode' in session_response and session_response['statusCode'] != 200:
+        return session_response
     try:
         # Update the team_composition attribute in the item
+
         response = table.update_item(
             Key={"session_id": session_id, "user_id": user_id},
             UpdateExpression="set team_composition = :team_comp",
@@ -75,7 +80,7 @@ def save_team_composition(session_id, user_id, team_composition):
                 'body': json.dumps(str(error))
             }
     except Exception as general_error:
-        print("Caught error: General error - could not save team composition")
+        print("Caught error: General error - could not save team composition:", general_error)
         return {
             'statusCode': 500,
             'headers': {'Access-Control-Allow-Origin': '*'},
@@ -84,6 +89,9 @@ def save_team_composition(session_id, user_id, team_composition):
 
 
 def get_team_composition(session_id, user_id):
+    session_response = get_session(session_id, user_id)
+    if 'statusCode' in session_response and session_response['statusCode'] != 200:
+        return session_response
     try:
         response = table.get_item(
             Key={"session_id": session_id, "user_id": user_id},
@@ -341,7 +349,15 @@ def list_sessions_by_user_id(user_id, limit=15):
 
 
 def lambda_handler(event, context):
-    data = json.loads(event['body'])
+    try:
+        data = json.loads(event['body'])
+    except json.JSONDecodeError:
+        return {
+            'statusCode': 400,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps('Invalid JSON in request body.')
+        }
+
     operation = data.get('operation')
     user_id = data.get('user_id')
     session_id = data.get('session_id')
@@ -350,6 +366,23 @@ def lambda_handler(event, context):
     title = data.get('title', f"Chat on {str(datetime.now())}")
     team_composition = data.get('team_composition')  # Retrieve team_composition from the request
 
+    if not operation:
+        return {
+            'statusCode': 400,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps('Operation is required.')
+        }
+
+    if operation in ['add_session', 'get_session', 'update_session', 'save_team_composition',
+                     'get_team_composition', 'delete_session']:
+        if not user_id or not session_id:
+            return {
+                'statusCode': 400,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps('Both user_id and session_id are required for this operation.')
+            }
+
+    # Dispatch based on operation
     if operation == 'add_session':
         return add_session(session_id, user_id, chat_history, title, new_chat_entry)
     elif operation == 'get_session':
@@ -369,9 +402,9 @@ def lambda_handler(event, context):
     elif operation == 'delete_user_sessions':
         return delete_user_sessions(user_id)
     else:
-        response = {
+        return {
             'statusCode': 400,
             'headers': {'Access-Control-Allow-Origin': '*'},
             'body': json.dumps(f'Operation not found/allowed! Operation Sent: {operation}')
         }
-        return response
+
