@@ -43,6 +43,86 @@ def add_session(session_id, user_id, chat_history, title, new_chat_entry):
                 'body': json.dumps(str(error))}
 
 
+def save_team_composition(session_id, user_id, team_composition):
+    try:
+        # Update the team_composition attribute in the item
+        response = table.update_item(
+            Key={"session_id": session_id, "user_id": user_id},
+            UpdateExpression="set team_composition = :team_comp",
+            ExpressionAttributeValues={":team_comp": team_composition},
+            ReturnValues="UPDATED_NEW"
+        )
+        return {
+            'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'message': 'Team composition saved successfully.', 'Attributes': response.get("Attributes", {})})
+        }
+    except ClientError as error:
+        print("Caught error: DynamoDB error - could not save team composition")
+        error_code = error.response['Error']['Code']
+        if error_code == "ResourceNotFoundException":
+            return {
+                'statusCode': 404,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(f"No record found with session id: {session_id}")
+            }
+        else:
+            return {
+                'statusCode': 500,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(str(error))
+            }
+    except Exception as general_error:
+        print("Caught error: General error - could not save team composition")
+        return {
+            'statusCode': 500,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps(str(general_error))
+        }
+
+
+def get_team_composition(session_id, user_id):
+    try:
+        response = table.get_item(
+            Key={"session_id": session_id, "user_id": user_id},
+            ProjectionExpression='team_composition'
+        )
+        if 'Item' in response and 'team_composition' in response['Item']:
+            return {
+                'statusCode': 200,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(response['Item']['team_composition'])
+            }
+        else:
+            return {
+                'statusCode': 404,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(f"Team composition not found for session id: {session_id}")
+            }
+    except ClientError as error:
+        print("Caught error: DynamoDB error - could not get team composition")
+        error_code = error.response['Error']['Code']
+        if error_code == "ResourceNotFoundException":
+            return {
+                'statusCode': 404,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(f"No record found with session id: {session_id}")
+            }
+        else:
+            return {
+                'statusCode': 500,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(str(error))
+            }
+    except Exception as general_error:
+        print("Caught error: General error - could not get team composition")
+        return {
+            'statusCode': 500,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps(str(general_error))
+        }
+
+
 # A function to retrieve a session from DynamoDB based on session_id and user_id
 def get_session(session_id, user_id):
     # Initialize a variable to hold the response from DynamoDB
@@ -262,10 +342,7 @@ def lambda_handler(event, context):
     chat_history = data.get('chat_history', None)
     new_chat_entry = data.get('new_chat_entry')
     title = data.get('title', f"Chat on {str(datetime.now())}")
-    if operation != 'list_sessions_by_user_id':
-        print(operation)
-    print(data)
-    print(new_chat_entry)
+    team_composition = data.get('team_composition')  # Retrieve team_composition from the request
 
     if operation == 'add_session':
         return add_session(session_id, user_id, chat_history, title, new_chat_entry)
@@ -273,10 +350,14 @@ def lambda_handler(event, context):
         return get_session(session_id, user_id)
     elif operation == 'update_session':
         return update_session(session_id, user_id, new_chat_entry)
+    elif operation == 'save_team_composition':
+        return save_team_composition(session_id, user_id, team_composition)
+    elif operation == 'get_team_composition':
+        return get_team_composition(session_id, user_id)
     elif operation == 'list_sessions_by_user_id':
         return list_sessions_by_user_id(user_id)
     elif operation == 'list_all_sessions_by_user_id':
-        return list_sessions_by_user_id(user_id,limit=100)
+        return list_sessions_by_user_id(user_id, limit=100)
     elif operation == 'delete_session':
         return delete_session(session_id, user_id)
     elif operation == 'delete_user_sessions':
@@ -284,9 +365,7 @@ def lambda_handler(event, context):
     else:
         response = {
             'statusCode': 400,
-            'headers': {
-                'Access-Control-Allow-Origin': '*'
-            },
+            'headers': {'Access-Control-Allow-Origin': '*'},
             'body': json.dumps(f'Operation not found/allowed! Operation Sent: {operation}')
         }
         return response

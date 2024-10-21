@@ -130,6 +130,10 @@ export class LambdaFunctionStack extends cdk.Stack {
      - Assign specific roles and agents to each player.
      - Provide justifications (statistics, achievements, qualities).
      
+   - **Post Team Composition:**
+        
+     - Use the \'save_team_composition\' tool to save the team composition to the database.
+     
 4. **Thought Processes:**
 
    - Enclose internal reasoning within descriptive tags (e.g., start with \`'<retrieving_players>'\`, end with \`'</retrieving_players>'\`).
@@ -140,7 +144,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 
    - Present the team composition and explanations outside of tags.
    - Ensure clarity and professionalism.
-   - Conclude your response with player data in JSON format using the \'return_json\' tool.
+   - If the team is composed, make sure to save it to the database using the \'save_team\' tool.
 
 6. **Response Style:**
 
@@ -176,7 +180,8 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 - Use \`player_info\`, \`list_players\`, and \`query_db\` for data retrieval.
 - Integrate tool outputs seamlessly without mentioning tool usage.
-- End with the \'return_json\' tool to provide player data in JSON format."
+- Save team compositions with the \'save_team_composition\' tool.
+- You can retrieve saved team compositions using the \'get_team_composition\' tool.
 
 `,
             'KB_ID' : props.knowledgeBase.attrKnowledgeBaseId
