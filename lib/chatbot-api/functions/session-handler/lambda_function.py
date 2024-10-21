@@ -14,6 +14,11 @@ dynamodb = boto3.resource("dynamodb", region_name='us-east-1')
 # Connect to the specified DynamoDB table
 table = dynamodb.Table(DDB_TABLE_NAME)
 
+class DecimalEncoder(json.JSONEncoder):
+  def default(self, obj):
+    if isinstance(obj, Decimal):
+      return str(obj)
+    return json.JSONEncoder.default(self, obj)
 
 # Define a function to add a session or update an existing one in the DynamoDB table
 def add_session(session_id, user_id, chat_history, title, new_chat_entry):
@@ -62,7 +67,7 @@ def save_team_composition(session_id, user_id, team_composition):
             'statusCode': 200,
             'headers': {'Access-Control-Allow-Origin': '*'},
             'body': json.dumps(
-                {'message': 'Team composition saved successfully.', 'Attributes': response.get("Attributes", {})})
+                {'message': 'Team composition saved successfully.', 'Attributes': response.get("Attributes", {})}, cls=DecimalEncoder)
         }
     except ClientError as error:
         print("Caught error: DynamoDB error - could not save team composition")
@@ -164,7 +169,7 @@ def get_session(session_id, user_id):
         'headers': {
             'Access-Control-Allow-Origin': '*'  # Allow all domains for CORS
         },
-        'body': json.dumps(response.get("Item", {}))  # Convert the retrieved item to JSON format
+        'body': json.dumps(response.get("Item", {}), cls=DecimalEncoder)  # Convert the retrieved item to JSON format
     }
     # Return the prepared response to the client
     return response_to_client
