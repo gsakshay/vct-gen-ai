@@ -1,6 +1,7 @@
 import {
   ChatBotHistoryItem,
   ChatBotMessageType,
+  TeamComposition
 } from "../../components/chatbot/types";
 
 import {
@@ -36,14 +37,14 @@ export class SessionsClient {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + auth,
         },
-        body: JSON.stringify(all? { "operation": "list_all_sessions_by_user_id", "user_id": userId } : { "operation": "list_sessions_by_user_id", "user_id": userId })
+        body: JSON.stringify(all ? { "operation": "list_all_sessions_by_user_id", "user_id": userId } : { "operation": "list_sessions_by_user_id", "user_id": userId })
       });
       if (response.status != 200) {
         validData = false;
-        let jsonResponse = await response.json()        
-        errorMessage = jsonResponse;        
+        let jsonResponse = await response.json()
+        errorMessage = jsonResponse;
         break;
-      }      
+      }
       try {
         output = await response.json();
         validData = true;
@@ -144,6 +145,48 @@ export class SessionsClient {
         },)
     })
     return history;
+  }
+
+  /** Gets team composition for a given session ID and user ID */
+  async getTeamComposition(sessionId: string,
+    userId: string): Promise<TeamComposition> {
+    let teamComp : TeamComposition = {
+      players : [],
+      teamVersion : 0,
+      errors: []
+    }
+    const auth = Utils.authenticate();
+    
+    const response = await fetch(this.API + '/user-session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + auth,
+      },
+      body: JSON.stringify({
+        "operation": "get_team_composition", "session_id": sessionId,
+        "user_id": userId
+      })
+    });
+    if (response.status != 200) {                  
+      teamComp.errors.push(`Status Code: ${response.status}`)      
+    }
+    try {
+      const output = await response.json();
+      const players = output.players
+      teamComp.players = players.map(player => ({
+        name : player.name,
+        averageKills: player.averageKills,
+        averageDeaths: player.averageDeaths,
+        gamesPlayed: player.gamesPlayed,
+        role : player.role,        
+        igl: Boolean(player.igl),
+      }));
+      teamComp.teamVersion = output.teamVersion;
+    } catch (e) {      
+      console.log(e);
+    }      
+    return teamComp;
   }
 
   /**Deletes a given session but this is not exposed in the UI */

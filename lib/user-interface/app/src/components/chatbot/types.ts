@@ -4,11 +4,11 @@ export interface ChatBotConfiguration {
   showMetadata: boolean;
   maxTokens: number;
   temperature: number;
-  topP: number;  
+  topP: number;
 }
 
 export interface ChatInputState {
-  value: string;  
+  value: string;
 }
 
 export enum ChatBotMessageType {
@@ -25,19 +25,35 @@ export interface ChatBotHistoryItem {
     | boolean
     | number
     | null
-    | undefined    
+    | undefined
     | string[]
     | string[][]
   >;
 }
 
 export interface FeedbackData {
-  sessionId: string;  
+  sessionId: string;
   feedback: number;
   prompt: string;
-  completion: string;    
+  completion: string;
   topic: string,
   problem: string,
   comment: string,
-  sources: string     
+  sources: string
+}
+
+export interface TeamPlayer {
+  name: string,
+  averageKills: number,
+  averageDeaths: number,
+  gamesPlayed: number,
+  agent: string,
+  role: string,
+  igl: boolean
+}
+
+export interface TeamComposition {
+  players: TeamPlayer[],
+  teamVersion: number,
+  errors: string[]
 }
