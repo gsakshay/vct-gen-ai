@@ -3,6 +3,7 @@ import boto3
 from botocore.exceptions import ClientError
 import json
 from datetime import datetime
+from decimal import Decimal
 
 # Retrieve DynamoDB table and secondary index names from environment variables
 DDB_TABLE_NAME = os.environ["DDB_TABLE_NAME"]
@@ -50,8 +51,7 @@ def save_team_composition(session_id, user_id, team_composition):
     if 'statusCode' in session_response and session_response['statusCode'] != 200:
         return session_response
     try:
-        # Update the team_composition attribute in the item
-
+        # Update the team_composition attribute in the item        
         response = table.update_item(
             Key={"session_id": session_id, "user_id": user_id},
             UpdateExpression="set team_composition = :team_comp",
@@ -350,7 +350,7 @@ def list_sessions_by_user_id(user_id, limit=15):
 
 def lambda_handler(event, context):
     try:
-        data = json.loads(event['body'])
+        data = json.loads(event['body'],parse_float=Decimal)
     except json.JSONDecodeError:
         return {
             'statusCode': 400,
