@@ -1,5 +1,5 @@
-import {  
-  ChatBotHistoryItem,  
+import {
+  ChatBotHistoryItem,
   ChatBotMessageType,
 } from "./types";
 
@@ -17,8 +17,8 @@ export function assembleHistory(history: ChatBotHistoryItem[]) {
     if (history[i].type == ChatBotMessageType.Human) {
       hist.push({ "user": history[i].content, "chatbot": history[i+1].content, "metadata" : JSON.stringify(history[i+1].metadata)})
     }
-  }   
-  
+  }
+
   return hist;
 }
 
@@ -26,18 +26,18 @@ export function formatThinkingString(input: string): string {
   if (typeof input !== 'string') {
     throw new Error('Input must be a string');
   }
-  
+
   return input
     .replace(/^\*+|\*+$/g, '')
     .split('_')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
+    .join(' ') + '...';
 }
 
 export function removeAngleBracketContent(input: string): string {
   if (typeof input !== 'string') {
     throw new Error('Input must be a string');
   }
-  
+
   return input.replace(/<[^>]*>/g, '');
 }

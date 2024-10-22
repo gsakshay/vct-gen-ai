@@ -63,54 +63,71 @@ export default function ChatMessage( props: ChatMessageProps )
   const showSources = props.message.metadata?.Sources && ( props.message.metadata.Sources as any[] ).length > 0;
 
   // Function to parse the content and extract thinking segments
-  function parseContent( content: string )
-  {
+  function parseContent(content: string) {
     const segments = [];
-    let customTagRegex = /<(\w+)>([\s\S]*?)<\/\1>/g;
+    const tagRegex = /<\/?(\w+)>/g; // Matches both opening and closing tags
     let lastIndex = 0;
+    let currentTag = null;
     let match;
 
-    while ( ( match = customTagRegex.exec( content ) ) !== null )
-    {
-      let [tagContent, tagName, tagInnerContent] = match;
+    while ((match = tagRegex.exec(content)) !== null) {
+      const tag = match[0];
+      const tagName = match[1];
+      const isClosingTag = tag.startsWith('</');
+      const tagIndex = match.index;
 
-      if ( match.index > lastIndex )
-      {
-        // Add text before the custom tag as normal text
-        segments.push( {
-          type: 'text',
-          content: content.substring( lastIndex, match.index ),
-        } );
+      // If there's content before the tag, process it
+      if (tagIndex > lastIndex) {
+        const textSegment = content.substring(lastIndex, tagIndex);
+        if (currentTag) {
+          // Content inside a tag
+          segments.push({
+            type: 'thinking',
+            tagName: currentTag,
+            content: textSegment.trim(),
+          });
+        } else {
+          // Regular text
+          segments.push({
+            type: 'text',
+            content: textSegment.trim(),
+          });
+        }
       }
 
-      // if ( tagName === "json_data" )
-      // {
-      //   const parsedPlayers = JSON.parse( JSON.stringify( tagInnerContent ) );
-      //   setSelectedValorantPlayers( parsedPlayers?.players )
-      // }
+      if (isClosingTag) {
+        // Closing tag: end the current tag
+        currentTag = null;
+      } else {
+        // Opening tag: start a new tag
+        currentTag = tagName;
+      }
 
-      // Add custom tag content
-      segments.push( {
-        type: "thinking",
-        tagName: tagName,
-        tagContent: tagContent,
-        tagInnerContent: tagInnerContent,
-      } );
-
-      lastIndex = customTagRegex.lastIndex;
+      // Update lastIndex to continue after the tag
+      lastIndex = tagRegex.lastIndex;
     }
 
-    if ( lastIndex < content.length )
-    {
-      // Add remaining text
-      segments.push( {
-        type: 'text',
-        content: content.substring( lastIndex ),
-      } );
+    // Process any remaining content after the last tag
+    if (lastIndex < content.length) {
+      const remainingText = content.substring(lastIndex);
+      if (currentTag) {
+        segments.push({
+          type: 'thinking',
+          tagName: currentTag,
+          content: remainingText.trim(),
+        });
+      } else {
+        segments.push({
+          type: 'text',
+          content: remainingText.trim(),
+        });
+      }
     }
 
     return segments;
   }
+
+
 
   const segments = parseContent( content );
 
@@ -233,7 +250,7 @@ export default function ChatMessage( props: ChatMessageProps )
                     return (
                       <ReactMarkdown
                         key={index}
-                        children={segment.content.replace( segment?.tagName, "" )}
+                        children={segment.content}
                         remarkPlugins={[remarkGfm]}
                         components={{
                           pre( props )
@@ -281,7 +298,7 @@ export default function ChatMessage( props: ChatMessageProps )
                       <div className="ThinkingContent">
                         <ExpandableSection key={index} headerText={formatThinkingString( segment?.tagName )}>
                           <ReactMarkdown
-                            children={removeAngleBracketContent( segment?.tagInnerContent )}
+                            children={segment.content}
                             remarkPlugins={[remarkGfm]}
                             components={{
                               pre( props )
