@@ -155,7 +155,7 @@ export class SessionsClient {
       teamVersion : 0,
       errors: []
     }
-    const auth = Utils.authenticate();
+    const auth = await Utils.authenticate();
     
     const response = await fetch(this.API + '/user-session', {
       method: 'POST',
@@ -173,9 +173,11 @@ export class SessionsClient {
     }
     try {
       const output = await response.json();
+      console.log(output);
       const players = output.players
       teamComp.players = players.map(player => ({
         name : player.name,
+        agent : player.agent,
         averageKills: player.averageKills,
         averageDeaths: player.averageDeaths,
         gamesPlayed: player.gamesPlayed,
@@ -185,7 +187,9 @@ export class SessionsClient {
       teamComp.teamVersion = output.teamVersion;
     } catch (e) {      
       console.log(e);
-    }      
+    }     
+    console.log("got team comp")
+    console.log(teamComp) 
     return teamComp;
   }
 
