@@ -6,7 +6,7 @@ import
   FeedbackData
 } from "./types";
 import { Auth } from "aws-amplify";
-import { SpaceBetween, StatusIndicator, Alert, Flashbar, Grid } from "@cloudscape-design/components";
+import { SpaceBetween, StatusIndicator, Alert, Flashbar, Grid, Button } from "@cloudscape-design/components";
 import { v4 as uuidv4 } from "uuid";
 import { AppContext } from "../../common/app-context";
 import { ApiClient } from "../../common/api-client/api-client";
@@ -15,6 +15,9 @@ import ChatInputPanel, { ChatScrollState } from "./chat-input-panel";
 import styles from "../../styles/chat.module.scss";
 import { CHATBOT_NAME } from "../../common/constants";
 import { useNotifications } from "../notif-manager";
+import ValorantAgentCards from "./ValorantAgentCard";
+import { Grid2 } from "@mui/material";
+import valorantAgentsMap from "./utils";
 
 export default function Chat( props: { sessionId?: string } )
 {
@@ -125,43 +128,82 @@ export default function Chat( props: { sessionId?: string } )
     await apiClient.userFeedback.sendUserFeedback( feedbackData );
   }
 
+  const demoAgent = {
+    agentName: 'Jett',
+    role: 'Duelist',
+    difficulty: 2,
+    image: '/images/jett.webp',
+    playerName: 'Player Name',
+    abilities: [
+      { key: 'Q', name: 'Updraft' },
+      { key: 'E', name: 'Tailwind' },
+      { key: 'C', name: 'Cloudburst' },
+      { key: 'X', name: 'Blade Storm' },
+    ],
+  }
+
   return (
     <div className={styles.chat_container}>
-      <div className="ChatHistoryDiv">
+      <Grid gridDefinition={[{ colspan: 9 }, { colspan: 3 }]}>
+        <div>
+          <div className="ChatHistoryDiv">
+            <SpaceBetween direction="vertical" size="m">
+              {messageHistory.map( ( message, idx ) =>
+              {
+                return <ChatMessage
+                  key={idx}
+                  message={message}
+                  onThumbsUp={() => handleFeedback( 1, idx, message )}
+                  onThumbsDown={( feedbackTopic: string, feedbackType: string, feedbackMessage: string ) => handleFeedback( 0, idx, message, feedbackTopic, feedbackType, feedbackMessage )}
+                />
+              } )}
+            </SpaceBetween>
+            <div className={styles.welcome_text}>
+              {messageHistory.length == 0 && !session?.loading && (
+                <center>{CHATBOT_NAME}</center>
+              )}
+              {session?.loading && (
+                <center>
+                  <StatusIndicator type="loading">Loading session</StatusIndicator>
+                </center>
+              )}
+            </div>
+          </div>
 
-        <SpaceBetween direction="vertical" size="m">
-          {messageHistory.map( ( message, idx ) =>
-          {
-            return <ChatMessage
-              key={idx}
-              message={message}
-              onThumbsUp={() => handleFeedback( 1, idx, message )}
-              onThumbsDown={( feedbackTopic: string, feedbackType: string, feedbackMessage: string ) => handleFeedback( 0, idx, message, feedbackTopic, feedbackType, feedbackMessage )}
+          <Grid gridDefinition={[{ colspan: 1 }, { colspan: 10 }, { colspan: 1 }]}>
+            <div></div>
+            <ChatInputPanel
+              session={session}
+              running={running}
+              setRunning={setRunning}
+              messageHistory={messageHistory}
+              setMessageHistory={( history ) => setMessageHistory( history )}
             />
-          } )}
-        </SpaceBetween>
-        <div className={styles.welcome_text}>
-          {messageHistory.length == 0 && !session?.loading && (
-            <center>{CHATBOT_NAME}</center>
-          )}
-          {session?.loading && (
-            <center>
-              <StatusIndicator type="loading">Loading session</StatusIndicator>
-            </center>
-          )}
+            <div></div>
+          </Grid>
         </div>
-      </div>
-      <Grid gridDefinition={[{ colspan: 1 }, { colspan: 10 }, { colspan: 1 }]}>
-        <div></div>
-        <ChatInputPanel
-          session={session}
-          running={running}
-          setRunning={setRunning}
-          messageHistory={messageHistory}
-          setMessageHistory={( history ) => setMessageHistory( history )}
-        />
-        <div></div>
-
+        <div className="TeamDisplayDiv">
+          <h2>Team Formation</h2>
+          {
+            Object.keys( valorantAgentsMap ).map( agentName => (
+              <div className="child" key={agentName}>
+                <ValorantAgentCards agentDetails={{
+                  ...valorantAgentsMap[agentName],
+                  isIGL: agentName == "jett",
+                  agentName: agentName,
+                  playerName: 'Player Name',
+                  abilities: [
+                    { key: 'Q', name: 'Ability 1' },
+                    { key: 'E', name: 'Ability 2' },
+                    { key: 'C', name: 'Ability 3' },
+                    { key: 'X', name: 'Ultimate' },
+                  ],
+                  difficulty: 1
+                }} />
+              </div>
+            ) )
+          }
+        </div>
       </Grid>
     </div>
   );

@@ -63,42 +63,49 @@ export default function ChatMessage( props: ChatMessageProps )
   const showSources = props.message.metadata?.Sources && ( props.message.metadata.Sources as any[] ).length > 0;
 
   // Function to parse the content and extract thinking segments
-  function parseContent(content: string) {
+  function parseContent( content: string )
+  {
     const segments = [];
     const tagRegex = /<\/?(\w+)>/g; // Matches both opening and closing tags
     let lastIndex = 0;
     let currentTag = null;
     let match;
 
-    while ((match = tagRegex.exec(content)) !== null) {
+    while ( ( match = tagRegex.exec( content ) ) !== null )
+    {
       const tag = match[0];
       const tagName = match[1];
-      const isClosingTag = tag.startsWith('</');
+      const isClosingTag = tag.startsWith( '</' );
       const tagIndex = match.index;
 
       // If there's content before the tag, process it
-      if (tagIndex > lastIndex) {
-        const textSegment = content.substring(lastIndex, tagIndex);
-        if (currentTag) {
+      if ( tagIndex > lastIndex )
+      {
+        const textSegment = content.substring( lastIndex, tagIndex );
+        if ( currentTag )
+        {
           // Content inside a tag
-          segments.push({
+          segments.push( {
             type: 'thinking',
             tagName: currentTag,
             content: textSegment.trim(),
-          });
-        } else {
+          } );
+        } else
+        {
           // Regular text
-          segments.push({
+          segments.push( {
             type: 'text',
             content: textSegment.trim(),
-          });
+          } );
         }
       }
 
-      if (isClosingTag) {
+      if ( isClosingTag )
+      {
         // Closing tag: end the current tag
         currentTag = null;
-      } else {
+      } else
+      {
         // Opening tag: start a new tag
         currentTag = tagName;
       }
@@ -108,26 +115,27 @@ export default function ChatMessage( props: ChatMessageProps )
     }
 
     // Process any remaining content after the last tag
-    if (lastIndex < content.length) {
-      const remainingText = content.substring(lastIndex);
-      if (currentTag) {
-        segments.push({
+    if ( lastIndex < content.length )
+    {
+      const remainingText = content.substring( lastIndex );
+      if ( currentTag )
+      {
+        segments.push( {
           type: 'thinking',
           tagName: currentTag,
           content: remainingText.trim(),
-        });
-      } else {
-        segments.push({
+        } );
+      } else
+      {
+        segments.push( {
           type: 'text',
           content: remainingText.trim(),
-        });
+        } );
       }
     }
 
     return segments;
   }
-
-
 
   const segments = parseContent( content );
 
@@ -195,31 +203,32 @@ export default function ChatMessage( props: ChatMessageProps )
           </FormField>
         </SpaceBetween>
       </Modal>
-      <div className="AIInteractionDiv">
-        {props.message?.type === ChatBotMessageType.AI && (
-          <Grid gridDefinition={[{ colspan: 1 }, { colspan: 10 }]}>
-            <div>
-              <img src="/svg/valorant-icon.svg" alt={CHATBOT_NAME} />
-            </div>
-            <div className="ChatTextContainer">
-              <Container
-                footer={
-                  showSources && (
-                    <SpaceBetween direction="horizontal" size="s">
-                      <ButtonDropdown
-                        items={( props.message.metadata.Sources as any[] ).map( ( item ) => { return { id: "id", disabled: false, text: item.title, href: item.uri, external: true, externalIconAriaLabel: "(opens in new tab)" } } )}
+      <div>
+        <div className="AIInteractionDiv">
+          {props.message?.type === ChatBotMessageType.AI && (
+            <Grid gridDefinition={[{ colspan: 1 }, { colspan: 10 }]}>
+              <div>
+                <img src="/svg/valorant-icon.svg" alt={CHATBOT_NAME} />
+              </div>
+              <div className="ChatTextContainer">
+                <Container
+                  footer={
+                    showSources && (
+                      <SpaceBetween direction="horizontal" size="s">
+                        <ButtonDropdown
+                          items={( props.message.metadata.Sources as any[] ).map( ( item ) => { return { id: "id", disabled: false, text: item.title, href: item.uri, external: true, externalIconAriaLabel: "(opens in new tab)" } } )}
 
-                      >Sources</ButtonDropdown>
-                    </SpaceBetween>
-                  )
-                }
-              >
-                {content?.length === 0 ? (
-                  <Box>
-                    <Spinner />
-                  </Box>
-                ) : null}
-                {/* {props.message.content.length > 0 ? (
+                        >Sources</ButtonDropdown>
+                      </SpaceBetween>
+                    )
+                  }
+                >
+                  {content?.length === 0 ? (
+                    <Box>
+                      <Spinner />
+                    </Box>
+                  ) : null}
+                  {/* {props.message.content.length > 0 ? (
                     <div className={styles.btn_chabot_message_copy}>
                       <Popover
                         size="medium"
@@ -242,126 +251,128 @@ export default function ChatMessage( props: ChatMessageProps )
                       </Popover>
                     </div>
                   ) : null} */}
-                {/* Render the segments */}
-                {segments.map( ( segment, index ) =>
-                {
-                  if ( segment.type === 'text' )
+                  {/* Render the segments */}
+                  {segments.map( ( segment, index ) =>
                   {
-                    return (
-                      <ReactMarkdown
-                        key={index}
-                        children={segment.content}
-                        remarkPlugins={[remarkGfm]}
-                        components={{
-                          pre( props )
-                          {
-                            const { children, ...rest } = props;
-                            return (
-                              <pre {...rest} className={styles.codeMarkdown}>
-                                {children}
-                              </pre>
-                            );
-                          },
-                          table( props )
-                          {
-                            const { children, ...rest } = props;
-                            return (
-                              <table {...rest} className={styles.markdownTable}>
-                                {children}
-                              </table>
-                            );
-                          },
-                          th( props )
-                          {
-                            const { children, ...rest } = props;
-                            return (
-                              <th {...rest} className={styles.markdownTableCell}>
-                                {children}
-                              </th>
-                            );
-                          },
-                          td( props )
-                          {
-                            const { children, ...rest } = props;
-                            return (
-                              <td {...rest} className={styles.markdownTableCell}>
-                                {children}
-                              </td>
-                            );
-                          },
-                        }}
-                      />
-                    );
-                  } else if ( segment.type === 'thinking' )
-                  {
-                    return (
-                      <div className="ThinkingContent">
-                        <ExpandableSection key={index} headerText={formatThinkingString( segment?.tagName )}>
-                          <ReactMarkdown
-                            children={segment.content}
-                            remarkPlugins={[remarkGfm]}
-                            components={{
-                              pre( props )
-                              {
-                                const { children, ...rest } = props;
-                                return (
-                                  <pre {...rest} className={styles.codeMarkdown}>
-                                    {children}
-                                  </pre>
-                                );
-                              },
-                              table( props )
-                              {
-                                const { children, ...rest } = props;
-                                return (
-                                  <table {...rest} className={styles.markdownTable}>
-                                    {children}
-                                  </table>
-                                );
-                              },
-                              th( props )
-                              {
-                                const { children, ...rest } = props;
-                                return (
-                                  <th {...rest} className={styles.markdownTableCell}>
-                                    {children}
-                                  </th>
-                                );
-                              },
-                              td( props )
-                              {
-                                const { children, ...rest } = props;
-                                return (
-                                  <td {...rest} className={styles.markdownTableCell}>
-                                    {children}
-                                  </td>
-                                );
-                              },
-                            }}
-                          />
-                        </ExpandableSection>
-                      </div>
-                    );
-                  }
-                } )}
-              </Container>
-            </div>
-          </Grid>
-        )}
+                    if ( segment.type === 'text' )
+                    {
+                      return (
+                        <ReactMarkdown
+                          key={index}
+                          children={segment.content}
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            pre( props )
+                            {
+                              const { children, ...rest } = props;
+                              return (
+                                <pre {...rest} className={styles.codeMarkdown}>
+                                  {children}
+                                </pre>
+                              );
+                            },
+                            table( props )
+                            {
+                              const { children, ...rest } = props;
+                              return (
+                                <table {...rest} className={styles.markdownTable}>
+                                  {children}
+                                </table>
+                              );
+                            },
+                            th( props )
+                            {
+                              const { children, ...rest } = props;
+                              return (
+                                <th {...rest} className={styles.markdownTableCell}>
+                                  {children}
+                                </th>
+                              );
+                            },
+                            td( props )
+                            {
+                              const { children, ...rest } = props;
+                              return (
+                                <td {...rest} className={styles.markdownTableCell}>
+                                  {children}
+                                </td>
+                              );
+                            },
+                          }}
+                        />
+                      );
+                    } else if ( segment.type === 'thinking' )
+                    {
+                      return (
+                        <div className="ThinkingContent">
+                          <ExpandableSection key={index} headerText={formatThinkingString( segment?.tagName )}>
+                            <ReactMarkdown
+                              children={segment.content}
+                              remarkPlugins={[remarkGfm]}
+                              components={{
+                                pre( props )
+                                {
+                                  const { children, ...rest } = props;
+                                  return (
+                                    <pre {...rest} className={styles.codeMarkdown}>
+                                      {children}
+                                    </pre>
+                                  );
+                                },
+                                table( props )
+                                {
+                                  const { children, ...rest } = props;
+                                  return (
+                                    <table {...rest} className={styles.markdownTable}>
+                                      {children}
+                                    </table>
+                                  );
+                                },
+                                th( props )
+                                {
+                                  const { children, ...rest } = props;
+                                  return (
+                                    <th {...rest} className={styles.markdownTableCell}>
+                                      {children}
+                                    </th>
+                                  );
+                                },
+                                td( props )
+                                {
+                                  const { children, ...rest } = props;
+                                  return (
+                                    <td {...rest} className={styles.markdownTableCell}>
+                                      {children}
+                                    </td>
+                                  );
+                                },
+                              }}
+                            />
+                          </ExpandableSection>
+                        </div>
+                      );
+                    }
+                  } )}
+                </Container>
+              </div>
+            </Grid>
+          )}
+        </div>
+        <div className="UserInteractionDiv">
+          {props.message?.type === ChatBotMessageType.Human && (
+            <Grid gridDefinition={[{ colspan: 3 }, { colspan: 8 }, { colspan: 2 }]}>
+              <div></div>
+              <div className="ChatTextContainer">
+                <TextContent>
+                  <strong>{props.message.content}</strong>
+                </TextContent>
+              </div>
+              <div></div>
+            </Grid>
+          )}
+        </div>
       </div>
-      <div className="UserInteractionDiv">
-        {props.message?.type === ChatBotMessageType.Human && (
-          <Grid gridDefinition={[{ colspan: 3 }, { colspan: 8 }, { colspan: 2 }]}>
-            <div></div>
-            <div className="ChatTextContainer">
-              <TextContent>
-                <strong>{props.message.content}</strong>
-              </TextContent>
-            </div>
-            <div></div>
-          </Grid>
-        )}
-      </div>
+
       {loading && (
         <Box float="left">
           <Spinner />
