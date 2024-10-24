@@ -202,7 +202,7 @@ export default function Chat( props: { sessionId?: string } )
             teamComposition.players.map( player => (
               <div className="child" key={player.name}>
                 <ValorantAgentCards agentDetails={{
-                  image: valorantAgentsMap[player.agent.toLowerCase()].image,
+                  image: valorantAgentsMap[player.agent.toLowerCase().replace(/[^a-z0-9]/g, '')].image,
                   isIGL: player.igl,
                   agentName: player.agent,
                   role: player.role,
