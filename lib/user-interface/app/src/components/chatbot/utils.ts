@@ -160,6 +160,21 @@ const valorantAgentsMap: { [key: string]: Agent } = {
         name: 'Deadlock',
         role: 'Sentinel',
         image: '/images/deadlock.webp',
+    },
+    'vyse': {
+        name: 'Vyse',
+        role: 'Sentinel',
+        image: '/images/vyse.webp',
+    },
+    'iso': {
+        name: 'Iso',
+        role: 'Duelist',
+        image: '/images/iso.webp',
+    },
+    'clove':{
+        name: 'Clove',
+        role: 'Controller',
+        image: '/images/clove.webp',
     }
 };
 
