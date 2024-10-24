@@ -60,7 +60,7 @@ const GlowingBorder = styled( Box )( {
 
 const ImageContainer = styled( Box )( {
     position: 'relative',
-    height: '192px',
+    height: '7.5rem',
     overflow: 'hidden',
 } );
 
@@ -111,7 +111,7 @@ const StatsContainer = styled( Box )( {
     display: 'flex',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: '1rem',
+    marginTop: '0.5rem',
     padding: '0.5rem',
     backgroundColor: '#121517',
     borderRadius: '8px',
@@ -126,7 +126,7 @@ const StatBox = styled( Box )( {
 
 const StatValue = styled( Typography )( {
     fontWeight: 'bold',
-    fontSize: '1.2rem',
+    fontSize: '0.75rem',
     color: '#FF6B74',
 } );
 
@@ -170,8 +170,8 @@ const ValorantAgentCard: React.FC<ValorantAgentCardProps> = ( { agent } ) =>
                         color: '#FF4655',
                         letterSpacing: '0.1em',
                         textTransform: 'uppercase',
-                        mb: 1.5,
                         textAlign: 'center',
+                        fontSize: '1rem',
                     }}
                 >
                     {agent.agentName}
@@ -201,7 +201,7 @@ const ValorantAgentCard: React.FC<ValorantAgentCardProps> = ( { agent } ) =>
                         letterSpacing: '0.1em',
                         textTransform: 'uppercase',
                         textAlign: 'center',
-                        mb: 1.5,
+                        fontSize: '1.5rem',
                     }}
                 >
                     {agent.playerName}
