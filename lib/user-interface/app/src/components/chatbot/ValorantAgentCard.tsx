@@ -15,13 +15,11 @@ interface Agent
 {
     agentName: string;
     role: string;
-    difficulty: number;
     playerName: string;
     isIGL: boolean; // New flag to indicate if the agent is an IGL
-    abilities: {
-        key: string;
-        name?: string;
-    }[];
+    averageDeaths: number;
+    averageKills: number;
+    gamesPlayed: number;
     image: string; // Image source
 }
 
@@ -77,7 +75,7 @@ const ImageOverlay = styled( Box )( {
     position: 'absolute',
     inset: 0,
     background: 'linear-gradient(to top, rgba(31, 35, 38, 1), transparent)',
-    opacity: 0.6,
+    opacity: 0.1,
 } );
 
 const RoleBadge = styled( Box )( {
@@ -85,13 +83,17 @@ const RoleBadge = styled( Box )( {
     padding: '0.25rem',
     background: 'rgba(255, 70, 85, 0.2)',
     border: '1px solid #FF4655',
-    borderRadius: '2px',
-    width: '100%',
-    textAlign: 'center',
+    position: 'absolute',
+    top: '10px',
+    left: '10px',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    borderRadius: '8px',
+    zIndex: 10, // Make sure it's on top
 } );
 
 // New IGL Badge styled component
-const IGLBadge = styled( Box )( ( { theme } ) => ( {
+const IGLBadge = styled( Box )( {
     position: 'absolute',
     top: '10px',
     right: '10px',
@@ -103,40 +105,35 @@ const IGLBadge = styled( Box )( ( { theme } ) => ( {
     borderRadius: '8px',
     zIndex: 10, // Make sure it's on top
     boxShadow: `0 0 10px 2px #FFFFFF`,
-} ) );
-
-const AbilityBox = styled( Box )( {
-    width: '40px',
-    height: '40px',
-    borderRadius: '8px',
-    backgroundColor: 'rgba(31, 35, 38, 0.8)',
-    border: '1px solid rgba(255, 70, 85, 0.3)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    transition: 'border-color 0.2s ease',
-    position: 'relative',
-    '&:hover': {
-        borderColor: '#FF4655',
-        '& .ability-tooltip': {
-            opacity: 1,
-        },
-    },
 } );
 
-const AbilityTooltip = styled( Box )( {
-    position: 'absolute',
-    top: '-32px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    backgroundColor: '#1F2326',
-    padding: '4px 8px',
-    borderRadius: '4px',
-    opacity: 0,
-    transition: 'opacity 0.2s ease',
-    whiteSpace: 'nowrap',
-    zIndex: 1,
+const StatsContainer = styled( Box )( {
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginTop: '1rem',
+    padding: '0.5rem',
+    backgroundColor: '#121517',
+    borderRadius: '8px',
+    border: '1px solid #FF4655',
+} );
+
+const StatBox = styled( Box )( {
+    textAlign: 'center',
+    color: '#FFFFFF',
+    fontFamily: 'Rajdhani',
+} );
+
+const StatValue = styled( Typography )( {
+    fontWeight: 'bold',
+    fontSize: '1.2rem',
+    color: '#FF6B74',
+} );
+
+const StatLabel = styled( Typography )( {
+    fontSize: '0.8rem',
+    textTransform: 'uppercase',
+    color: '#FF4655',
 } );
 
 interface ValorantAgentCardProps
@@ -174,12 +171,13 @@ const ValorantAgentCard: React.FC<ValorantAgentCardProps> = ( { agent } ) =>
                         letterSpacing: '0.1em',
                         textTransform: 'uppercase',
                         mb: 1.5,
+                        textAlign: 'center',
                     }}
                 >
                     {agent.agentName}
                 </Typography>
 
-                {/* Role Badge */}
+                {/* Role Badge with SVG Icon */}
                 <RoleBadge>
                     <Typography
                         variant="caption"
@@ -187,6 +185,7 @@ const ValorantAgentCard: React.FC<ValorantAgentCardProps> = ( { agent } ) =>
                             color: '#FF6B74',
                             textTransform: 'uppercase',
                             letterSpacing: '0.1em',
+                            fontSize: '0.55rem',
                         }}
                     >
                         {agent.role}
@@ -207,6 +206,22 @@ const ValorantAgentCard: React.FC<ValorantAgentCardProps> = ( { agent } ) =>
                 >
                     {agent.playerName}
                 </Typography>
+
+                {/* Game Stats */}
+                <StatsContainer>
+                    <StatBox>
+                        <StatValue>{agent.averageKills}</StatValue>
+                        <StatLabel>Kills</StatLabel>
+                    </StatBox>
+                    <StatBox>
+                        <StatValue>{agent.averageDeaths}</StatValue>
+                        <StatLabel>Deaths</StatLabel>
+                    </StatBox>
+                    <StatBox>
+                        <StatValue>{agent.gamesPlayed}</StatValue>
+                        <StatLabel>Games</StatLabel>
+                    </StatBox>
+                </StatsContainer>
             </CardContent>
         </StyledCard>
     );

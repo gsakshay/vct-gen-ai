@@ -173,9 +173,9 @@ export class SessionsClient {
     }
     try {
       const output = await response.json();
-      console.log(output);
+      console.log("Main outoput", output);
       const players = output.players
-      teamComp.players = players.map(player => ({
+      teamComp.players = players.map((player: any) => ({
         name : player.name,
         agent : player.agent,
         averageKills: player.averageKills,

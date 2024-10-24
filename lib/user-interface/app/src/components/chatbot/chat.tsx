@@ -38,8 +38,8 @@ export default function Chat( props: { sessionId?: string } )
 
   const [teamComposition, setTeamComposition] = useState<TeamComposition>(
     {
-      players : [],
-      teamVersion : 0,
+      players: [],
+      teamVersion: 0,
       errors: []
     }
   );
@@ -74,8 +74,9 @@ export default function Chat( props: { sessionId?: string } )
         if ( !username ) return;
         const hist = await apiClient.sessions.getSession( props.sessionId, username );
         const teamComp = await apiClient.sessions.getTeamComposition( props.sessionId, username );
-        if (teamComp.players.length > 0) {
-          setTeamComposition(teamComp);
+        if ( teamComp.players.length > 0 )
+        {
+          setTeamComposition( teamComp );
         }
         if ( hist )
         {
@@ -142,18 +143,21 @@ export default function Chat( props: { sessionId?: string } )
   }
 
   /** Refreshes the team via the ApiClient */
-  const refreshTeam = async () => {
-    let username : string;
+  const refreshTeam = async () =>
+  {
+    let username: string;
     await Auth.currentAuthenticatedUser().then( ( value ) => username = value.username );
     if ( !username ) return;
     if ( !appContext ) return;
     const apiClient = new ApiClient( appContext );
     const teamComp = await apiClient.sessions.getTeamComposition( props.sessionId, username );
-        if (teamComp.players.length > 0) {
-          setTeamComposition(teamComp);
-        }
+    console.log( "Team comp", teamComp );
+    if ( teamComp.players.length > 0 )
+    {
+      setTeamComposition( teamComp );
+    }
   }
-  
+
 
   return (
     <div className={styles.chat_container}>
@@ -181,10 +185,6 @@ export default function Chat( props: { sessionId?: string } )
                 </center>
               )}
             </div>
-          </div>
-
-          <Grid gridDefinition={[{ colspan: 1 }, { colspan: 10 }, { colspan: 1 }]}>
-            <div></div>
             <ChatInputPanel
               session={session}
               running={running}
@@ -193,30 +193,32 @@ export default function Chat( props: { sessionId?: string } )
               setMessageHistory={( history ) => setMessageHistory( history )}
               refreshTeam={() => refreshTeam()}
             />
-            <div></div>
-          </Grid>
+          </div>
         </div>
         <div className="TeamDisplayDiv">
           <h2>Team Formation</h2>
           {
-            teamComposition.players.map( player => (
-              <div className="child" key={player.name}>
-                <ValorantAgentCards agentDetails={{
-                  image: valorantAgentsMap[player.agent.toLowerCase().replace(/[^a-z0-9]/g, '')].image,
-                  isIGL: player.igl,
-                  agentName: player.agent,
-                  role: player.role,
-                  playerName: player.name,
-                  abilities: [
-                    { key: 'Q', name: 'Ability 1' },
-                    { key: 'E', name: 'Ability 2' },
-                    { key: 'C', name: 'Ability 3' },
-                    { key: 'X', name: 'Ultimate' },
-                  ],
-                  difficulty: 1
-                }} />
-              </div>
-            ) )
+            teamComposition?.players?.length ?
+              teamComposition.players
+                .slice() // Create a shallow copy to avoid mutating original array
+                .sort( ( a, b ) => ( b.igl === true ? 1 : 0 ) - ( a.igl === true ? 1 : 0 ) ) // Sort to put igl: true players first
+                .map( player => (
+                  <div className="child" key={player.name}>
+                    <ValorantAgentCards
+                      agentDetails={{
+                        image: valorantAgentsMap[player.agent.toLowerCase().replace( /[^a-z0-9]/g, '' )]?.image,
+                        isIGL: player?.igl,
+                        agentName: player?.agent,
+                        role: player?.role,
+                        playerName: player?.name,
+                        averageKills: player?.averageKills,
+                        averageDeaths: player?.averageDeaths,
+                        gamesPlayed: player?.gamesPlayed
+                      }}
+                    />
+                  </div>
+                ) )
+              : <></>
           }
         </div>
       </Grid>

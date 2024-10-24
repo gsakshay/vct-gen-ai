@@ -52,8 +52,6 @@ export default function ChatMessage( props: ChatMessageProps )
   const [selectedFeedbackType, setSelectedFeedbackType] = React.useState( { label: "Select a Problem", value: "1" } );
   const [value, setValue] = useState( "" );
 
-  // const [selectedValorantPlayers, setSelectedValorantPlayers] = useState( [] )
-  // console.log( selectedValorantPlayers )
 
   const content =
     props.message.content && props.message.content.length > 0
