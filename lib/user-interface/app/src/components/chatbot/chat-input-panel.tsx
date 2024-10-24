@@ -53,6 +53,7 @@ export interface ChatInputPanelProps
   session: { id: string; loading: boolean };
   messageHistory: ChatBotHistoryItem[];
   setMessageHistory: ( history: ChatBotHistoryItem[] ) => void;
+  refreshTeam: () => void;
 }
 
 export abstract class ChatScrollState
@@ -339,6 +340,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
           Utils.delay( 1500 ).then( () => setNeedsRefresh( true ) );
         }
         props.setRunning( false );
+        props.refreshTeam();
         console.log( 'Disconnected from the WebSocket server' );
       } );
 

@@ -3,7 +3,9 @@ import
 {
   ChatBotHistoryItem,
   ChatBotMessageType,
-  FeedbackData
+  FeedbackData,
+  TeamPlayer,
+  TeamComposition
 } from "./types";
 import { Auth } from "aws-amplify";
 import { SpaceBetween, StatusIndicator, Alert, Flashbar, Grid, Button } from "@cloudscape-design/components";
@@ -32,6 +34,14 @@ export default function Chat( props: { sessionId?: string } )
 
   const [messageHistory, setMessageHistory] = useState<ChatBotHistoryItem[]>(
     []
+  );
+
+  const [teamComposition, setTeamComposition] = useState<TeamComposition>(
+    {
+      players : [],
+      teamVersion : 0,
+      errors: []
+    }
   );
 
 
@@ -63,7 +73,10 @@ export default function Chat( props: { sessionId?: string } )
         await Auth.currentAuthenticatedUser().then( ( value ) => username = value.username );
         if ( !username ) return;
         const hist = await apiClient.sessions.getSession( props.sessionId, username );
-
+        const teamComp = await apiClient.sessions.getTeamComposition( props.sessionId, username );
+        if (teamComp.players.length > 0) {
+          setTeamComposition(teamComp);
+        }
         if ( hist )
         {
 
@@ -128,19 +141,19 @@ export default function Chat( props: { sessionId?: string } )
     await apiClient.userFeedback.sendUserFeedback( feedbackData );
   }
 
-  const demoAgent = {
-    agentName: 'Jett',
-    role: 'Duelist',
-    difficulty: 2,
-    image: '/images/jett.webp',
-    playerName: 'Player Name',
-    abilities: [
-      { key: 'Q', name: 'Updraft' },
-      { key: 'E', name: 'Tailwind' },
-      { key: 'C', name: 'Cloudburst' },
-      { key: 'X', name: 'Blade Storm' },
-    ],
+  /** Refreshes the team via the ApiClient */
+  const refreshTeam = async () => {
+    let username : string;
+    await Auth.currentAuthenticatedUser().then( ( value ) => username = value.username );
+    if ( !username ) return;
+    if ( !appContext ) return;
+    const apiClient = new ApiClient( appContext );
+    const teamComp = await apiClient.sessions.getTeamComposition( props.sessionId, username );
+        if (teamComp.players.length > 0) {
+          setTeamComposition(teamComp);
+        }
   }
+  
 
   return (
     <div className={styles.chat_container}>
@@ -178,6 +191,7 @@ export default function Chat( props: { sessionId?: string } )
               setRunning={setRunning}
               messageHistory={messageHistory}
               setMessageHistory={( history ) => setMessageHistory( history )}
+              refreshTeam={() => refreshTeam()}
             />
             <div></div>
           </Grid>
@@ -185,13 +199,14 @@ export default function Chat( props: { sessionId?: string } )
         <div className="TeamDisplayDiv">
           <h2>Team Formation</h2>
           {
-            Object.keys( valorantAgentsMap ).map( agentName => (
-              <div className="child" key={agentName}>
+            teamComposition.players.map( player => (
+              <div className="child" key={player.name}>
                 <ValorantAgentCards agentDetails={{
-                  ...valorantAgentsMap[agentName],
-                  isIGL: agentName == "jett",
-                  agentName: agentName,
-                  playerName: 'Player Name',
+                  image: valorantAgentsMap[player.agent.toLowerCase()].image,
+                  isIGL: player.igl,
+                  agentName: player.agent,
+                  role: player.role,
+                  playerName: player.name,
                   abilities: [
                     { key: 'Q', name: 'Ability 1' },
                     { key: 'E', name: 'Ability 2' },
