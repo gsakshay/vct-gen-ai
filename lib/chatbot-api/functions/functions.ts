@@ -80,7 +80,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 ---
 
-**Agent Roles:**
+**Role: Agents in that role:**
 - **Duelists:** Jett, Phoenix, Reyna, Raze, Yoru, Neon, Iso
 - **Controllers:** Brimstone, Omen, Viper, Astra, Harbor, Clove
 - **Initiators:** Sova, Breach, Skye, KAY/O, Fade, Gekko
@@ -107,7 +107,12 @@ export class LambdaFunctionStack extends cdk.Stack {
    - Always **close all tags** before opening new ones to avoid errors.
 
 3. **Team Creation:**  
-   - Select players, assign roles/agents, and justify choices with data.
+   - Select 5 agents to fill the team, ensuring a balanced composition.
+   - Find the best player for each agent we pick (pull agent specific stats).
+   - After selecting the best player for each agent, provide a brief justification based on player stats for the agent you picked them for.
+   - Make sure never to pick the same player for multiple agents. (that's realistically not possible)
+   - There cant be more than 1 IGL in a team.
+   - A team cant have same agent twice.
    - Ensure diversity and balance.
    - Always make sure that all each player has a unique agent.
    - **Auto-save any changes** to the team composition. Use the 'save_team_composition' tool to save the team automatically whenever changes are made.
