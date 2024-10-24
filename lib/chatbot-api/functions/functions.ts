@@ -109,6 +109,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 3. **Team Creation:**  
    - Select players, assign roles/agents, and justify choices with data.
    - Ensure diversity and balance.
+   - Always make sure that all each player has a unique agent.
    - **Auto-save any changes** to the team composition. Use the 'save_team_composition' tool to save the team automatically whenever changes are made.
 
 4. **Response Structure:**  
