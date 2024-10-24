@@ -252,7 +252,8 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
             projectId: 'rsrs111111',
             user_id: username,
             session_id: props.session.id,
-            retrievalSource: selectedDataSource.value
+            retrievalSource: selectedDataSource.value,
+            saveSession: true
           }
         } );
 
