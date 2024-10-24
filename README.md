@@ -1,4 +1,6 @@
 # VCT Scout
+<img src="images/chat_view_1.jpeg" alt="Chat View 1" width="800"/>
+<img src="images/chat_view_2.jpeg" alt="Chat View 2" width="800"/>
 
 VCT Scout is an AI assistant powered by Amazon Bedrock, designed to help users generate optimal Valorant teams through natural language queries. By analyzing comprehensive player stats and game insights, it streamlines team-building and player analysis, providing managers with data-driven insights for recruitment and strategy optimization.
 
@@ -36,6 +38,19 @@ The biggest challenge was processing and structuring the game data for quick ret
 - Accurate data mapping and agent identification: Mapping in-game player IDs to esports player IDs and associating actions with the correct agents was complex.
 
 and so on.
+
+## Features
+- **Input Text (Voice/Text)**
+
+  <img src="images/input_text.jpeg" alt="Input View" width="800"/>
+
+- **Data Dashboard**
+
+  <img src="images/data_dashboard.jpeg" alt="Data Dashboard View" width="800"/>
+
+- **Session History Manager**
+
+  <img src="images/session_history_manager.jpeg" alt="Session History Manager View" width="800"/>
 
 ## Useful commands
 
