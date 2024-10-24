@@ -105,7 +105,8 @@ $valorant-alert-text-accent: #FF4654; // Valorant red for alert text
 }
 
 body {
-  overflow-y: scroll;
+  overflow-y: hidden;
+  max-height: 100vh;
   background: $valorant-bg-secondary !important;
 }
 
@@ -153,18 +154,30 @@ nav {
   }
 }
 
+.ChatInputParent {
+  position: sticky !important;
+  bottom: 0 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .ChatInputContainer {
   background: $valorant-bg-primary !important;
   border-color: $valorant-white !important;
   border-radius: 0.25rem !important;
 
-  position: fixed !important;
-  bottom: 0 !important;
-  min-width: 50rem !important;
-  margin-left: 4rem !important;
+  margin: 1rem 2rem;
+
+  // position: fixed !important;
+  // bottom: 1rem !important;
+  // width: 50% !important;
+  // left: 0;
+  // right: 0;
 
   div {
     border-radius: 0.25rem !important;
+    padding: 0.5rem !important;
   }
 
   box-shadow: 0 0 8px 1px rgba(255, 255, 255, 0.5) !important;
@@ -673,12 +686,20 @@ div:has(> .SideNavigations) {
   margin: 2rem 0 !important;
 }
 
+.awsui_mobile-toolbar_hyvsj_t18rz_647 {
+  background: $valorant-bg-secondary !important;
+}
+
 .ChatHistoryDiv {
-  overflow-y: hidden !important;
+  overflow-y: scroll !important;
   overflow-x: hidden !important;
-  min-height: 80vh !important;
+  height: 90vh !important;
   margin-bottom: 2.5rem !important;
   width: 100% !important;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .awsui_link-active_l0dv0_ihdoe_315 {

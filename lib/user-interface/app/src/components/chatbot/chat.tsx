@@ -185,16 +185,17 @@ export default function Chat( props: { sessionId?: string } )
                 />
               } )}
             </SpaceBetween>
-            <div className={styles.welcome_text}>
-              {messageHistory.length == 0 && !session?.loading && (
-                <center>{CHATBOT_NAME}</center>
-              )}
-              {session?.loading && (
+            {messageHistory.length == 0 && !session?.loading && (
+              <div className={styles.welcome_text}><center>{CHATBOT_NAME}</center></div>
+            )}
+            {session?.loading && (
+              <div className={styles.welcome_text}>
                 <center>
                   <StatusIndicator type="loading">Loading session</StatusIndicator>
                 </center>
-              )}
-            </div>
+              </div>
+
+            )}
             <ChatInputPanel
               session={session}
               running={running}

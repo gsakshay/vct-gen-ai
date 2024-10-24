@@ -361,8 +361,8 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
   }[readyState];
 
   return (
-    <>
-      <Container
+    <div className="ChatInputParent">
+      <div
         className="ChatInputContainer">
         <div
           className={styles.input_textarea_container}>
@@ -401,7 +401,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
               }
             }}
             value={state.value}
-            placeholder={"Send a message"}
+            placeholder={"Build the team..."}
           />
           <div style={{ marginLeft: "8px" }}>
             <Button
@@ -428,7 +428,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
             </Button>
           </div>
         </div>
-      </Container>
+      </div>
       <div className={styles.input_controls}>
         <div>
         </div>
@@ -439,7 +439,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
           </SpaceBetween>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

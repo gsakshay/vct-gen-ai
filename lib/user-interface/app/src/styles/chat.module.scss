@@ -73,6 +73,7 @@
   margin-right: -8px;
   container-type: inline-size;
   container-name: input_container;
+  width: 100% !important;
 }
 
 .input_textarea_container {
@@ -80,6 +81,7 @@
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 4px;
+  width: 100% !important;
 }
 
 .input_textarea {
