@@ -54,128 +54,153 @@ const valorantAgentsMap: { [key: string]: Agent } = {
     'jett': {
         name: 'Jett',
         role: 'Duelist',
-        image: '/images/jett.webp',
+        image: '/images/agents/jett.png',
     },
     'phoenix': {
         name: 'Phoenix',
         role: 'Duelist',
-        image: '/images/phoenix.webp',
+
+        image: '/images/agents/phoenix.png',
     },
     'reyna': {
         name: 'Reyna',
         role: 'Duelist',
-        image: '/images/reyna.webp',
+
+        image: '/images/agents/reyna.png',
     },
     'raze': {
         name: 'Raze',
         role: 'Duelist',
-        image: '/images/raze.webp',
+
+        image: '/images/agents/raze.png',
     },
     'yoru': {
         name: 'Yoru',
         role: 'Duelist',
-        image: '/images/yoru.webp',
+
+        image: '/images/agents/yoru.png',
     },
     'neon': {
         name: 'Neon',
         role: 'Duelist',
-        image: '/images/neon.webp',
+
+        image: '/images/agents/neon.png',
     },
     'brimstone': {
         name: 'Brimstone',
         role: 'Controller',
-        image: '/images/brimstone.webp',
+
+        image: '/images/agents/brimstone.png',
     },
     'viper': {
         name: 'Viper',
         role: 'Controller',
-        image: '/images/viper.webp',
+
+        image: '/images/agents/viper.png',
     },
     'omen': {
         name: 'Omen',
         role: 'Controller',
-        image: '/images/omen.webp',
+
+        image: '/images/agents/omen.png',
     },
     'astra': {
         name: 'Astra',
         role: 'Controller',
-        image: '/images/astra.webp',
+
+        image: '/images/agents/astra.png',
     },
     'harbor': {
         name: 'Harbor',
         role: 'Controller',
-        image: '/images/harbor.webp',
+
+        image: '/images/agents/harbor.png',
     },
     'sage': {
         name: 'Sage',
         role: 'Sentinel',
-        image: '/images/sage.webp',
+
+        image: '/images/agents/sage.png',
     },
     'cypher': {
         name: 'Cypher',
         role: 'Sentinel',
-        image: '/images/cypher.webp',
+
+        image: '/images/agents/cypher.png',
     },
     'killjoy': {
         name: 'Killjoy',
         role: 'Sentinel',
-        image: '/images/killjoy.webp',
+
+        image: '/images/agents/killjoy.png',
     },
     'chamber': {
         name: 'Chamber',
         role: 'Sentinel',
-        image: '/images/chamber.webp',
+
+        image: '/images/agents/chamber.png',
     },
     'skye': {
         name: 'Skye',
         role: 'Initiator',
-        image: '/images/skye.webp',
+        image: '/images/agents/skye.png',
     },
     'sova': {
         name: 'Sova',
         role: 'Initiator',
-        image: '/images/sova.webp',
+        image: '/images/agents/sova.png',
     },
     'breach': {
         name: 'Breach',
         role: 'Initiator',
-        image: '/images/breach.webp',
+        image: '/images/agents/breach.png',
     },
     'kayo': {
         name: 'KAY/O',
         role: 'Initiator',
-        image: '/images/kayo.webp',
+        image: '/images/agents/kayo.png',
     },
     'fade': {
         name: 'Fade',
         role: 'Initiator',
-        image: '/images/fade.webp',
+        image: '/images/agents/fade.png',
     },
     'gekko': {
         name: 'Gekko',
         role: 'Initiator',
-        image: '/images/gekko.webp',
+        image: '/images/agents/gekko.png',
     },
     'deadlock': {
         name: 'Deadlock',
         role: 'Sentinel',
-        image: '/images/deadlock.webp',
+        image: '/images/agents/deadlock.png',
     },
     'vyse': {
         name: 'Vyse',
         role: 'Sentinel',
-        image: '/images/vyse.webp',
+        image: '/images/agents/vyse.png',
     },
     'iso': {
         name: 'Iso',
         role: 'Duelist',
-        image: '/images/iso.webp',
+        image: '/images/agents/iso.png',
     },
-    'clove':{
+    'clove': {
         name: 'Clove',
         role: 'Controller',
-        image: '/images/clove.webp',
-    }
+        image: '/images/agents/clove.png',
+    },
+    'sunburst': {
+        name: 'Sunburst',
+        role: 'Duelist',
+        image: '/images/agents/sunburst.png',
+    },
+    'titan': {
+        name: 'Titan',
+        role: 'Controller',
+        image: '/images/agents/titan.png',
+    },
 };
+
 
 export default valorantAgentsMap;

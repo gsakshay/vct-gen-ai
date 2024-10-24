@@ -58,6 +58,10 @@ export default function Chat( props: { sessionId?: string } )
        * However, even if a session ID is set and there is no saved session in the 
        * backend, there will be no errors - the API will simply return a blank session
        */
+      setTeamComposition( {
+        ...teamComposition,
+        players: [],
+      } )
       if ( !props.sessionId )
       {
         setSession( { id: uuidv4(), loading: false } );
@@ -77,6 +81,12 @@ export default function Chat( props: { sessionId?: string } )
         if ( teamComp.players.length > 0 )
         {
           setTeamComposition( teamComp );
+        } else
+        {
+          setTeamComposition( {
+            ...teamComposition,
+            players: [],
+          } )
         }
         if ( hist )
         {
