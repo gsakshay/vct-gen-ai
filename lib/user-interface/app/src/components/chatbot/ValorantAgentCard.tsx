@@ -127,7 +127,7 @@ const StatBox = styled( Box )( {
 const StatValue = styled( Typography )( {
     fontWeight: 'bold',
     fontSize: '0.75rem',
-    color: '#FF6B74',
+    color: '#FFFFFF',
 } );
 
 const StatLabel = styled( Typography )( {
