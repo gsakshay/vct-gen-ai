@@ -118,6 +118,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 2. **Data Retrieval & Analysis:**  
    - Use tools to gather player info inside \`<retrieving_players>\` tags.
    - Always **close all tags** before opening new ones to avoid errors.
+   - To retrieve a specific match, you will need a match URL, which you can get by retrieving player data.
 
 3. **Team Creation:**  
    - Select 5 agents to fill the team, ensuring a balanced composition.
