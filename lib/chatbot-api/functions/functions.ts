@@ -59,7 +59,19 @@ export class LambdaFunctionStack extends cdk.Stack {
         // Define the Lambda function resource
         const websocketAPIFunction = new lambda.Function(scope, 'ChatHandlerFunction', {
           runtime: lambda.Runtime.NODEJS_20_X, // Choose any supported Node.js runtime
-          code: lambda.Code.fromAsset(path.join(__dirname, 'websocket-chat')), // Points to the lambda directory
+          code: lambda.Code.fromAsset(path.join(__dirname, 'websocket-chat'),{
+            bundling: {
+              image: lambda.Runtime.NODEJS_20_X.bundlingImage,
+              command: [
+                'bash', '-c',
+                `cp -aur . /asset-output &&
+                 cd /asset-output &&
+                 mkdir .npm &&
+                 export npm_config_cache=.npm &&
+                 npm install`,
+              ],
+            },
+          }), // Points to the lambda directory
           handler: 'index.handler', // Points to the 'hello' file in the lambda directory
           environment : {
             "WEBSOCKET_API_ENDPOINT" : props.wsApiEndpoint.replace("wss","https"),            
@@ -108,7 +120,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 3. **Team Creation:**  
    - Select 5 agents to fill the team, ensuring a balanced composition.
-   - Find the best player for each agent we pick (pull agent specific stats).
+   - Go through each role/agent and find the best players based on the criteria.
    - After selecting the best player for each agent, provide a brief justification based on player stats for the agent you picked them for.
    - Make sure never to pick the same player for multiple agents. (that's realistically not possible)
    - There cant be more than 1 IGL in a team.
