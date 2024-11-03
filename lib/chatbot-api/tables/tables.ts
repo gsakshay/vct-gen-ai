@@ -5,6 +5,8 @@ import { Attribute, AttributeType, Table, ProjectionType } from 'aws-cdk-lib/aws
 export class TableStack extends Stack {
   public readonly historyTable : Table;
   public readonly feedbackTable : Table;
+  public readonly playerTable : Table;
+
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
@@ -45,5 +47,12 @@ export class TableStack extends Stack {
     });
 
     this.feedbackTable = userFeedbackTable;    
+
+    const userPageTable = new Table(scope, 'UserPageTable', {
+      partitionKey: { name: 'userID', type: AttributeType.STRING },
+      // sortKey: { name: 'session_id', type: AttributeType.STRING },
+    });
+
+    this.playerTable = userPageTable;
   }
 }

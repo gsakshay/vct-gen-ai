@@ -51,6 +51,7 @@ export class ChatBotApi extends Construct {
         wsApiEndpoint: websocketBackend.wsAPIStage.url,
         sessionTable: tables.historyTable,        
         feedbackTable: tables.feedbackTable,
+        playerTable : tables.playerTable,
         feedbackBucket: buckets.feedbackBucket,
         knowledgeBucket: buckets.knowledgeBucket,
         knowledgeBase: knowledgeBase.knowledgeBase,

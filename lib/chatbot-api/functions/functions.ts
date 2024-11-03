@@ -13,6 +13,7 @@ interface LambdaFunctionStackProps {
   readonly wsApiEndpoint : string;  
   readonly sessionTable : Table;  
   readonly feedbackTable : Table;
+  readonly playerTable : Table;
   readonly feedbackBucket : s3.Bucket;
   readonly knowledgeBucket : s3.Bucket;
   readonly knowledgeBase : bedrock.CfnKnowledgeBase;
@@ -148,7 +149,8 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 
 `,
-            'KB_ID' : props.knowledgeBase.attrKnowledgeBaseId
+            'KB_ID' : props.knowledgeBase.attrKnowledgeBaseId,
+            "PLAYER_TABLE" : props.playerTable.tableName,
           },
           timeout: cdk.Duration.seconds(300)
         });
@@ -201,6 +203,19 @@ export class LambdaFunctionStack extends cdk.Stack {
             'lambda:InvokeFunction'
           ],
           resources: [this.sessionFunction.functionArn]
+        }));
+
+        websocketAPIFunction.addToRolePolicy(new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          actions: [
+            'dynamodb:GetItem',
+            'dynamodb:PutItem',
+            'dynamodb:UpdateItem',
+            'dynamodb:DeleteItem',
+            'dynamodb:Query',
+            'dynamodb:Scan'
+          ],
+          resources: [props.playerTable.tableArn, props.playerTable.tableArn + "/index/*"]
         }));
         
         this.chatFunction = websocketAPIFunction;
