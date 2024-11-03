@@ -152,7 +152,8 @@ export class LambdaFunctionStack extends cdk.Stack {
             'KB_ID' : props.knowledgeBase.attrKnowledgeBaseId,
             "PLAYER_TABLE" : props.playerTable.tableName,
           },
-          timeout: cdk.Duration.seconds(300)
+          timeout: cdk.Duration.seconds(300),
+          memorySize: 4096
         });
         websocketAPIFunction.addToRolePolicy(new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,
