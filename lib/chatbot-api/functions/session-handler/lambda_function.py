@@ -65,7 +65,7 @@ def save_team_composition(session_id, user_id, team_composition):
     if 'statusCode' in session_response and session_response['statusCode'] != 200:
         return session_response
     try:
-        # Update the team_composition attribute in the item        
+        # Update the team_composition attribute in the item
         response = table.update_item(
             Key={"session_id": session_id, "user_id": user_id},
             UpdateExpression="set team_composition = :team_comp",
@@ -146,6 +146,92 @@ def get_team_composition(session_id, user_id):
             'body': json.dumps(str(general_error))
         }
 
+def save_map(session_id, user_id, map_data):
+    session_response = get_session(session_id, user_id)
+    if 'statusCode' in session_response and session_response['statusCode'] != 200:
+        return session_response
+    try:
+        # Update the 'maps' attribute in the DynamoDB item
+        response = table.update_item(
+            Key={"session_id": session_id, "user_id": user_id},
+            UpdateExpression="set maps = :maps",
+            ExpressionAttributeValues={":maps": map_data},
+            ReturnValues="UPDATED_NEW"
+        )
+        return {
+            'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps(
+                {'message': 'Map saved successfully.', 'Attributes': response.get("Attributes", {})},
+                cls=DecimalEncoder
+            )
+        }
+    except ClientError as error:
+        print("Caught error: DynamoDB error - could not save map")
+        error_code = error.response['Error']['Code']
+        if error_code == "ResourceNotFoundException":
+            return {
+                'statusCode': 404,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(f"No record found with session id: {session_id}")
+            }
+        else:
+            return {
+                'statusCode': 500,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(str(error))
+            }
+    except Exception as general_error:
+        print("Caught error: General error - could not save map:", general_error)
+        return {
+            'statusCode': 500,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps(str(general_error))
+        }
+
+def get_map(session_id, user_id):
+    session_response = get_session(session_id, user_id)
+    if 'statusCode' in session_response and session_response['statusCode'] != 200:
+        return session_response
+    try:
+        response = table.get_item(
+            Key={"session_id": session_id, "user_id": user_id},
+            ProjectionExpression='maps'
+        )
+        if 'Item' in response and 'maps' in response['Item']:
+            return {
+                'statusCode': 200,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(response['Item']['maps'], cls=DecimalEncoder)
+            }
+        else:
+            return {
+                'statusCode': 404,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(f"Map not found for session id: {session_id}")
+            }
+    except ClientError as error:
+        print("Caught error: DynamoDB error - could not get map")
+        error_code = error.response['Error']['Code']
+        if error_code == "ResourceNotFoundException":
+            return {
+                'statusCode': 404,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(f"No record found with session id: {session_id}")
+            }
+        else:
+            return {
+                'statusCode': 500,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(str(error))
+            }
+    except Exception as general_error:
+        print("Caught error: General error - could not get map")
+        return {
+            'statusCode': 500,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps(str(general_error))
+        }
 
 # A function to retrieve a session from DynamoDB based on session_id and user_id
 def get_session(session_id, user_id):
@@ -364,7 +450,7 @@ def list_sessions_by_user_id(user_id, limit=15):
 
 def lambda_handler(event, context):
     try:
-        data = json.loads(event['body'],parse_float=Decimal)
+        data = json.loads(event['body'], parse_float=Decimal)
     except json.JSONDecodeError:
         return {
             'statusCode': 400,
@@ -379,6 +465,7 @@ def lambda_handler(event, context):
     new_chat_entry = data.get('new_chat_entry')
     title = data.get('title', f"Chat on {str(datetime.now())}")
     team_composition = data.get('team_composition')  # Retrieve team_composition from the request
+    map_data = data.get('map')  # New: Retrieve map data from the request
 
     if not operation:
         return {
@@ -387,8 +474,14 @@ def lambda_handler(event, context):
             'body': json.dumps('Operation is required.')
         }
 
-    if operation in ['add_session', 'get_session', 'update_session', 'save_team_composition',
-                     'get_team_composition', 'delete_session']:
+    operations_requiring_ids = [
+        'add_session', 'get_session', 'update_session',
+        'save_team_composition', 'get_team_composition',
+        'save_map', 'get_map'
+        'delete_session'
+    ]
+
+    if operation in operations_requiring_ids:
         if not user_id or not session_id:
             return {
                 'statusCode': 400,
@@ -407,6 +500,16 @@ def lambda_handler(event, context):
         return save_team_composition(session_id, user_id, team_composition)
     elif operation == 'get_team_composition':
         return get_team_composition(session_id, user_id)
+    elif operation == 'save_map':
+        if not map_data:
+            return {
+                'statusCode': 400,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps('Map data is required for this operation.')
+            }
+        return save_map(session_id, user_id, map_data)
+    elif operation == 'get_map':
+        return get_map(session_id, user_id)
     elif operation == 'list_sessions_by_user_id':
         return list_sessions_by_user_id(user_id)
     elif operation == 'list_all_sessions_by_user_id':
@@ -421,4 +524,3 @@ def lambda_handler(event, context):
             'headers': {'Access-Control-Allow-Origin': '*'},
             'body': json.dumps(f'Operation not found/allowed! Operation Sent: {operation}')
         }
-
