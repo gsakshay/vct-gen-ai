@@ -162,17 +162,14 @@ def save_map(session_id, user_id, maps_array):
             Key={"session_id": session_id, "user_id": user_id},
             UpdateExpression="SET maps = :maps",
             ExpressionAttributeValues={
-                ":maps": maps_array
+                ":maps": maps_array  # Expecting a dictionary like {1: {...}, 2: {...}, 3: {...}}
             },
             ReturnValues="UPDATED_NEW"
         )
         return {
             'statusCode': 200,
             'headers': {'Access-Control-Allow-Origin': '*'},
-            'body': json.dumps(
-                {'message': 'Maps saved successfully.', 'Attributes': response.get("Attributes", {})},
-                cls=DecimalEncoder
-            )
+            'body': json.dumps({'message': 'Maps saved successfully.', 'Attributes': response.get("Attributes", {})})
         }
     except ClientError as error:
         print("Caught error: DynamoDB error - could not save maps")
