@@ -50,7 +50,7 @@ interface Agent {
     image: string;
 }
 
-const valorantAgentsMap: { [key: string]: Agent } = {
+export const valorantAgentsMap: { [key: string]: Agent } = {
     'jett': {
         name: 'Jett',
         role: 'Duelist',
@@ -203,4 +203,47 @@ const valorantAgentsMap: { [key: string]: Agent } = {
 };
 
 
-export default valorantAgentsMap;
+
+export const valorantMapsMap = {
+    'ascent': {
+        name: 'Ascent',
+        image: '/images/maps/ascent.png',
+    },
+    'bind': {
+        name: 'Bind',
+        image: '/images/maps/bind.png',
+    },
+    'haven': {
+        name: 'Haven',
+        image: '/images/maps/haven.png',
+    },
+    'split': {
+        name: 'Split',
+        image: '/images/maps/split.png',
+    },
+    'icebox': {
+        name: 'Icebox',
+        image: '/images/maps/icebox.png',
+    },
+    'breeze': {
+        name: 'Breeze',
+        image: '/images/maps/breeze.png',
+    },
+    'fracture': {
+        name: 'Fracture',
+        image: '/images/maps/fracture.png',
+    },
+    'pearl': {
+        name: 'Pearl',
+        image: '/images/maps/pearl.png',
+    },
+    'lotus': {
+        name: 'Lotus',
+        image: '/images/maps/lotus.png',
+    },
+    'sunset': {
+        name: 'Sunset',
+        image: '/images/maps/sunset.png',
+    },
+};
+

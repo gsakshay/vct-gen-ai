@@ -24,7 +24,7 @@ import styles from "../../styles/chat.module.scss";
 import { CHATBOT_NAME } from "../../common/constants";
 import { useNotifications } from "../notif-manager";
 import ValorantAgentCard from "./ValorantAgentCard";
-import valorantAgentsMap from "./utils";
+import { valorantAgentsMap } from "./utils";
 import { Utils } from "../../common/utils";
 import { Grid2 } from "@mui/material";
 
