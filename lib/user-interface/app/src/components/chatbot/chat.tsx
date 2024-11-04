@@ -1,20 +1,20 @@
 import { useContext, useEffect, useState } from "react";
 import
-  {
-    ChatBotHistoryItem,
-    ChatBotMessageType,
-    FeedbackData,
-    TeamPlayer,
-    TeamComposition,
-  } from "./types";
+{
+  ChatBotHistoryItem,
+  ChatBotMessageType,
+  FeedbackData,
+  TeamPlayer,
+  TeamComposition,
+} from "./types";
 import { Auth } from "aws-amplify";
 import
-  {
-    SpaceBetween,
-    StatusIndicator,
-    Button,
-    Grid,
-  } from "@cloudscape-design/components";
+{
+  SpaceBetween,
+  StatusIndicator,
+  Button,
+  Grid,
+} from "@cloudscape-design/components";
 import { v4 as uuidv4 } from "uuid";
 import { AppContext } from "../../common/app-context";
 import { ApiClient } from "../../common/api-client/api-client";
@@ -26,6 +26,7 @@ import { useNotifications } from "../notif-manager";
 import ValorantAgentCard from "./ValorantAgentCard";
 import valorantAgentsMap from "./utils";
 import { Utils } from "../../common/utils";
+import { Grid2 } from "@mui/material";
 
 export default function Chat( props: { sessionId?: string } )
 {
@@ -35,6 +36,16 @@ export default function Chat( props: { sessionId?: string } )
     id: props.sessionId ?? uuidv4(),
     loading: typeof props.sessionId !== "undefined",
   } );
+
+  const [examplePrompts, setExamplePrompts] = useState<string[]>( [
+    "Build a team with players from 3 + regions",
+    "Build a team with VCT Game Changers players only",
+    "Build a team with pro players (VCT International) only",
+    "Build a team with semi - pro (VCT Challengers) players only",
+    "Build a team with at least 2 players from an underrepresented group (ex.Game Changers)",
+    "Build a team that includes at least two semi - professional players (VCT Challengers or VCT Game Changers)",
+  ] )
+  const [selectedExamplePrompt, setSelectedExamplePrompt] = useState<string>( "" );
 
   const { notifications, addNotification } = useNotifications();
   const [messageHistory, setMessageHistory] = useState<ChatBotHistoryItem[]>( [] );
@@ -49,6 +60,7 @@ export default function Chat( props: { sessionId?: string } )
   {
     if ( !appContext ) return;
     setMessageHistory( [] );
+    setSelectedExamplePrompt( "" );
 
     ( async () =>
     {
@@ -299,7 +311,28 @@ export default function Chat( props: { sessionId?: string } )
               } )}
             </SpaceBetween>
             {messageHistory.length == 0 && !session?.loading && (
-              <div className={styles.welcome_text}><center>{CHATBOT_NAME}</center></div>
+              <div>
+                <div className={styles.welcome_text}><center>{CHATBOT_NAME}</center></div>
+                <Grid2 container spacing={2} justifyContent="space-around">
+                  {examplePrompts.map( ( prompt, idx ) =>
+                  {
+                    return (
+                      <Grid2
+                        onClick={() =>
+                        {
+                          setSelectedExamplePrompt( prompt );
+                        }}
+                        key={idx} style={{
+                          color: "#E9EFEC",
+                          border: "1px solid #FF4654",
+                          borderRadius: "0.25rem",
+                          padding: "0.75rem",
+                          cursor: "pointer"
+                        }} size={5.5}>{prompt}</Grid2>
+                    );
+                  } )}
+                </Grid2>
+              </div>
             )}
             {session?.loading && (
               <div className={styles.welcome_text}>
@@ -312,6 +345,7 @@ export default function Chat( props: { sessionId?: string } )
 
             )}
             <ChatInputPanel
+              selectedExamplePrompt={selectedExamplePrompt}
               session={session}
               running={running}
               setRunning={setRunning}

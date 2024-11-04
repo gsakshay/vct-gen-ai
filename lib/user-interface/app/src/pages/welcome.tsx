@@ -1,18 +1,20 @@
-import {
-  ContentLayout,
-  Header,
-  Cards,
-  Container,
-  SpaceBetween,
-  Link,
-  BreadcrumbGroup,
-} from "@cloudscape-design/components";
+import
+  {
+    ContentLayout,
+    Header,
+    Cards,
+    Container,
+    SpaceBetween,
+    Link,
+    BreadcrumbGroup,
+  } from "@cloudscape-design/components";
 import BaseAppLayout from "../components/base-app-layout";
 import RouterButton from "../components/wrappers/router-button";
 import useOnFollow from "../common/hooks/use-on-follow";
 import { CHATBOT_NAME } from "../common/constants";
 
-export default function Welcome() {
+export default function Welcome()
+{
   const onFollow = useOnFollow();
 
   return (
@@ -52,7 +54,7 @@ export default function Welcome() {
           <SpaceBetween size="l">
             <Cards
               cardDefinition={{
-                header: (item) => (
+                header: ( item ) => (
                   <Link
                     external={item.external}
                     href={item.href}
@@ -63,7 +65,7 @@ export default function Welcome() {
                 ),
                 sections: [
                   {
-                    content: (item) => (
+                    content: ( item ) => (
                       <div>
                         <img
                           src={item.img}
@@ -74,7 +76,7 @@ export default function Welcome() {
                     ),
                   },
                   {
-                    content: (item) => (
+                    content: ( item ) => (
                       <div>
                         <div>{item.description}</div>
                       </div>
@@ -83,7 +85,7 @@ export default function Welcome() {
                   {
                     id: "type",
                     header: "Type",
-                    content: (item) => item.type,
+                    content: ( item ) => item.type,
                   },
                 ],
               }}
@@ -175,7 +177,7 @@ export default function Welcome() {
             </Header>
             <Cards
               cardDefinition={{
-                header: (item) => (
+                header: ( item ) => (
                   <Link
                     href={item.href}
                     external={item.external}
@@ -186,12 +188,12 @@ export default function Welcome() {
                 ),
                 sections: [
                   {
-                    content: (item) => <div>{item.description}</div>,
+                    content: ( item ) => <div>{item.description}</div>,
                   },
                   {
                     id: "type",
                     header: "Type",
-                    content: (item) => item.type,
+                    content: ( item ) => item.type,
                   },
                 ],
               }}
