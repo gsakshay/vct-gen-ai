@@ -9,9 +9,9 @@ import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as bedrock from "aws-cdk-lib/aws-bedrock";
 
-interface LambdaFunctionStackProps {  
-  readonly wsApiEndpoint : string;  
-  readonly sessionTable : Table;  
+interface LambdaFunctionStackProps {
+  readonly wsApiEndpoint : string;
+  readonly sessionTable : Table;
   readonly feedbackTable : Table;
   readonly playerTable : Table;
   readonly feedbackBucket : s3.Bucket;
@@ -20,7 +20,7 @@ interface LambdaFunctionStackProps {
   readonly knowledgeBaseSource: bedrock.CfnDataSource;
 }
 
-export class LambdaFunctionStack extends cdk.Stack {  
+export class LambdaFunctionStack extends cdk.Stack {
   public readonly chatFunction : lambda.Function;
   public readonly sessionFunction : lambda.Function;
   public readonly feedbackFunction : lambda.Function;
@@ -30,7 +30,7 @@ export class LambdaFunctionStack extends cdk.Stack {
   public readonly syncKBFunction : lambda.Function;
 
   constructor(scope: Construct, id: string, props: LambdaFunctionStackProps) {
-    super(scope, id);    
+    super(scope, id);
 
     const sessionAPIHandlerFunction = new lambda.Function(scope, 'SessionHandlerFunction', {
       runtime: lambda.Runtime.PYTHON_3_12, // Choose any supported Node.js runtime
@@ -41,7 +41,7 @@ export class LambdaFunctionStack extends cdk.Stack {
       },
       timeout: cdk.Duration.seconds(30)
     });
-    
+
     sessionAPIHandlerFunction.addToRolePolicy(new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       actions: [
@@ -75,7 +75,7 @@ export class LambdaFunctionStack extends cdk.Stack {
           }), // Points to the lambda directory
           handler: 'index.handler', // Points to the 'hello' file in the lambda directory
           environment : {
-            "WEBSOCKET_API_ENDPOINT" : props.wsApiEndpoint.replace("wss","https"),            
+            "WEBSOCKET_API_ENDPOINT" : props.wsApiEndpoint.replace("wss","https"),
             "PROMPT" : `You are a Valorant team manager (VCT Scout) and data scientist assisting in scouting and recruitment for a new VALORANT esports team. Your main tasks include:
 
 ### **Primary Tasks:**
@@ -112,15 +112,15 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 ### **Instructions:**
 
-1. **Assess Query:**  
-   - Identify team type and user preferences. 
+1. **Assess Query:**
+   - Identify team type and user preferences.
 
-2. **Data Retrieval & Analysis:**  
+2. **Data Retrieval & Analysis:**
    - Use tools to gather player info inside \`<retrieving_players>\` tags.
    - Always **close all tags** before opening new ones to avoid errors.
    - To retrieve a specific match, you will need a match URL, which you can get by retrieving player data.
 
-3. **Team Creation:**  
+3. **Team Creation:**
    - Select 5 agents to fill the team, ensuring a balanced composition.
    - Go through each role/agent and find the best players based on the criteria.
    - After selecting the best player for each agent, provide a brief justification based on player stats for the agent you picked them for.
@@ -131,11 +131,11 @@ export class LambdaFunctionStack extends cdk.Stack {
    - Always make sure that all each player has a unique agent.
    - **Auto-save any changes** to the team composition. Use the 'save_team_composition' tool to save the team automatically whenever changes are made.
 
-4. **Response Structure:**  
+4. **Response Structure:**
    - Present team composition clearly, outside tags, in list/key point format.
    - Maintain a professional, concise tone, encouraging follow-up questions.
 
-5. **Final Action:**  
+5. **Final Action:**
    - After finalizing the team, **always** save it as the last step. Saving the team composition with the 'save_team_composition' tool should **always** be the last action.
 
 ---
@@ -145,6 +145,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 - **Inclusivity:** Promote diverse team structures when requested.
 - **Professionalism:** Maintain a positive tone and provide actionable recommendations.
 - **Confidentiality:** Do not disclose sensitive information.
+- Use the 'save_map' tool to save the maps for a team composition after finding the top maps. Ensure that keys 1, 2, and 3 each contain unique map names.
 
 **Tool Usage:** Use tools like \`player_info\`, \`list_players\`, and \`query_db\` inside tags. Always close tags properly before opening new ones. Auto-save any team composition changes, and always save the final team with 'save_team_composition' as the last step.
 
@@ -161,7 +162,7 @@ export class LambdaFunctionStack extends cdk.Stack {
           actions: [
             'bedrock:InvokeModelWithResponseStream',
             'bedrock:InvokeModel',
-            
+
           ],
           resources: ["*"]
         }));
@@ -192,12 +193,12 @@ export class LambdaFunctionStack extends cdk.Stack {
           ],
           resources: [`arn:aws:athena:us-east-1:${cdk.Stack.of(this).account}:workgroup/*`,
                 "arn:aws:s3:::riot-unzipped/*",
-                "arn:aws:s3:::riot-unzipped",                
+                "arn:aws:s3:::riot-unzipped",
                 `arn:aws:glue:us-east-1:${cdk.Stack.of(this).account}:catalog`,
                 `arn:aws:glue:us-east-1:${cdk.Stack.of(this).account}:catalog/*`,
                 `arn:aws:glue:us-east-1:${cdk.Stack.of(this).account}:database/*`,
                 `arn:*:glue:us-east-1:${cdk.Stack.of(this).account}:table/*`]
-        }));  
+        }));
 
         websocketAPIFunction.addToRolePolicy(new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,
@@ -219,7 +220,7 @@ export class LambdaFunctionStack extends cdk.Stack {
           ],
           resources: [props.playerTable.tableArn, props.playerTable.tableArn + "/index/*"]
         }));
-        
+
         this.chatFunction = websocketAPIFunction;
 
     const feedbackAPIHandlerFunction = new lambda.Function(scope, 'FeedbackHandlerFunction', {
@@ -232,7 +233,7 @@ export class LambdaFunctionStack extends cdk.Stack {
       },
       timeout: cdk.Duration.seconds(30)
     });
-    
+
     feedbackAPIHandlerFunction.addToRolePolicy(new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       actions: [
@@ -255,13 +256,13 @@ export class LambdaFunctionStack extends cdk.Stack {
     }));
 
     this.feedbackFunction = feedbackAPIHandlerFunction;
-    
+
     const deleteS3APIHandlerFunction = new lambda.Function(scope, 'DeleteS3FilesHandlerFunction', {
       runtime: lambda.Runtime.PYTHON_3_12, // Choose any supported Node.js runtime
       code: lambda.Code.fromAsset(path.join(__dirname, 'knowledge-management/delete-s3')), // Points to the lambda directory
       handler: 'lambda_function.lambda_handler', // Points to the 'hello' file in the lambda directory
       environment: {
-        "BUCKET" : props.knowledgeBucket.bucketName,        
+        "BUCKET" : props.knowledgeBucket.bucketName,
       },
       timeout: cdk.Duration.seconds(30)
     });
@@ -280,7 +281,7 @@ export class LambdaFunctionStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.join(__dirname, 'knowledge-management/get-s3')), // Points to the lambda directory
       handler: 'index.handler', // Points to the 'hello' file in the lambda directory
       environment: {
-        "BUCKET" : props.knowledgeBucket.bucketName,        
+        "BUCKET" : props.knowledgeBucket.bucketName,
       },
       timeout: cdk.Duration.seconds(30)
     });
@@ -300,8 +301,8 @@ export class LambdaFunctionStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.join(__dirname, 'knowledge-management/kb-sync')), // Points to the lambda directory
       handler: 'lambda_function.lambda_handler', // Points to the 'hello' file in the lambda directory
       environment: {
-        "KB_ID" : props.knowledgeBase.attrKnowledgeBaseId,      
-        "SOURCE" : props.knowledgeBaseSource.attrDataSourceId  
+        "KB_ID" : props.knowledgeBase.attrKnowledgeBaseId,
+        "SOURCE" : props.knowledgeBaseSource.attrDataSourceId
       },
       timeout: cdk.Duration.seconds(30)
     });
@@ -320,7 +321,7 @@ export class LambdaFunctionStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.join(__dirname, 'knowledge-management/upload-s3')), // Points to the lambda directory
       handler: 'index.handler', // Points to the 'hello' file in the lambda directory
       environment: {
-        "BUCKET" : props.knowledgeBucket.bucketName,        
+        "BUCKET" : props.knowledgeBucket.bucketName,
       },
       timeout: cdk.Duration.seconds(30)
     });
