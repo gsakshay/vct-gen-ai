@@ -92,7 +92,6 @@ const RoleBadge = styled( Box )( {
   display: 'inline-block',
   padding: '0.25rem',
   background: 'rgba(255, 70, 85, 0.2)',
-  border: '1px solid #FF4655',
   position: 'absolute',
   top: '10px',
   left: '10px',
@@ -217,10 +216,10 @@ const ValorantAgentCard: React.FC<ValorantAgentCardProps> = ( { agent, onOptionS
                 fontSize: '0.55rem',
               }}
             >
-              {agent?.role?.toLowerCase() === 'initiator' ? <a href="https://emoji.gg/emoji/3452-initiator-valorant"><img src="https://cdn3.emoji.gg/emojis/3452-initiator-valorant.png" width="32px" height="32px" alt="Initiator_Valorant" /></a> : agent?.role}
-              {agent?.role?.toLowerCase() === 'duelist' ? <a href="https://emoji.gg/emoji/4987-duelist-valorant"><img src="https://cdn3.emoji.gg/emojis/4987-duelist-valorant.png" width="32px" height="32px" alt="Duelist_Valorant" /></a> : agent?.role}
-              {agent?.role?.toLowerCase() === 'sentinel' ? <a href="https://emoji.gg/emoji/5030-sentinel-valorant"><img src="https://cdn3.emoji.gg/emojis/5030-sentinel-valorant.png" width="32px" height="32px" alt="Sentinel_Valorant" /></a> : agent?.role}
-              {agent?.role?.toLowerCase() === 'controller' ? <a href="https://emoji.gg/emoji/8733-controller-valorant"><img src="https://cdn3.emoji.gg/emojis/8733-controller-valorant.png" width="32px" height="32px" alt="Controller_Valorant" /></a> : agent?.role}
+              {agent?.role?.toLowerCase() === 'initiator' ? <a href="https://emoji.gg/emoji/3452-initiator-valorant"><img src="https://cdn3.emoji.gg/emojis/3452-initiator-valorant.png" width="32px" height="32px" alt="Initiator_Valorant" /></a> : <></>}
+              {agent?.role?.toLowerCase() === 'duelist' ? <a href="https://emoji.gg/emoji/4987-duelist-valorant"><img src="https://cdn3.emoji.gg/emojis/4987-duelist-valorant.png" width="32px" height="32px" alt="Duelist_Valorant" /></a> : <></>}
+              {agent?.role?.toLowerCase() === 'sentinel' ? <a href="https://emoji.gg/emoji/5030-sentinel-valorant"><img src="https://cdn3.emoji.gg/emojis/5030-sentinel-valorant.png" width="32px" height="32px" alt="Sentinel_Valorant" /></a> : <></>}
+              {agent?.role?.toLowerCase() === 'controller' ? <a href="https://emoji.gg/emoji/8733-controller-valorant"><img src="https://cdn3.emoji.gg/emojis/8733-controller-valorant.png" width="32px" height="32px" alt="Controller_Valorant" /></a> : <></>}
             </Typography>
           </RoleBadge>
 

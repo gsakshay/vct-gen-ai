@@ -369,7 +369,9 @@ export default function Chat( props: { sessionId?: string } )
                       ]?.image,
                       isIGL: player?.igl,
                       agentName: player?.agent,
-                      role: player?.role,
+                      role: valorantAgentsMap[
+                        player.agent.toLowerCase().replace( /[^a-z0-9]/g, "" )
+                      ]?.role,
                       playerName: player?.name,
                       averageKills: player?.averageKills,
                       averageDeaths: player?.averageDeaths,
