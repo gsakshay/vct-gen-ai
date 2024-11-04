@@ -38,9 +38,11 @@ def add_session(session_id, user_id, chat_history, title, new_chat_entry):
         response = table.update_item(
             Key={"session_id": session_id, "user_id": user_id},
             UpdateExpression="set chat_history = :chat_history, title = :title, time_stamp = :time_stamp",
-            ExpressionAttributeValues={":chat_history": [new_chat_entry],
-                                       ":title" : title.strip(),
-                                       ":time_stamp" : str(datetime.now())},
+            ExpressionAttributeValues={
+                ":chat_history": [new_chat_entry],
+                ":title": title.strip(),
+                ":time_stamp": str(datetime.now())
+            },
             ReturnValues="UPDATED_NEW"
         )
         # Return any attributes returned by the DynamoDB operation, default to an empty dictionary if none
@@ -50,15 +52,18 @@ def add_session(session_id, user_id, chat_history, title, new_chat_entry):
         print("Caught error: DynamoDB error - could not add new session")
         if error.response["Error"]["Code"] == "ResourceNotFoundException":
             # Return an error message if the DynamoDB resource (e.g., table, item) is not found
-            return {'statusCode': 404,
-                    'headers': {'Access-Control-Allow-Origin': '*'},
-                    'body': json.dumps(f"No record found with session id: {session_id}")}
+            return {
+                'statusCode': 404,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(f"No record found with session id: {session_id}")
+            }
         else:
             # Return a general error message for other client errors encountered
-            return {'statusCode': 500,
-                    'headers': {'Access-Control-Allow-Origin': '*'},
-                    'body': json.dumps(str(error))}
-
+            return {
+                'statusCode': 500,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps(str(error))
+            }
 
 def save_team_composition(session_id, user_id, team_composition):
     session_response = get_session(session_id, user_id)
@@ -76,7 +81,9 @@ def save_team_composition(session_id, user_id, team_composition):
             'statusCode': 200,
             'headers': {'Access-Control-Allow-Origin': '*'},
             'body': json.dumps(
-                {'message': 'Team composition saved successfully.', 'Attributes': response.get("Attributes", {})}, cls=DecimalEncoder)
+                {'message': 'Team composition saved successfully.', 'Attributes': response.get("Attributes", {})},
+                cls=DecimalEncoder
+            )
         }
     except ClientError as error:
         print("Caught error: DynamoDB error - could not save team composition")
@@ -146,28 +153,29 @@ def get_team_composition(session_id, user_id):
             'body': json.dumps(str(general_error))
         }
 
-def save_map(session_id, user_id, map_data):
+def save_map(session_id, user_id, maps_array):
     session_response = get_session(session_id, user_id)
     if 'statusCode' in session_response and session_response['statusCode'] != 200:
         return session_response
     try:
-        # Update the 'maps' attribute in the DynamoDB item
         response = table.update_item(
             Key={"session_id": session_id, "user_id": user_id},
-            UpdateExpression="set maps = :maps",
-            ExpressionAttributeValues={":maps": map_data},
+            UpdateExpression="SET maps = :maps",
+            ExpressionAttributeValues={
+                ":maps": maps_array
+            },
             ReturnValues="UPDATED_NEW"
         )
         return {
             'statusCode': 200,
             'headers': {'Access-Control-Allow-Origin': '*'},
             'body': json.dumps(
-                {'message': 'Map saved successfully.', 'Attributes': response.get("Attributes", {})},
+                {'message': 'Maps saved successfully.', 'Attributes': response.get("Attributes", {})},
                 cls=DecimalEncoder
             )
         }
     except ClientError as error:
-        print("Caught error: DynamoDB error - could not save map")
+        print("Caught error: DynamoDB error - could not save maps")
         error_code = error.response['Error']['Code']
         if error_code == "ResourceNotFoundException":
             return {
@@ -182,7 +190,7 @@ def save_map(session_id, user_id, map_data):
                 'body': json.dumps(str(error))
             }
     except Exception as general_error:
-        print("Caught error: General error - could not save map:", general_error)
+        print("Caught error: General error - could not save maps:", general_error)
         return {
             'statusCode': 500,
             'headers': {'Access-Control-Allow-Origin': '*'},
@@ -211,7 +219,7 @@ def get_map(session_id, user_id):
                 'body': json.dumps(f"Map not found for session id: {session_id}")
             }
     except ClientError as error:
-        print("Caught error: DynamoDB error - could not get map")
+        print("Caught error: DynamoDB error - could not get maps")
         error_code = error.response['Error']['Code']
         if error_code == "ResourceNotFoundException":
             return {
@@ -226,7 +234,7 @@ def get_map(session_id, user_id):
                 'body': json.dumps(str(error))
             }
     except Exception as general_error:
-        print("Caught error: General error - could not get map")
+        print("Caught error: General error - could not get maps")
         return {
             'statusCode': 500,
             'headers': {'Access-Control-Allow-Origin': '*'},
@@ -335,16 +343,29 @@ def delete_session(session_id, user_id):
         # Handle specific DynamoDB client errors. If the item cannot be found or another error occurs, return the appropriate message.
         error_code = error.response['Error']['Code']
         if error_code == "ResourceNotFoundException":
-            return {'statusCode': 404, "id": session_id, "deleted": False,
-                    'headers': {'Access-Control-Allow-Origin': '*'},
-                    "body": json.dumps(f"No record found with session id: {session_id}")}
+            return {
+                'statusCode': 404,
+                "id": session_id,
+                "deleted": False,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                "body": json.dumps(f"No record found with session id: {session_id}")
+            }
         else:
-            return {'statusCode': 500, "id": session_id, "deleted": False,
-                    'headers': {'Access-Control-Allow-Origin': '*'}, "body": json.dumps(f"Error occurred: {error}")}
+            return {
+                'statusCode': 500,
+                "id": session_id,
+                "deleted": False,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                "body": json.dumps(f"Error occurred: {error}")
+            }
 
     # If no exceptions are raised, return a response indicating that the deletion was successful.
-    return {'statusCode': 200, "id": session_id, 'headers': {'Access-Control-Allow-Origin': '*'}, "deleted": True}
-
+    return {
+        'statusCode': 200,
+        "id": session_id,
+        'headers': {'Access-Control-Allow-Origin': '*'},
+        "deleted": True
+    }
 
 def delete_user_sessions(user_id):
     try:
@@ -398,44 +419,54 @@ def list_sessions_by_user_id(user_id, limit=15):
         # More detailed client error handling based on DynamoDB error codes
         error_code = error.response['Error']['Code']
         if error_code == "ResourceNotFoundException":
-            return {'statusCode': 404,
-                    'headers': {'Access-Control-Allow-Origin': '*'},
-                    'body': f"No record found for user id: {user_id}"}
+            return {
+                'statusCode': 404,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': f"No record found for user id: {user_id}"
+            }
         elif error_code == "ProvisionedThroughputExceededException":
-            return {'statusCode': 429,
-                    'headers': {
-                        'Access-Control-Allow-Origin': '*'  # CORS header allowing access from any domain
-                    }, 'body': "Request limit exceeded"}
+            return {
+                'statusCode': 429,
+                'headers': {'Access-Control-Allow-Origin': '*'}, # CORS header allowing access from any domain
+                'body': "Request limit exceeded"
+            }
         elif error_code == "ValidationException":
-            return {'statusCode': 400,
-                    'headers': {
-                        'Access-Control-Allow-Origin': '*'  # CORS header allowing access from any domain
-                    }, 'body': "Invalid input parameters"}
+            return {
+                'statusCode': 400,
+                'headers': {'Access-Control-Allow-Origin': '*'}, # CORS header allowing access from any domain
+                'body': "Invalid input parameters"
+            }
         else:
-            return {'statusCode': 500,
-                    'headers': {
-                        'Access-Control-Allow-Origin': '*'  # CORS header allowing access from any domain
-                    }, 'body': "Internal server error"}
+            return {
+                'statusCode': 500,
+                'headers': {'Access-Control-Allow-Origin': '*'}, # CORS header allowing access from any domain
+                'body': "Internal server error"
+            }
     except KeyError as key_error:
         print("Caught error: DynamoDB error - could not list user sessions")
         # Handle errors that might occur if expected keys are missing in the response
-        return {'statusCode': 500,
-                'headers': {
-                    'Access-Control-Allow-Origin': '*'  # CORS header allowing access from any domain
-                }, 'body': f"Key error: {str(key_error)}"}
+        return {
+            'statusCode': 500,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': f"Key error: {str(key_error)}"
+        }
     except Exception as general_error:
         print("Caught error: DynamoDB error - could not list user sessions")
         # Generic error handling for any other unforeseen errors
-        return {'statusCode': 500,
-                'headers': {
-                    'Access-Control-Allow-Origin': '*'  # CORS header allowing access from any domain
-                }, 'body': json.dumps(f"An unexpected error occurred: {str(general_error)}")}
-
+        return {
+            'statusCode': 500,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps(f"An unexpected error occurred: {str(general_error)}")
+        }
     # Sort the items by 'time_stamp' in descending order to ensure the latest sessions appear first
     sorted_items = sorted(items, key=lambda x: x['time_stamp'], reverse=True)
     sorted_items = list(
-        map(lambda x: {"time_stamp": x["time_stamp"], "session_id": x["session_id"], "title": x["title"].strip()},
-            sorted_items))
+        map(lambda x: {
+            "time_stamp": x["time_stamp"],
+            "session_id": x["session_id"],
+            "title": x["title"].strip()
+        }, sorted_items)
+    )
 
     # Prepare the HTTP response object with a status code, headers, and body
     response = {
@@ -464,8 +495,8 @@ def lambda_handler(event, context):
     chat_history = data.get('chat_history', None)
     new_chat_entry = data.get('new_chat_entry')
     title = data.get('title', f"Chat on {str(datetime.now())}")
-    team_composition = data.get('team_composition')  # Retrieve team_composition from the request
-    map_data = data.get('map')  # New: Retrieve map data from the request
+    team_composition = data.get('team_composition')
+    maps_array = data.get('maps')
 
     if not operation:
         return {
@@ -477,7 +508,7 @@ def lambda_handler(event, context):
     operations_requiring_ids = [
         'add_session', 'get_session', 'update_session',
         'save_team_composition', 'get_team_composition',
-        'save_map', 'get_map'
+        'save_map', 'get_map',
         'delete_session'
     ]
 
@@ -501,13 +532,13 @@ def lambda_handler(event, context):
     elif operation == 'get_team_composition':
         return get_team_composition(session_id, user_id)
     elif operation == 'save_map':
-        if not map_data:
+        if not maps_array:
             return {
                 'statusCode': 400,
                 'headers': {'Access-Control-Allow-Origin': '*'},
-                'body': json.dumps('Map data is required for this operation.')
+                'body': json.dumps('Maps data is required for this operation.')
             }
-        return save_map(session_id, user_id, map_data)
+        return save_map(session_id, user_id, maps_array)
     elif operation == 'get_map':
         return get_map(session_id, user_id)
     elif operation == 'list_sessions_by_user_id':
