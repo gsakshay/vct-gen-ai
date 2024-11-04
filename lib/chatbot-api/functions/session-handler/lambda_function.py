@@ -153,7 +153,13 @@ def get_team_composition(session_id, user_id):
             'body': json.dumps(str(general_error))
         }
 
-def save_map(session_id, user_id, maps_array):
+def save_map(session_id, user_id, maps):
+    # check uniqueness of map suggestions
+    map_values = list(maps.values())
+
+    if len(set(map_values)) != len(map_values):
+        raise ValueError("All map selections must be unique.")
+
     session_response = get_session(session_id, user_id)
     if 'statusCode' in session_response and session_response['statusCode'] != 200:
         return session_response
@@ -162,7 +168,7 @@ def save_map(session_id, user_id, maps_array):
             Key={"session_id": session_id, "user_id": user_id},
             UpdateExpression="SET maps = :maps",
             ExpressionAttributeValues={
-                ":maps": maps_array  # Expecting a dictionary like {1: {...}, 2: {...}, 3: {...}}
+                ":maps": maps  # Expecting a dictionary like {1: {...}, 2: {...}, 3: {...}}
             },
             ReturnValues="UPDATED_NEW"
         )
@@ -493,7 +499,7 @@ def lambda_handler(event, context):
     new_chat_entry = data.get('new_chat_entry')
     title = data.get('title', f"Chat on {str(datetime.now())}")
     team_composition = data.get('team_composition')
-    maps_array = data.get('maps')
+    maps = data.get('maps')
 
     if not operation:
         return {
@@ -529,13 +535,13 @@ def lambda_handler(event, context):
     elif operation == 'get_team_composition':
         return get_team_composition(session_id, user_id)
     elif operation == 'save_map':
-        if not maps_array:
+        if not maps:
             return {
                 'statusCode': 400,
                 'headers': {'Access-Control-Allow-Origin': '*'},
                 'body': json.dumps('Maps data is required for this operation.')
             }
-        return save_map(session_id, user_id, maps_array)
+        return save_map(session_id, user_id, maps)
     elif operation == 'get_map':
         return get_map(session_id, user_id)
     elif operation == 'list_sessions_by_user_id':
