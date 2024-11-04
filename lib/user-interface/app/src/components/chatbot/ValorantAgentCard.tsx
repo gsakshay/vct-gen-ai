@@ -26,29 +26,26 @@ interface Agent
   image: string; // Image source
 }
 
-// Styled components
+// Styled components for horizontal layout
 const StyledCard = styled( Card )( ( { theme } ) => ( {
   position: 'relative',
-  width: '256px',
+  width: '100%',  // Increased width for horizontal layout
+  height: '128px', // Decreased height for a compact look
   backgroundColor: '#1F2326',
   border: '2px solid #FF4655',
   overflow: 'hidden',
   transition: 'all 0.3s ease',
   cursor: 'pointer',
   fontFamily: 'Rajdhani',
+  display: 'flex', // Flex for horizontal layout
   '&:hover': {
     transform: 'scale(1.05)',
     borderColor: '#FF6B74',
-    '& .agent-image': {
-      transform: 'scale(1.1)',
-    },
     zIndex: 100000,
-  }, '&:active': {
+  },
+  '&:active': {
     transform: 'scale(0.95)',
     borderColor: '#FF6B74',
-    '& .agent-image': {
-      transform: 'scale(0.95)',
-    },
     zIndex: 100000,
   },
 } ) );
@@ -70,67 +67,72 @@ const GlowingBorder = styled( Box )( {
 
 const ImageContainer = styled( Box )( {
   position: 'relative',
-  height: '7.5rem',
+  width: '100%', // Fixed width for image on the left
+  height: '100%', // Full height of the card
   overflow: 'hidden',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 } );
 
 const AgentImage = styled( 'img' )( {
   width: '100%',
   height: '100%',
-  objectFit: 'contain', // Ensure the whole image is visible without cutting it
+  objectFit: 'cover', // Image takes full height and width
   transition: 'transform 0.3s ease',
 } );
 
-const ImageOverlay = styled( Box )( {
-  position: 'absolute',
-  inset: 0,
-  background: 'linear-gradient(to top, rgba(31, 35, 38, 1), transparent)',
-  opacity: 0.1,
+const ContentContainer = styled( Box )( {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  width: '100%',
+  padding: '0 0.25rem',
 } );
 
 const RoleBadge = styled( Box )( {
   display: 'inline-block',
   padding: '0.25rem',
-  background: 'rgba(255, 70, 85, 0.2)',
   position: 'absolute',
-  top: '10px',
-  left: '10px',
+  top: '5px',
+  right: '5px',
   fontWeight: 'bold',
   textTransform: 'uppercase',
   borderRadius: '8px',
-  zIndex: 10, // Make sure it's on top
+  zIndex: 10,
 } );
 
-// New IGL Badge styled component
 const IGLBadge = styled( Box )( {
   position: 'absolute',
   top: '10px',
-  right: '10px',
+  left: '10px',
   padding: '0.25rem 0.5rem',
   backgroundColor: '#FF4655',
   color: '#FFFFFF',
   fontWeight: 'bold',
   textTransform: 'uppercase',
   borderRadius: '8px',
-  zIndex: 10, // Make sure it's on top
+  zIndex: 10,
   boxShadow: `0 0 10px 2px #FFFFFF`,
 } );
 
 const StatsContainer = styled( Box )( {
   display: 'flex',
-  justifyContent: 'space-around',
-  alignItems: 'center',
-  marginTop: '0.5rem',
-  padding: '0.5rem',
+  flexDirection: 'column',
+  padding: '0.5rem 0',
   backgroundColor: '#121517',
   borderRadius: '8px',
-  border: '1px solid #FF4655',
 } );
 
 const StatBox = styled( Box )( {
-  textAlign: 'center',
+  width: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
   color: '#FFFFFF',
   fontFamily: 'Rajdhani',
+  padding: '0rem 0.25rem',
+  border: '1px solid #FF4655',
 } );
 
 const StatValue = styled( Typography )( {
@@ -140,9 +142,27 @@ const StatValue = styled( Typography )( {
 } );
 
 const StatLabel = styled( Typography )( {
-  fontSize: '0.8rem',
+  fontSize: '0.5rem',
+  whiteSpace: 'nowrap',
   textTransform: 'uppercase',
   color: '#FF4655',
+} );
+
+const DialogOptionButton = styled( Button )( {
+  backgroundColor: '#121517',
+  color: '#FF4655',
+  fontWeight: 'bold',
+  textTransform: 'uppercase',
+  fontFamily: 'Rajdhani',
+  width: '100%',
+  border: '1px solid #FF4655',
+  '&:hover': {
+    backgroundColor: '#FF4655',
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    fontFamily: 'Rajdhani',
+  },
 } );
 
 interface ValorantAgentCardProps
@@ -183,27 +203,12 @@ const ValorantAgentCard: React.FC<ValorantAgentCardProps> = ( { agent, onOptionS
         {/* Image Container */}
         <ImageContainer>
           <AgentImage className="agent-image" src={agent.image} alt={agent.agentName} />
-          <ImageOverlay />
         </ImageContainer>
 
-        {/* If the agent is an IGL, show the IGL badge */}
-        {agent.isIGL && <IGLBadge>IGL</IGLBadge>}
-
-        <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
-          {/* Agent Name */}
-          <Typography
-            variant="h5"
-            sx={{
-              fontWeight: 'bold',
-              color: '#FF4655',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              textAlign: 'center',
-              fontSize: '1rem',
-            }}
-          >
-            {agent.agentName}
-          </Typography>
+        {/* Content Container */}
+        <ContentContainer>
+          {/* If the agent is an IGL, show the IGL badge */}
+          {agent.isIGL && <IGLBadge>IGL</IGLBadge>}
 
           {/* Role Badge */}
           <RoleBadge>
@@ -216,23 +221,32 @@ const ValorantAgentCard: React.FC<ValorantAgentCardProps> = ( { agent, onOptionS
                 fontSize: '0.55rem',
               }}
             >
-              {agent?.role?.toLowerCase() === 'initiator' ? <a href="https://emoji.gg/emoji/3452-initiator-valorant"><img src="https://cdn3.emoji.gg/emojis/3452-initiator-valorant.png" width="32px" height="32px" alt="Initiator_Valorant" /></a> : <></>}
-              {agent?.role?.toLowerCase() === 'duelist' ? <a href="https://emoji.gg/emoji/4987-duelist-valorant"><img src="https://cdn3.emoji.gg/emojis/4987-duelist-valorant.png" width="32px" height="32px" alt="Duelist_Valorant" /></a> : <></>}
-              {agent?.role?.toLowerCase() === 'sentinel' ? <a href="https://emoji.gg/emoji/5030-sentinel-valorant"><img src="https://cdn3.emoji.gg/emojis/5030-sentinel-valorant.png" width="32px" height="32px" alt="Sentinel_Valorant" /></a> : <></>}
-              {agent?.role?.toLowerCase() === 'controller' ? <a href="https://emoji.gg/emoji/8733-controller-valorant"><img src="https://cdn3.emoji.gg/emojis/8733-controller-valorant.png" width="32px" height="32px" alt="Controller_Valorant" /></a> : <></>}
+              {agent?.role?.toLowerCase() === 'initiator' ? <a href="https://emoji.gg/emoji/3452-initiator-valorant"><img src="https://cdn3.emoji.gg/emojis/3452-initiator-valorant.png" width="24px" height="24px" alt="Initiator_Valorant" /></a> : <></>}
+              {agent?.role?.toLowerCase() === 'duelist' ? <a href="https://emoji.gg/emoji/4987-duelist-valorant"><img src="https://cdn3.emoji.gg/emojis/4987-duelist-valorant.png" width="24px" height="24px" alt="Duelist_Valorant" /></a> : <></>}
+              {agent?.role?.toLowerCase() === 'sentinel' ? <a href="https://emoji.gg/emoji/5030-sentinel-valorant"><img src="https://cdn3.emoji.gg/emojis/5030-sentinel-valorant.png" width="24px" height="24px" alt="Sentinel_Valorant" /></a> : <></>}
+              {agent?.role?.toLowerCase() === 'controller' ? <a href="https://emoji.gg/emoji/8733-controller-valorant"><img src="https://cdn3.emoji.gg/emojis/8733-controller-valorant.png" width="24px" height="24px" alt="Controller_Valorant" /></a> : <></>}
             </Typography>
           </RoleBadge>
 
-          {/* Player Name */}
+          {/* Agent and Player Name */}
           <Typography
-            variant="h5"
             sx={{
               fontWeight: 'bold',
-              color: '#FFFFFF',
-              letterSpacing: '0.1em',
+              fontSize: '0.75rem',
+              color: '#FF4655',
+              letterSpacing: '0',
               textTransform: 'uppercase',
-              textAlign: 'center',
-              fontSize: '1.5rem',
+            }}
+          >
+            {agent.agentName}
+          </Typography>
+          <Typography
+            sx={{
+              fontWeight: 'bold',
+              fontSize: '0.75rem',
+              color: '#FFFFFF',
+              letterSpacing: '0',
+              textTransform: 'uppercase',
             }}
           >
             {agent.playerName}
@@ -242,35 +256,98 @@ const ValorantAgentCard: React.FC<ValorantAgentCardProps> = ( { agent, onOptionS
           <StatsContainer>
             <StatBox>
               <StatValue>{agent.averageKills}</StatValue>
-              <StatLabel>Kills</StatLabel>
+              <StatLabel>Kills / Round</StatLabel>
             </StatBox>
             <StatBox>
               <StatValue>{agent.averageDeaths}</StatValue>
-              <StatLabel>Deaths</StatLabel>
+              <StatLabel>Deaths / Round</StatLabel>
             </StatBox>
             <StatBox>
               <StatValue>{agent.gamesPlayed}</StatValue>
               <StatLabel>Games</StatLabel>
             </StatBox>
           </StatsContainer>
-        </CardContent>
+        </ContentContainer>
       </StyledCard>
 
       {/* Dialog with options */}
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Select an Option</DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">
-            Choose an action for {agent.agentName}:
+      <Dialog open={openDialog} onClose={handleCloseDialog} PaperProps={{
+        style: {
+          backgroundColor: '#1F2326', // Dark background for Valorant theme
+          border: '2px solid #FF4655', // Valorant red border
+          borderRadius: '8px',
+        },
+      }}>
+        <DialogTitle sx={{
+          color: '#FF4655',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          fontFamily: 'Rajdhani',
+          textTransform: 'uppercase',
+          fontSize: '1.25rem',
+          paddingBottom: '0.5rem',
+        }}>
+          Select an Option
+        </DialogTitle>
+        <DialogContent sx={{
+          color: '#FFFFFF',
+          textAlign: 'center',
+          fontFamily: 'Rajdhani',
+          paddingBottom: '1rem',
+        }}>
+          <Typography variant="body1" sx={{ fontSize: '1rem', color: '#D0D0D0' }}>
+            Choose an action for <span style={{ color: '#FF4655', fontWeight: 'bold' }}>{agent.agentName}</span>:
           </Typography>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleOptionSelect( 'in-place-replace' )}>Replace this {agent.playerName} with another {agent.agentName}</Button>
-          <Button onClick={() => handleOptionSelect( 'initiator' )}>Replace {agent.playerName} with an Initiator</Button>
-          <Button onClick={() => handleOptionSelect( 'duelist' )}>Replace {agent.playerName} with an Duelist</Button>
-          <Button onClick={() => handleOptionSelect( 'sentinel' )}>Replace {agent.playerName} with a Sentinel</Button>
-          <Button onClick={() => handleOptionSelect( 'controller' )}>Replace {agent.playerName} with a Controller</Button>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
+        <DialogActions sx={{
+          flexDirection: 'column',
+          gap: '0.5rem',
+          paddingBottom: '1rem',
+          justifyContent: 'center',
+        }}>
+          <DialogOptionButton
+            onClick={() => handleOptionSelect( 'in-place-replace' )}>
+            Replace {agent.playerName} with another {agent.agentName}
+          </DialogOptionButton>
+          <DialogOptionButton
+            onClick={() => handleOptionSelect( 'initiator' )}
+          >
+            Replace {agent.playerName} with an Initiator
+          </DialogOptionButton>
+          <DialogOptionButton
+            onClick={() => handleOptionSelect( 'duelist' )}
+          >
+            Replace {agent.playerName} with a Duelist
+          </DialogOptionButton>
+          <DialogOptionButton
+            onClick={() => handleOptionSelect( 'sentinel' )}
+          >
+            Replace {agent.playerName} with a Sentinel
+          </DialogOptionButton>
+          <DialogOptionButton
+            onClick={() => handleOptionSelect( 'controller' )}
+          >
+            Replace {agent.playerName} with a Controller
+          </DialogOptionButton>
+          <Button
+            onClick={handleCloseDialog}
+            sx={{
+              // marginTop: '0.5rem',
+              backgroundColor: '#121517',
+              color: '#D0D0D0',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              fontFamily: 'Rajdhani',
+              width: '75%',
+              border: '1px solid #FF4655',
+              '&:hover': {
+                backgroundColor: '#2A2D30',
+                color: '#FFFFFF',
+              },
+            }}
+          >
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
     </>

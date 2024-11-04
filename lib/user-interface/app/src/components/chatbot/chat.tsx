@@ -292,7 +292,7 @@ export default function Chat( props: { sessionId?: string } )
 
   return (
     <div className={styles.chat_container}>
-      <Grid gridDefinition={[{ colspan: 9 }, { colspan: 3 }]}>
+      <Grid gridDefinition={teamComposition?.players?.length ? [{ colspan: 9 }, { colspan: 3 }] : [{ colspan: 12 }]}>
         <div>
           <div className="ChatHistoryDiv">
             <SpaceBetween direction="vertical" size="m">
@@ -355,37 +355,40 @@ export default function Chat( props: { sessionId?: string } )
             />
           </div>
         </div>
-        <div className="TeamDisplayDiv">
-          <h2>Team Formation</h2>
-          {teamComposition?.players?.length
-            ? teamComposition.players
-              .sort( ( a, b ) => ( b.igl ? 1 : 0 ) - ( a.igl ? 1 : 0 ) )
-              .map( ( player ) => (
-                <div className="child" key={player.name}>
-                  <ValorantAgentCard
-                    agentDetails={{
-                      image: valorantAgentsMap[
-                        player.agent.toLowerCase().replace( /[^a-z0-9]/g, "" )
-                      ]?.image,
-                      isIGL: player?.igl,
-                      agentName: player?.agent,
-                      role: valorantAgentsMap[
-                        player.agent.toLowerCase().replace( /[^a-z0-9]/g, "" )
-                      ]?.role,
-                      playerName: player?.name,
-                      averageKills: player?.averageKills,
-                      averageDeaths: player?.averageDeaths,
-                      gamesPlayed: player?.gamesPlayed,
-                    }}
-                    onOptionSelect={( agent, option ) =>
-                      handleAgentOptionSelect( agent, option )
-                    }
-                  />
-                </div>
-              ) )
-            : null}
-        </div>
-      </Grid>
-    </div>
+        {
+          teamComposition?.players?.length && <div className="TeamDisplayDiv">
+            <h2>Team Formation</h2>
+            {teamComposition?.players?.length
+              ? teamComposition.players
+                .sort( ( a, b ) => ( b.igl ? 1 : 0 ) - ( a.igl ? 1 : 0 ) )
+                .map( ( player ) => (
+                  <div style={{ width: "90%" }} className="child" key={player.name}>
+                    <ValorantAgentCard
+                      agentDetails={{
+                        image: valorantAgentsMap[
+                          player.agent.toLowerCase().replace( /[^a-z0-9]/g, "" )
+                        ]?.image,
+                        isIGL: player?.igl,
+                        agentName: player?.agent,
+                        role: valorantAgentsMap[
+                          player.agent.toLowerCase().replace( /[^a-z0-9]/g, "" )
+                        ]?.role,
+                        playerName: player?.name,
+                        averageKills: player?.averageKills,
+                        averageDeaths: player?.averageDeaths,
+                        gamesPlayed: player?.gamesPlayed,
+                      }}
+                      onOptionSelect={( agent, option ) =>
+                        handleAgentOptionSelect( agent, option )
+                      }
+                    />
+                  </div>
+                ) )
+              : null}
+          </div>
+        }
+
+      </Grid >
+    </div >
   );
 }

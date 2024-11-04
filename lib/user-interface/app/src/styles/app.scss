@@ -694,6 +694,7 @@ div:has(> .SideNavigations) {
   overflow-y: scroll !important;
   overflow-x: hidden !important;
   height: 90vh !important;
+  padding-top: 1rem !important;
   margin-bottom: 2.5rem !important;
   width: 100% !important;
 
@@ -716,7 +717,7 @@ div:has(> .SideNavigations) {
   z-index: 1000 !important;
   margin-right: 2rem !important;
   margin-bottom: 2rem !important;
-  box-shadow: 0 0 15px 1px $valorant-white !important;
+  // box-shadow: 0 0 15px 1px $valorant-white !important;
   border-radius: 0.25rem !important;
 
   font-family: 'Rajdhani' !important;
@@ -724,9 +725,9 @@ div:has(> .SideNavigations) {
   width: 17.5rem !important;
 
   display: flex;
-  flex-direction: column;
-  align-content: center;
-  align-items: center;
+  flex-direction: column !important;
+  align-items: center !important;
+  // justify-content: center !important;
   padding: 1rem 0 !important;
   overflow-y: scroll !important;
 
@@ -762,4 +763,16 @@ div:has(> .SideNavigations) {
       color: $valorant-white !important;
     }
   }
+}
+
+// Remove this unusual css
+.css-1kucycd-MuiDialogActions-root>:not(style)~:not(style) {
+  margin-left: 0 !important;
+}
+
+.awsui_menu-item_93a1u_1lk94_183,
+.awsui_menu-item_q2oen_w271r_6 {
+  background: $valorant-bg-secondary !important;
+  color: $valorant-red !important;
+  border-radius: 0.25rem !important;
 }
