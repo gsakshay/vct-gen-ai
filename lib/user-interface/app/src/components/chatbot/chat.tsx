@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import
 {
   ChatBotHistoryItem,
@@ -200,114 +200,114 @@ export default function Chat( props: { sessionId?: string } )
     await apiClient.userFeedback.sendUserFeedback( feedbackData );
   }
 
-  const handleSendMessage = async ( messageToSend: string ) =>
-  {
-    if ( running ) return;
-    if ( appContext?.wsEndpoint )
-    {
-      let username;
-      await Auth.currentAuthenticatedUser().then(
-        ( value ) => ( username = value.username )
-      );
-      if ( !username ) return;
+  // const handleSendMessage = async ( messageToSend: string ) =>
+  // {
+  //   if ( running ) return;
+  //   if ( appContext?.wsEndpoint )
+  //   {
+  //     let username;
+  //     await Auth.currentAuthenticatedUser().then(
+  //       ( value ) => ( username = value.username )
+  //     );
+  //     if ( !username ) return;
 
-      if ( messageToSend.trim().length === 0 )
-      {
-        addNotification( "error", "Please do not submit blank text!" );
-        return;
-      }
+  //     if ( messageToSend.trim().length === 0 )
+  //     {
+  //       addNotification( "error", "Please do not submit blank text!" );
+  //       return;
+  //     }
 
-      try
-      {
-        setRunning( true );
-        let receivedData = "";
+  //     try
+  //     {
+  //       setRunning( true );
+  //       let receivedData = "";
 
-        const TEST_URL = appContext.wsEndpoint + "/";
-        const TOKEN = await Utils.authenticate();
-        const wsUrl = TEST_URL + "?Authorization=" + TOKEN;
-        const ws = new WebSocket( wsUrl );
+  //       const TEST_URL = appContext.wsEndpoint + "/";
+  //       const TOKEN = await Utils.authenticate();
+  //       const wsUrl = TEST_URL + "?Authorization=" + TOKEN;
+  //       const ws = new WebSocket( wsUrl );
 
-        let incomingMetadata: boolean = false;
-        let sources = {};
+  //       let incomingMetadata: boolean = false;
+  //       let sources = {};
 
-        ws.addEventListener( "open", function open()
-        {
-          const message = JSON.stringify( {
-            action: "getChatbotResponse",
-            data: {
-              userMessage: messageToSend,
-              chatHistory: [],
-              user_id: username,
-              session_id: session.id,
-              saveSession: false
-            },
-          } );
-          ws.send( message );
-        } );
+  //       ws.addEventListener( "open", function open()
+  //       {
+  //         const message = JSON.stringify( {
+  //           action: "getChatbotResponse",
+  //           data: {
+  //             userMessage: messageToSend,
+  //             chatHistory: [],
+  //             user_id: username,
+  //             session_id: session.id,
+  //             saveSession: false
+  //           },
+  //         } );
+  //         ws.send( message );
+  //       } );
 
-        ws.addEventListener( "message", function incoming( data )
-        {
-          if ( data.data.includes( "<!ERROR!>:" ) )
-          {
-            addNotification( "error", data.data );
-            ws.close();
-            return;
-          }
+  //       ws.addEventListener( "message", function incoming( data )
+  //       {
+  //         if ( data.data.includes( "<!ERROR!>:" ) )
+  //         {
+  //           addNotification( "error", data.data );
+  //           ws.close();
+  //           return;
+  //         }
 
-          if ( data.data === "!<|EOF_STREAM|>!" )
-          {
-            incomingMetadata = true;
-            return;
-          }
+  //         if ( data.data === "!<|EOF_STREAM|>!" )
+  //         {
+  //           incomingMetadata = true;
+  //           return;
+  //         }
 
-          if ( !incomingMetadata )
-          {
-            receivedData += data.data;
-          } else
-          {
-            const sourceData = JSON.parse( data.data );
-            sources = { Sources: sourceData };
-          }
+  //         if ( !incomingMetadata )
+  //         {
+  //           receivedData += data.data;
+  //         } else
+  //         {
+  //           const sourceData = JSON.parse( data.data );
+  //           sources = { Sources: sourceData };
+  //         }
 
-        } );
+  //       } );
 
-        ws.addEventListener( "error", ( err ) =>
-        {
-          console.error( "WebSocket error:", err );
-        } );
+  //       ws.addEventListener( "error", ( err ) =>
+  //       {
+  //         console.error( "WebSocket error:", err );
+  //       } );
 
-        ws.addEventListener( "close", async () =>
-        {
-          await refreshTeam();
-          await refreshMap();
-          setRunning( false );
-        } );
-      } catch ( error )
-      {
-        console.error( "Error sending message:", error );
-        alert( "Something went wrong. Please try again." );
-        setRunning( false );
-      }
-    }
-  };
+  //       ws.addEventListener( "close", async () =>
+  //       {
+  //         await refreshTeam();
+  //         await refreshMap();
+  //         setRunning( false );
+  //       } );
+  //     } catch ( error )
+  //     {
+  //       console.error( "Error sending message:", error );
+  //       alert( "Something went wrong. Please try again." );
+  //       setRunning( false );
+  //     }
+  //   }
+  // };
 
   const handleAgentOptionSelect = ( agent, option ) =>
   {
     if ( option === "in-place-replace" )
     {
-      handleSendMessage( `Replace this ${agent.playerName} with another ${agent.agentName}` );
+      setSelectedExamplePrompt( `Replace this ${agent.playerName} with another ${agent.agentName}` );
     } else if ( option === "initiator" )
     {
-      handleSendMessage( `Replace ${agent.playerName} with an Initiator` );
+      setSelectedExamplePrompt( `Replace ${agent.playerName} with an Initiator` );
     } else if ( option === "duelist" )
     {
-      handleSendMessage( `Replace ${agent.playerName} with an Duelist` );
+      setSelectedExamplePrompt( `Replace ${agent.playerName} with an Duelist` );
     } else if ( option === "controller" )
     {
-      handleSendMessage( `Replace ${agent.playerName} with an Controller` );
+      setSelectedExamplePrompt( `Replace ${agent.playerName} with an Controller` );
     } else if ( option === "sentinel" )
     {
-      handleSendMessage( `Replace ${agent.playerName} with a Sentinel` );
+      setSelectedExamplePrompt( `Replace ${agent.playerName} with a Sentinel` );
     }
   };
 
@@ -347,6 +347,20 @@ export default function Chat( props: { sessionId?: string } )
 
   console.log( "teamComposition", teamComposition );
 
+  const chatEndRef = useRef<HTMLDivElement | null>( null );
+
+  // Function to scroll to the bottom
+  const scrollToBottom = () =>
+  {
+    chatEndRef.current?.scrollIntoView( { behavior: "auto" } );
+  };
+
+  // Auto-scroll whenever messageHistory changes
+  useEffect( () =>
+  {
+    scrollToBottom();
+  }, [messageHistory] );
+
 
   return (
     <div className={styles.chat_container}>
@@ -367,6 +381,7 @@ export default function Chat( props: { sessionId?: string } )
                 />
               );
             } )}
+            <div ref={chatEndRef} />
           </SpaceBetween>
           {messageHistory.length == 0 && !session?.loading && (
             <div>
@@ -427,7 +442,7 @@ export default function Chat( props: { sessionId?: string } )
             </div>
           )}
           <ChatInputPanel
-            selectedExamplePrompt={selectedExamplePrompt}
+            selectedPrompt={selectedExamplePrompt}
             session={session}
             running={running}
             setRunning={setRunning}

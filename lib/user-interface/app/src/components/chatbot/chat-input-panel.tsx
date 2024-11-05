@@ -48,7 +48,7 @@ import { useNotifications } from "../notif-manager";
 
 export interface ChatInputPanelProps
 {
-  selectedExamplePrompt: string;
+  selectedPrompt: string;
   running: boolean;
   setRunning: Dispatch<SetStateAction<boolean>>;
   session: { id: string; loading: boolean };
@@ -365,11 +365,11 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
 
   useEffect( () =>
   {
-    if ( props.selectedExamplePrompt.length ) // Update the input field with the selected example prompt and send the request
+    if ( props.selectedPrompt.length ) // Update the input field with the selected example prompt and send the request
     {
-      handleSendMessage( props.selectedExamplePrompt );
+      handleSendMessage( props.selectedPrompt );
     }
-  }, [props.selectedExamplePrompt] );
+  }, [props.selectedPrompt] );
 
   return (
     <div className="ChatInputParent">
