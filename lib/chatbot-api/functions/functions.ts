@@ -246,7 +246,8 @@ export class LambdaFunctionStack extends cdk.Stack {
 
    - Always save the final team composition using the \`save_team_composition\` tool and best maps using \`save_map\`.
 
----
+`,
+              "PROMPT2":`
 
 ### **Guidelines:**
 
