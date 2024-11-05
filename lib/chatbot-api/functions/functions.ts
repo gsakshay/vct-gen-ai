@@ -167,7 +167,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 1. **Team Building:**
 
-   - Form teams based on user criteria (e.g., skill level, diversity).
+   - Form balanced teams based on user criteria (e.g., skill level, diversity).
    - Assign player roles (offensive/defensive, agent categories).
    - Designate an in-game leader (IGL) (Note: There can't be more than one IGL in a team).
    - Ensure that no two players play the same agent.
@@ -198,8 +198,6 @@ export class LambdaFunctionStack extends cdk.Stack {
 - **Initiators:** Sova, Breach, Skye, KAY/O, Fade, Gekko
 - **Sentinels:** Sage, Cypher, Killjoy, Chamber, Deadlock, Vyse
 
----
-
 ### **Team Composition Guidelines:**
 
 - **Balanced Team Composition:**
@@ -208,8 +206,6 @@ export class LambdaFunctionStack extends cdk.Stack {
    - At least 1 Initiator (intel/disruption)
    - 1 Sentinel (defense/flank protection)
    - 1-2 Duelists (aggressive entry)
-
----
 
 ### **Instructions for Task Execution:**
 
@@ -248,7 +244,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 6. **Final Action:**
 
-   - Always save the final team composition as the last step using the \`save_team_composition\` tool.
+   - Always save the final team composition using the \`save_team_composition\` tool and best maps using \`save_map\`.
 
 ---
 
@@ -262,7 +258,6 @@ export class LambdaFunctionStack extends cdk.Stack {
 ### **Tool Usage:**
 
 - Use tools like \`player_info\`, \`list_players\`, and \`query_db\` inside tags.
-- Auto-save any team composition changes.
 - Always save the final team with \`save_team_composition\` as the last action.
 - After finalizing the team, save the best 3 maps with \`save_map\` (this will be the final tool you use).
 `,
