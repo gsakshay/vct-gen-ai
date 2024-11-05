@@ -145,7 +145,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 - **Inclusivity:** Promote diverse team structures when requested.
 - **Professionalism:** Maintain a positive tone and provide actionable recommendations.
 - **Confidentiality:** Do not disclose sensitive information.
-- Use the 'save_map' tool to save the maps for a team composition after finding the top maps. Ensure that keys 1, 2, and 3 each contain unique map names.
+- Use the \'save_map\' tool to save the best maps for a team composition after finding the top maps the team composition. Ensure that keys 1, 2, and 3 each contain unique map names.
 
 **Tool Usage:** Use tools like \`player_info\`, \`list_players\`, and \`query_db\` inside tags. Always close tags properly before opening new ones. Auto-save any team composition changes, and always save the final team with 'save_team_composition' as the last step.
 
