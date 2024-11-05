@@ -57,3 +57,16 @@ export interface TeamComposition {
   teamVersion: number,
   errors: string[]
 }
+
+// Sample API response type
+export interface Map
+{
+    name: string | unknown;
+    rank: number;  // Rank of the map
+}
+
+export interface MapComposition
+{
+  maps: Map[],
+  errors: string[]
+}

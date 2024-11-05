@@ -1,6 +1,7 @@
 import {
   ChatBotHistoryItem,
   ChatBotMessageType,
+  MapComposition,
   TeamComposition
 } from "../../components/chatbot/types";
 
@@ -192,6 +193,51 @@ export class SessionsClient {
     console.log(teamComp) 
     return teamComp;
   }
+
+  async getMapComposition(sessionId: string, userId: string): Promise<any> {
+  let mapComp: MapComposition = {
+    maps: [],
+    errors: []
+  };
+
+  const auth = await Utils.authenticate();
+
+  const response = await fetch(this.API + '/user-session', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + auth,
+    },
+    body: JSON.stringify({
+      "operation": "get_map",
+      "session_id": sessionId,
+      "user_id": userId
+    })
+  });
+
+  if (response.status !== 200) {
+    mapComp.errors.push(`Status Code: ${response.status}`);
+  }
+
+  try {
+    // Parse the JSON response
+    const output = await response.json();
+    console.log("Main output", output);
+
+    // Transform the output into the desired format
+    mapComp.maps = Object.entries(output).map(([rank, name]) => ({
+      rank: parseInt(rank, 10), // Convert rank string to number
+      name,
+    }));
+  } catch (e) {
+    console.log(e);
+    mapComp.errors.push("Failed to parse response JSON.");
+  }
+
+  console.log("got MAPS composition");
+  console.log(mapComp);
+  return mapComp;
+}
 
   /**Deletes a given session but this is not exposed in the UI */
   async deleteSession(

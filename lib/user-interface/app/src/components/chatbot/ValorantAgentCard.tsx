@@ -104,8 +104,8 @@ const RoleBadge = styled( Box )( {
 
 const IGLBadge = styled( Box )( {
   position: 'absolute',
-  top: '10px',
-  left: '10px',
+  top: '5px',
+  left: '5px',
   padding: '0.25rem 0.5rem',
   backgroundColor: '#FF4655',
   color: '#FFFFFF',
@@ -139,6 +139,7 @@ const StatValue = styled( Typography )( {
   fontWeight: 'bold',
   fontSize: '0.75rem',
   color: '#FFFFFF',
+  marginRight: '0.5rem',
 } );
 
 const StatLabel = styled( Typography )( {
@@ -299,12 +300,13 @@ const ValorantAgentCard: React.FC<ValorantAgentCardProps> = ( { agent, onOptionS
             Choose an action for <span style={{ color: '#FF4655', fontWeight: 'bold' }}>{agent.agentName}</span>:
           </Typography>
         </DialogContent>
-        <DialogActions sx={{
-          flexDirection: 'column',
-          gap: '0.5rem',
-          paddingBottom: '1rem',
-          justifyContent: 'center',
-        }}>
+        <DialogActions
+          sx={{
+            flexDirection: 'column',
+            gap: '0.5rem',
+            paddingBottom: '1rem',
+            justifyContent: 'center',
+          }}>
           <DialogOptionButton
             onClick={() => handleOptionSelect( 'in-place-replace' )}>
             Replace {agent.playerName} with another {agent.agentName}

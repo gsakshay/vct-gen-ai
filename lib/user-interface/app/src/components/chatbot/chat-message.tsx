@@ -38,6 +38,7 @@ import { formatThinkingString, removeAngleBracketContent } from "./utils";
 export interface ChatMessageProps
 {
   message: ChatBotHistoryItem;
+  idx: number;
   onThumbsUp: () => void;
   onThumbsDown: ( feedbackTopic: string, feedbackType: string, feedbackMessage: string ) => void;
 }
@@ -139,7 +140,7 @@ export default function ChatMessage( props: ChatMessageProps )
 
 
   return (
-    <div>
+    <div style={{ marginTop: props.idx === 0 ? '3rem' : '0' }}>
       <Modal
         onDismiss={() => setModalVisible( false )}
         visible={modalVisible}
@@ -202,8 +203,8 @@ export default function ChatMessage( props: ChatMessageProps )
         </SpaceBetween>
       </Modal>
       <div>
-        <div className="AIInteractionDiv">
-          {props.message?.type === ChatBotMessageType.AI && (
+        {props.message?.type === ChatBotMessageType.AI && (
+          <div className="AIInteractionDiv">
             <Grid gridDefinition={[{ colspan: 1 }, { colspan: 10 }]}>
               <div>
                 <img src="/svg/valorant-icon.svg" alt={CHATBOT_NAME} />
@@ -354,10 +355,10 @@ export default function ChatMessage( props: ChatMessageProps )
                 </Container>
               </div>
             </Grid>
-          )}
-        </div>
-        <div className="UserInteractionDiv">
-          {props.message?.type === ChatBotMessageType.Human && (
+          </div>
+        )}
+        {props.message?.type === ChatBotMessageType.Human && (
+          <div className="UserInteractionDiv">
             <Grid gridDefinition={[{ colspan: 3 }, { colspan: 8 }, { colspan: 2 }]}>
               <div></div>
               <div className="ChatTextContainer">
@@ -367,8 +368,8 @@ export default function ChatMessage( props: ChatMessageProps )
               </div>
               <div></div>
             </Grid>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {loading && (

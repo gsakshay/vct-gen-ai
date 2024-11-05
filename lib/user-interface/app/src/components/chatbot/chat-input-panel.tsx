@@ -55,6 +55,7 @@ export interface ChatInputPanelProps
   messageHistory: ChatBotHistoryItem[];
   setMessageHistory: ( history: ChatBotHistoryItem[] ) => void;
   refreshTeam: () => void;
+  refreshMap: () => void;
 }
 
 export abstract class ChatScrollState
@@ -342,6 +343,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
         }
         props.setRunning( false );
         props.refreshTeam();
+        props.refreshMap();
         console.log( 'Disconnected from the WebSocket server' );
       } );
 

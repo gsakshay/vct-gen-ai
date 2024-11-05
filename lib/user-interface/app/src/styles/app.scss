@@ -79,8 +79,8 @@ $valorant-alert-text-accent: #FF4654; // Valorant red for alert text
 
 /* WebKit-based browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.25rem;
+  height: 0.25rem;
 }
 
 ::-webkit-scrollbar-track {
@@ -694,12 +694,7 @@ div:has(> .SideNavigations) {
   overflow-y: scroll !important;
   overflow-x: hidden !important;
   height: 90vh !important;
-  padding-top: 1rem !important;
-  margin-bottom: 2.5rem !important;
   width: 100% !important;
-
-  margin: 1rem 0 0 0 !important;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -715,9 +710,7 @@ div:has(> .SideNavigations) {
   height: 90vh !important;
   position: fixed !important;
   z-index: 1000 !important;
-  margin-right: 2rem !important;
   margin-bottom: 2rem !important;
-  // box-shadow: 0 0 15px 1px $valorant-white !important;
   border-radius: 0.25rem !important;
 
   font-family: 'Rajdhani' !important;
@@ -727,7 +720,6 @@ div:has(> .SideNavigations) {
   display: flex;
   flex-direction: column !important;
   align-items: center !important;
-  // justify-content: center !important;
   padding: 1rem 0 !important;
   overflow-y: scroll !important;
 
@@ -744,29 +736,71 @@ div:has(> .SideNavigations) {
   div {
     flex: 1;
   }
+}
 
-  button {
-    background: $valorant-white !important;
-    border: none !important;
-    color: $valorant-black !important;
-    font-family: 'Rajdhani' !important;
-    border-radius: 0 !important;
+.ValorantMapDisplay {
+  height: 90vh !important;
+  position: fixed !important;
+  z-index: 1000 !important;
+  margin-bottom: 2rem !important;
+  border-radius: 0.25rem !important;
+  font-family: 'Rajdhani' !important;
+  display: flex;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding: 1rem 0 !important;
+  overflow-y: scroll !important;
+  margin-right: 2rem !important;
+  width: 10rem !important;
+
+  h2 {
+    color: $valorant-white !important;
     text-transform: uppercase !important;
-    height: 2rem !important;
-    margin: 1rem 0 !important;
+    font-size: 1.5rem !important;
+    margin: 0.5rem 0 !important;
+    background: $valorant-red !important;
+    padding: 0.5rem !important;
+    font-weight: 600 !important;
   }
 
-  button:hover {
-    background: $valorant-bg-secondary !important;
-
-    span {
-      color: $valorant-white !important;
-    }
+  div {
+    flex: 1;
   }
+}
+
+.examplePrompt {
+  font-size: 0.75rem;
+
+  b {
+    font-size: 0.8rem;
+    color: $valorant-red;
+  }
+}
+
+.morePromptsButton {
+  background: $valorant-white !important;
+  border: none !important;
+  outline: 0 !important;
+  outline-offset: 0 !important;
+  font-family: 'Rajdhani' !important;
+  border-radius: 0 !important;
+  padding: 0.5rem !important;
+  margin: 1rem 0 !important;
+  color: $valorant-black !important;
+  cursor: pointer !important;
+}
+
+.morePromptsButton:hover {
+  background: $valorant-black !important;
+  color: $valorant-white !important;
 }
 
 // Remove this unusual css
 .css-1kucycd-MuiDialogActions-root>:not(style)~:not(style) {
+  margin-left: 0 !important;
+}
+
+.css-122ml0v> :not(style)~ :not(style) {
   margin-left: 0 !important;
 }
 
