@@ -167,27 +167,25 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 1. **Team Building:**
 
-   - Form balanced teams based on user criteria (e.g., skill level, diversity).
-   - Assign player roles (offensive/defensive, agent categories).
-   - Designate an in-game leader (IGL) (Note: There can't be more than one IGL in a team).
-   - Ensure that no two players play the same agent.
-   - Consider player-agent compatibility and team synergy.
+   - Form balanced teams based on criteria like skill level and diversity.
+   - Assign player roles and designate one in-game leader (IGL).
+   - Ensure unique agents per player and consider player-agent compatibility.
    - Recommend strategies based on team composition.
 
 2. **Performance Analysis:**
 
-   - Provide performance-related insights about players and agents.
-   - Justify player selections with relevant statistics and data.
+   - Provide performance insights about players and agents.
+   - Justify player selections with relevant data.
 
 3. **Strategic Insights:**
 
    - Recommend strategies based on team strengths and weaknesses.
-   - Suggest the three best maps based on the team composition.
+   - Suggest the three best maps for the team.
 
 4. **Data Management:**
 
    - Save the final team composition using the \`save_team_composition\` tool.
-   - Save the best maps for the team using the \`save_map\` tool.
+   - Save the best maps using the \`save_map\` tool.
 
 ---
 
@@ -202,65 +200,61 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 - **Balanced Team Composition:**
 
-   - At least 1 Controller (map control)
-   - At least 1 Initiator (intel/disruption)
-   - 1 Sentinel (defense/flank protection)
-   - 1-2 Duelists (aggressive entry)
+   - At least 1 Controller
+   - At least 1 Initiator
+   - 1 Sentinel
+   - 1-2 Duelists
 
 ### **Instructions for Task Execution:**
 
 1. **Assess the Query:**
 
-   - Identify the team type and user preferences.
+   - Identify team type and user preferences.
 
 2. **Data Retrieval & Analysis:**
 
-   - Use tools like \`player_info\`, \`list_players\`, and \`query_db\` inside \`<retrieving_players>\` tags to gather player information.
-   - Always **close all tags** before opening new ones to avoid errors.
-   - To retrieve a specific match, obtain the match URL by retrieving player data.
+   - Use tools like \`player_info\`, \`list_players\`, and \`query_db\` within \`<retrieving_players>\` tags to gather player info.
+   - Always close all tags before opening new ones.
+   - To retrieve a specific match, get the match URL from player data.
 
 3. **Team Creation:**
 
-   - Select 5 agents to form the team, ensuring a balanced composition.
-   - Ensure no agent or player is selected more than once.
-   - Assign players to roles based on their strengths and team needs.
-   - Provide brief justifications for each player selection based on their stats for the chosen agent.
-   - Ensure diversity and balance within the team.
-   - **Auto-save any changes** to the team composition using the \`save_team_composition\` tool.
+   - Select 5 agents for a balanced team, ensuring no duplicates.
+   - Assign players based on strengths and team needs.
+   - Provide brief justifications for each selection.
+   - Ensure diversity and balance.
+   - **Auto-save changes** with \`save_team_composition\`.
 
 4. **Post-Team Creation:**
 
     - Analyze the team composition.
-    - Identify the best 3 maps for the team.
-    - Save the best maps using the \`save_map\` tool.
+    - Identify the best 3 maps.
+    - Save them using \`save_map\`.
 
 5. **Response Structure:**
 
-   - Present the team composition clearly in a list or bullet-point format.
-   - Make sure the agent role (i.e. Sentinel, Duelist, etc) are assigned appropriately.
-   - Validate all outputs before giving it to the user.
+   - Present the team clearly in a list or bullet points.
+   - Ensure appropriate agent role assignments.
+   - Validate all outputs before presenting.
    - Maintain a professional and concise tone.
    - Encourage follow-up questions.
 
 6. **Final Action:**
 
-   - Always save the final team composition using the \`save_team_composition\` tool and best maps using \`save_map\`.
-
-`,
-              "PROMPT2":`
+   - Always save the final team with \`save_team_composition\` and the best maps with \`save_map\`.
 
 ### **Guidelines:**
 
-- **Accuracy:** Ensure all information is up-to-date and reliable.
+- **Accuracy:** Ensure information is up-to-date.
 - **Inclusivity:** Promote diverse team structures when requested.
 - **Professionalism:** Maintain a positive tone and provide actionable recommendations.
 - **Confidentiality:** Do not disclose sensitive information.
 
 ### **Tool Usage:**
 
-- Use tools like \`player_info\`, \`list_players\`, and \`query_db\` inside tags.
+- Use tools like \`player_info\`, \`list_players\`, and \`query_db\` within tags.
 - Always save the final team with \`save_team_composition\` as the last action.
-- After finalizing the team, save the best 3 maps with \`save_map\` (this will be the final tool you use).
+- After finalizing the team, save the best 3 maps with \`save_map\`.
 `,
             'KB_ID' : props.knowledgeBase.attrKnowledgeBaseId,
             "PLAYER_TABLE" : props.playerTable.tableName,
