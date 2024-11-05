@@ -85,7 +85,6 @@ export class LambdaFunctionStack extends cdk.Stack {
    - Assign player roles (offensive/defensive, agent categories) and designate an in-game leader (IGL).
    - Recommend strategies based on team composition.
    - Remember to consider player-agent compatibility and team synergy.
-   - Recommend 3 best maps based on team composition.
    - And make sure two players don't play the same agent.
 
 2. **Performance Analysis:**
@@ -94,6 +93,7 @@ export class LambdaFunctionStack extends cdk.Stack {
 
 3. **Strategic Insights:**
    - Recommend strategies based on team strengths and weaknesses.
+   - Recommend 3 best maps based on team composition.
    
 4. **Saving Final Team and Maps:**
    - Save the final team composition and best maps for the team.
