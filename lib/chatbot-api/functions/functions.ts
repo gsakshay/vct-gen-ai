@@ -241,6 +241,8 @@ export class LambdaFunctionStack extends cdk.Stack {
 5. **Response Structure:**
 
    - Present the team composition clearly in a list or bullet-point format.
+   - Make sure the agent role (i.e. Sentinel, Duelist, etc) are assigned appropriately.
+   - Validate all outputs before giving it to the user.
    - Maintain a professional and concise tone.
    - Encourage follow-up questions.
 
