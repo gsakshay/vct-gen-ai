@@ -48,12 +48,14 @@ import { useNotifications } from "../notif-manager";
 
 export interface ChatInputPanelProps
 {
+  selectedPrompt: string;
   running: boolean;
   setRunning: Dispatch<SetStateAction<boolean>>;
   session: { id: string; loading: boolean };
   messageHistory: ChatBotHistoryItem[];
   setMessageHistory: ( history: ChatBotHistoryItem[] ) => void;
   refreshTeam: () => void;
+  refreshMap: () => void;
 }
 
 export abstract class ChatScrollState
@@ -88,8 +90,6 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
   {
     messageHistoryRef.current = props.messageHistory;
   }, [props.messageHistory] );
-
-
 
   /** Speech recognition */
   useEffect( () =>
@@ -155,7 +155,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
   }, [props.messageHistory] );
 
   /**Sends a message to the chat API */
-  const handleSendMessage = async () =>
+  const handleSendMessage = async ( value: string ) =>
   {
     if ( props.running ) return;
     if ( readyState !== ReadyState.OPEN ) return;
@@ -165,7 +165,8 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
     await Auth.currentAuthenticatedUser().then( ( value ) => username = value.username );
     if ( !username ) return;
 
-    const messageToSend = state.value.trim();
+    const messageToSend = value.trim();
+
     if ( messageToSend.length === 0 )
     {
       addNotification( "error", "Please do not submit blank text!" );
@@ -342,6 +343,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
         }
         props.setRunning( false );
         props.refreshTeam();
+        props.refreshMap();
         console.log( 'Disconnected from the WebSocket server' );
       } );
 
@@ -360,6 +362,14 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
     [ReadyState.CLOSED]: "Closed",
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
+
+  useEffect( () =>
+  {
+    if ( props.selectedPrompt.length ) // Update the input field with the selected example prompt and send the request
+    {
+      handleSendMessage( props.selectedPrompt );
+    }
+  }, [props.selectedPrompt] );
 
   return (
     <div className="ChatInputParent">
@@ -398,7 +408,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
               if ( e.key == "Enter" && !e.shiftKey )
               {
                 e.preventDefault();
-                handleSendMessage();
+                handleSendMessage( state?.value );
               }
             }}
             value={state.value}
@@ -413,7 +423,7 @@ export default function ChatInputPanel( props: ChatInputPanelProps )
                 state.value.trim().length === 0 ||
                 props.session.loading
               }
-              onClick={handleSendMessage}
+              onClick={() => handleSendMessage( state.value )}
               iconAlign="right"
               iconName={!props.running ? "angle-right-double" : undefined}
               variant="primary"
